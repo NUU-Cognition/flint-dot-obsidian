@@ -8,7 +8,7 @@
   "hideStatusBar": "focused",
   "interceptLogging": true,
   "language": "",
-  "newInstanceBehavior": "newHorizontalSplit",
+  "newInstanceBehavior": "newRightSplit",
   "noticeTimeout": 5,
   "openChangelogOnUpdate": true,
   "pinNewInstance": true,
