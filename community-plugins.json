@@ -3,5 +3,8 @@
   "calendar",
   "share-note",
   "obsidian-style-settings",
-  "mermaid-popup"
+  "mermaid-popup",
+  "dataview",
+  "dataview-serializer",
+  "force-read-mode"
 ]
