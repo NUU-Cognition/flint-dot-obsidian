@@ -5,6 +5,5 @@
   "obsidian-style-settings",
   "mermaid-popup",
   "dataview",
-  "dataview-serializer",
-  "force-read-mode"
+  "dataview-serializer"
 ]
