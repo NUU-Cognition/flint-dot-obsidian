@@ -5,5 +5,7 @@
   "obsidian-style-settings",
   "mermaid-popup",
   "dataview",
-  "dataview-serializer"
+  "dataview-serializer",
+  "tldraw",
+  "unitade"
 ]
