@@ -1,0 +1,8 @@
+{
+  "mySetting": "toml,yaml,json",
+  "mySettingArray": [
+    "txt",
+    "nfo",
+    "json"
+  ]
+}
