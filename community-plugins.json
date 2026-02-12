@@ -3,9 +3,9 @@
   "calendar",
   "share-note",
   "obsidian-style-settings",
-  "mermaid-popup",
   "dataview",
   "dataview-serializer",
   "tldraw",
-  "open-as-md"
+  "open-as-md",
+  "mermaid-popup"
 ]
