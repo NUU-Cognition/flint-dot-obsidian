@@ -1,0 +1,59 @@
+{
+  "kvMap": {},
+  "kvMapDefault": {
+    "Mermaid": ".mermaid"
+  },
+  "kvMapReserved": {
+    "Reserved": ".diagram-popup"
+  },
+  "PopupSizeInitValue": "1.50",
+  "kvMapPopupSizeInit": {
+    "1.00": "1.00",
+    "1.25": "1.25",
+    "1.50": "1.50",
+    "1.75": "1.75",
+    "2.00": "2.00",
+    "2.25": "2.25",
+    "2.50": "2.50",
+    "2.75": "2.75",
+    "3.00": "3.00"
+  },
+  "DiagramHeightVal": "600",
+  "DiagramHeightMin": "50",
+  "DiagramHeightMax": "1500",
+  "DiagramHeightStep": "50",
+  "ZoomRatioValue": "0.1",
+  "kvMapZoomRatio": {
+    "0.1": "0.1",
+    "0.2": "0.2",
+    "0.3": "0.3",
+    "0.4": "0.4"
+  },
+  "MoveStepValue": "30",
+  "kvMapMoveStep": {
+    "20": "20",
+    "30": "30",
+    "40": "40",
+    "50": "60",
+    "60": "60"
+  },
+  "open_btn_pos_x": "30",
+  "open_btn_pos_y": "0",
+  "bgColorLight": "rgba(255,255,255, 0.5)",
+  "bgColorDark": "rgba(51,51,51, 0.5)",
+  "bgAlpha": "0.5",
+  "bgAlphaStep": {
+    "0.0": "0.0",
+    "0.1": "0.1",
+    "0.2": "0.2",
+    "0.3": "0.3",
+    "0.4": "0.4",
+    "0.5": "0.5",
+    "0.6": "0.6",
+    "0.7": "0.7",
+    "0.8": "0.8",
+    "0.9": "0.9",
+    "1.0": "1.0"
+  },
+  "bgIsBlur": "1"
+}
