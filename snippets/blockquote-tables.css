@@ -1,0 +1,8 @@
+.callout[data-callout="tables"] {
+  background: transparent;
+  border-left: 2px solid var(--text-accent);
+  border-radius: 0px;
+}
+.callout[data-callout="tables"] .callout-title {
+  display: none;
+}

@@ -2,11 +2,12 @@
   "alwaysUpdateLinks": true,
   "promptDelete": false,
   "showLineNumber": false,
-  "newFileLocation": "folder",
+  "newFileLocation": "current",
   "newFileFolderPath": "Mesh",
   "attachmentFolderPath": "Media",
   "userIgnoreFilters": [
     "Workspace/"
   ],
-  "showUnsupportedFiles": true
+  "showUnsupportedFiles": true,
+  "trashOption": "local"
 }
