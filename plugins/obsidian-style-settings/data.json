@@ -1,4 +1,11 @@
 {
   "retroma-obsidian-theme@@theme-color-scheme-selection": "cs-monochromatic-colors",
-  "retroma-obsidian-theme@@theme-variant": "Groovy"
+  "retroma-obsidian-theme@@theme-variant": "Groovy",
+  "baseline-style@@layout-style": "layout-baseline",
+  "baseline-style@@element-style": "input-baseline",
+  "baseline-style@@anim-motion-baseline": "cubic-bezier(0.32, 0.72, 0, 1)",
+  "baseline-style@@nav-item-active-style": "nav-item-baseline",
+  "baseline-style@@file-header-visibility": "view-header-title-hover",
+  "baseline-style@@colorful-frame": false,
+  "baseline-style@@hide-vault-switcher-off": true
 }
