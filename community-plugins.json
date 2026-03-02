@@ -7,5 +7,6 @@
   "dataview-serializer",
   "tldraw",
   "open-as-md",
-  "mermaid-popup"
+  "mermaid-popup",
+  "obsidian-git"
 ]
