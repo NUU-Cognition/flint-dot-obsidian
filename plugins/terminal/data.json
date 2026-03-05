@@ -8,7 +8,7 @@
   "hideStatusBar": "focused",
   "interceptLogging": true,
   "language": "",
-  "newInstanceBehavior": "newRightSplit",
+  "newInstanceBehavior": "newTab",
   "noticeTimeout": 5,
   "openChangelogOnUpdate": true,
   "pinNewInstance": true,
