@@ -11,7 +11,7 @@
             "dimension": 31.504221028396003,
             "children": [
               {
-                "id": "786961a3f7153721",
+                "id": "ab27202c477149d8",
                 "type": "leaf",
                 "state": {
                   "type": "empty",
@@ -23,242 +23,81 @@
             ]
           },
           {
-            "id": "aa4e18fb5028ac85",
+            "id": "443d7103d7cdffa6",
             "type": "split",
-            "dimension": 68.495778971604,
+            "dimension": 34.247889485802,
             "children": [
               {
-                "id": "2e87a4dfaf427254",
-                "type": "split",
+                "id": "2a36c35f64a4a17b",
+                "type": "tabs",
                 "children": [
                   {
-                    "id": "df1083451cea3c77",
-                    "type": "tabs",
-                    "children": [
-                      {
-                        "id": "ade9fa8b6afc0a41",
-                        "type": "leaf",
-                        "pinned": true,
-                        "state": {
-                          "type": "terminal:terminal",
-                          "state": {
-                            "terminal:terminal": {
-                              "cwd": "/Users/nathan/dev/nuu/nuu-flints/(Flint) NUU Flint",
-                              "focus": false,
-                              "profile": {
-                                "args": [],
-                                "executable": "/bin/zsh",
-                                "name": "",
-                                "platforms": {
-                                  "darwin": true
-                                },
-                                "pythonExecutable": "python3",
-                                "restoreHistory": false,
-                                "rightClickAction": "copyPaste",
-                                "successExitCodes": [
-                                  "0",
-                                  "SIGINT",
-                                  "SIGTERM"
-                                ],
-                                "terminalOptions": {
-                                  "documentOverride": null
-                                },
-                                "type": "integrated",
-                                "useWin32Conhost": true
-                              },
-                              "serial": null
-                            }
-                          },
-                          "pinned": true,
-                          "icon": "terminal",
-                          "title": "Terminal: nathan@sword:~/dev/nuu/nuu-flints/(Flint) NUU Flint"
-                        }
-                      },
-                      {
-                        "id": "c0a4af801265c280",
-                        "type": "leaf",
-                        "pinned": true,
-                        "state": {
-                          "type": "terminal:terminal",
-                          "state": {
-                            "terminal:terminal": {
-                              "cwd": "/Users/nathan/dev/nuu/nuu-flints/(Flint) NUU Flint",
-                              "focus": false,
-                              "profile": {
-                                "args": [],
-                                "executable": "/bin/zsh",
-                                "name": "",
-                                "platforms": {
-                                  "darwin": true
-                                },
-                                "pythonExecutable": "python3",
-                                "restoreHistory": false,
-                                "rightClickAction": "copyPaste",
-                                "successExitCodes": [
-                                  "0",
-                                  "SIGINT",
-                                  "SIGTERM"
-                                ],
-                                "terminalOptions": {
-                                  "documentOverride": null
-                                },
-                                "type": "integrated",
-                                "useWin32Conhost": true
-                              },
-                              "serial": null
-                            }
-                          },
-                          "pinned": true,
-                          "icon": "terminal",
-                          "title": "Terminal: ✳ Claude Code"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "id": "74823f383ccd77bf",
-                    "type": "tabs",
-                    "children": [
-                      {
-                        "id": "2530e258ceb1e112",
-                        "type": "leaf",
-                        "pinned": true,
-                        "state": {
-                          "type": "terminal:terminal",
-                          "state": {
-                            "terminal:terminal": {
-                              "cwd": "/Users/nathan/dev/nuu/nuu-flints/(Flint) NUU Flint",
-                              "focus": false,
-                              "profile": {
-                                "args": [],
-                                "executable": "/bin/zsh",
-                                "name": "",
-                                "platforms": {
-                                  "darwin": true
-                                },
-                                "pythonExecutable": "python3",
-                                "restoreHistory": false,
-                                "rightClickAction": "copyPaste",
-                                "successExitCodes": [
-                                  "0",
-                                  "SIGINT",
-                                  "SIGTERM"
-                                ],
-                                "terminalOptions": {
-                                  "documentOverride": null
-                                },
-                                "type": "integrated",
-                                "useWin32Conhost": true
-                              },
-                              "serial": null
-                            }
-                          },
-                          "pinned": true,
-                          "icon": "terminal",
-                          "title": "Terminal: ✳ Claude Code"
-                        }
-                      }
-                    ]
+                    "id": "ca46dcf585805f5b",
+                    "type": "leaf",
+                    "state": {
+                      "type": "empty",
+                      "state": {},
+                      "icon": "lucide-file",
+                      "title": "New tab"
+                    }
                   }
-                ],
-                "direction": "vertical"
+                ]
               },
               {
-                "id": "c162df0bc7e580bf",
-                "type": "split",
+                "id": "be360dc10796947d",
+                "type": "tabs",
                 "children": [
                   {
-                    "id": "a9e5b01d46235f01",
-                    "type": "tabs",
-                    "children": [
-                      {
-                        "id": "7d127fce8cc7ce52",
-                        "type": "leaf",
-                        "pinned": true,
-                        "state": {
-                          "type": "terminal:terminal",
-                          "state": {
-                            "terminal:terminal": {
-                              "cwd": "/Users/nathan/dev/nuu/nuu-flints/(Flint) NUU Flint",
-                              "focus": false,
-                              "profile": {
-                                "args": [],
-                                "executable": "/bin/zsh",
-                                "name": "",
-                                "platforms": {
-                                  "darwin": true
-                                },
-                                "pythonExecutable": "python3",
-                                "restoreHistory": false,
-                                "rightClickAction": "copyPaste",
-                                "successExitCodes": [
-                                  "0",
-                                  "SIGINT",
-                                  "SIGTERM"
-                                ],
-                                "terminalOptions": {
-                                  "documentOverride": null
-                                },
-                                "type": "integrated",
-                                "useWin32Conhost": true
-                              },
-                              "serial": null
-                            }
-                          },
-                          "pinned": true,
-                          "icon": "terminal",
-                          "title": "Terminal: ✳ Claude Code"
-                        }
-                      }
-                    ]
-                  },
-                  {
-                    "id": "2a36c35f64a4a17b",
-                    "type": "tabs",
-                    "children": [
-                      {
-                        "id": "f1f2b79ce288df7f",
-                        "type": "leaf",
-                        "pinned": true,
-                        "state": {
-                          "type": "terminal:terminal",
-                          "state": {
-                            "terminal:terminal": {
-                              "cwd": "/Users/nathan/dev/nuu/nuu-flints/(Flint) NUU Flint",
-                              "focus": false,
-                              "profile": {
-                                "args": [],
-                                "executable": "/bin/zsh",
-                                "name": "",
-                                "platforms": {
-                                  "darwin": true
-                                },
-                                "pythonExecutable": "python3",
-                                "restoreHistory": false,
-                                "rightClickAction": "copyPaste",
-                                "successExitCodes": [
-                                  "0",
-                                  "SIGINT",
-                                  "SIGTERM"
-                                ],
-                                "terminalOptions": {
-                                  "documentOverride": null
-                                },
-                                "type": "integrated",
-                                "useWin32Conhost": true
-                              },
-                              "serial": null
-                            }
-                          },
-                          "pinned": true,
-                          "icon": "terminal",
-                          "title": "Terminal: ✳ Claude Code"
-                        }
-                      }
-                    ]
+                    "id": "6111d566619c3b87",
+                    "type": "leaf",
+                    "state": {
+                      "type": "empty",
+                      "state": {},
+                      "icon": "lucide-file",
+                      "title": "New tab"
+                    }
                   }
-                ],
-                "direction": "vertical"
+                ]
+              }
+            ],
+            "direction": "horizontal"
+          },
+          {
+            "id": "ee18e628c5e850cd",
+            "type": "split",
+            "dimension": 34.247889485802,
+            "children": [
+              {
+                "id": "24be50b1c6111292",
+                "type": "tabs",
+                "children": [
+                  {
+                    "id": "4e5a0023c9985ecf",
+                    "type": "leaf",
+                    "state": {
+                      "type": "empty",
+                      "state": {},
+                      "icon": "lucide-file",
+                      "title": "New tab"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "6319b05b0d17d48d",
+                "type": "tabs",
+                "children": [
+                  {
+                    "id": "f1776e9bed2d0c07",
+                    "type": "leaf",
+                    "state": {
+                      "type": "empty",
+                      "state": {},
+                      "icon": "lucide-file",
+                      "title": "New tab"
+                    }
+                  }
+                ]
               }
             ],
             "direction": "horizontal"
@@ -395,13 +234,12 @@
                 "state": {
                   "type": "outline",
                   "state": {
-                    "file": "Mesh/Archive/Notepads/(Notepad) 035 Notepad Shard Improvements.md",
                     "followCursor": false,
                     "showSearch": false,
                     "searchQuery": ""
                   },
                   "icon": "lucide-list",
-                  "title": "Outline of (Notepad) 035 Notepad Shard Improvements"
+                  "title": "Outline"
                 }
               },
               {
@@ -410,12 +248,12 @@
                 "state": {
                   "type": "calendar",
                   "state": {},
-                  "icon": "lucide-ghost",
-                  "title": "calendar"
+                  "icon": "calendar-with-checkmark",
+                  "title": "Calendar"
                 }
               }
             ],
-            "currentTab": 4
+            "currentTab": 5
           }
         ],
         "direction": "horizontal",
@@ -439,8 +277,8 @@
           "workspaces:Manage workspace layouts": false
         }
       },
-      "active": "786961a3f7153721",
-      "mtime": "2026-03-05T11:28:48+11:00"
+      "active": "ab27202c477149d8",
+      "mtime": "2026-03-05T14:04:07+11:00"
     }
   },
   "active": "Power"
