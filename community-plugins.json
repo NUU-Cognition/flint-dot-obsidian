@@ -9,5 +9,6 @@
   "open-as-md",
   "mermaid-popup",
   "obsidian-git",
-  "templater-obsidian"
+  "templater-obsidian",
+  "copy-path"
 ]
