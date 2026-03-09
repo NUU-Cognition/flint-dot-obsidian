@@ -6,7 +6,9 @@
   "newFileFolderPath": "Mesh",
   "attachmentFolderPath": "Media",
   "userIgnoreFilters": [
-    "Workspace/"
+    "Workspace/",
+    "Exports/",
+    "Imports/"
   ],
   "showUnsupportedFiles": true,
   "trashOption": "none"
