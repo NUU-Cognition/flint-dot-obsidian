@@ -3,12 +3,12 @@
   "calendar",
   "share-note",
   "obsidian-style-settings",
-  "dataview",
-  "dataview-serializer",
   "tldraw",
   "open-as-md",
   "mermaid-popup",
   "obsidian-git",
   "templater-obsidian",
-  "copy-path"
+  "copy-path",
+  "at-people",
+  "dataview"
 ]
