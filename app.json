@@ -8,8 +8,9 @@
   "userIgnoreFilters": [
     "Workspace/",
     "Exports/",
-    "Imports/"
+    "Imports/",
+    "Mesh/Agents/"
   ],
   "showUnsupportedFiles": true,
-  "trashOption": "none"
+  "trashOption": "system"
 }
