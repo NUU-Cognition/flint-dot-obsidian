@@ -10,5 +10,7 @@
   "templater-obsidian",
   "copy-path",
   "at-people",
-  "dataview"
+  "dataview",
+  "obsidian-excalidraw-plugin",
+  "nuu-obsidian"
 ]
