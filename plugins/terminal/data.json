@@ -23,7 +23,8 @@
       "followTheme": true,
       "name": "",
       "platforms": {
-        "darwin": true
+        "darwin": true,
+        "win32": false
       },
       "restoreHistory": false,
       "rightClickAction": "copyPaste",
