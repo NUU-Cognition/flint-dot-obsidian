@@ -1,4 +1,5 @@
 {
+  "terminal:toggle-focus-on-last-terminal": [],
   "editor:swap-line-up": [
     {
       "modifiers": [
@@ -86,6 +87,14 @@
         "Mod"
       ],
       "key": "]"
+    }
+  ],
+  "tab-selector:open-tab-selector": [
+    {
+      "modifiers": [
+        "Ctrl"
+      ],
+      "key": "1"
     }
   ]
 }
