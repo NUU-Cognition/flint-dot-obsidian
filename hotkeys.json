@@ -96,5 +96,14 @@
       ],
       "key": "1"
     }
+  ],
+  "vertical-tabs:open-vertical-tabs": [
+    {
+      "modifiers": [
+        "Mod",
+        "Shift"
+      ],
+      "key": "/"
+    }
   ]
 }
