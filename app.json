@@ -12,5 +12,6 @@
     "Mesh/Agents/"
   ],
   "showUnsupportedFiles": true,
-  "trashOption": "system"
+  "trashOption": "system",
+  "openBehavior": ""
 }
