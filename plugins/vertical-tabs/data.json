@@ -31,7 +31,7 @@
   "disablePointerInMissionControlView": true,
   "showMissionControlToggle": true,
   "backgroundMode": false,
-  "scrollableTabs": true,
+  "scrollableTabs": false,
   "scrollableTabsMinWidth": 100,
   "autoHideHorizontalTabs": true,
   "disableOnThisDevice": false,
