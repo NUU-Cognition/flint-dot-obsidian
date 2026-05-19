@@ -288,7 +288,6 @@
           {
             "id": "0df8f411e801d8b2",
             "type": "tabs",
-            "dimension": 48.68641699273338,
             "children": [
               {
                 "id": "41174f68a9cb6e5a",
@@ -303,48 +302,17 @@
             ]
           },
           {
-            "id": "24be50b1c6111292",
+            "id": "e9c5a391f52e7162",
             "type": "tabs",
-            "dimension": 51.31358300726662,
             "children": [
               {
-                "id": "9e4e4eeb4536e308",
+                "id": "5734ca09e14ab3c6",
                 "type": "leaf",
-                "pinned": true,
                 "state": {
-                  "type": "terminal:terminal",
-                  "state": {
-                    "terminal:terminal": {
-                      "cwd": "/Users/nathan/dev/nuu/(Tinderbox) NUU Cognition/(Flint) NUU Flint",
-                      "focus": false,
-                      "profile": {
-                        "args": [],
-                        "executable": "/bin/zsh",
-                        "followTheme": true,
-                        "name": "",
-                        "platforms": {
-                          "darwin": true
-                        },
-                        "pythonExecutable": "python3",
-                        "restoreHistory": false,
-                        "rightClickAction": "copyPaste",
-                        "successExitCodes": [
-                          "0",
-                          "SIGINT",
-                          "SIGTERM"
-                        ],
-                        "terminalOptions": {
-                          "documentOverride": null
-                        },
-                        "type": "integrated",
-                        "useWin32Conhost": true
-                      },
-                      "serial": null
-                    }
-                  },
-                  "pinned": true,
-                  "icon": "terminal",
-                  "title": "nathan@sword:~/dev/nuu/(Tinderbox) NUU Cognition/(Flint) NUU Flint"
+                  "type": "empty",
+                  "state": {},
+                  "icon": "lucide-file",
+                  "title": "New tab"
                 }
               }
             ]
@@ -539,7 +507,7 @@
         }
       },
       "active": "41174f68a9cb6e5a",
-      "mtime": "2026-05-19T11:36:30+10:00"
+      "mtime": "2026-05-19T11:38:12+10:00"
     }
   },
   "active": "Split"
