@@ -290,13 +290,27 @@
             "type": "tabs",
             "children": [
               {
-                "id": "41174f68a9cb6e5a",
+                "id": "e9fc6e04f1deeb51",
                 "type": "leaf",
                 "state": {
-                  "type": "empty",
-                  "state": {},
+                  "type": "markdown",
+                  "state": {
+                    "file": "Mesh/Homepage.md",
+                    "mode": "source",
+                    "source": false,
+                    "backlinks": true,
+                    "backlinkOpts": {
+                      "collapseAll": false,
+                      "extraContext": false,
+                      "sortOrder": "alphabetical",
+                      "showSearch": false,
+                      "searchQuery": "",
+                      "backlinkCollapsed": false,
+                      "unlinkedCollapsed": true
+                    }
+                  },
                   "icon": "lucide-file",
-                  "title": "New tab"
+                  "title": "Homepage"
                 }
               }
             ]
@@ -309,10 +323,24 @@
                 "id": "5734ca09e14ab3c6",
                 "type": "leaf",
                 "state": {
-                  "type": "empty",
-                  "state": {},
+                  "type": "markdown",
+                  "state": {
+                    "file": "Mesh/(System) Orbh Sessions.md",
+                    "mode": "source",
+                    "source": false,
+                    "backlinks": true,
+                    "backlinkOpts": {
+                      "collapseAll": false,
+                      "extraContext": false,
+                      "sortOrder": "alphabetical",
+                      "showSearch": false,
+                      "searchQuery": "",
+                      "backlinkCollapsed": false,
+                      "unlinkedCollapsed": true
+                    }
+                  },
                   "icon": "lucide-file",
-                  "title": "New tab"
+                  "title": "(System) Orbh Sessions"
                 }
               }
             ]
@@ -506,8 +534,8 @@
           "workspaces:Manage workspace layouts": false
         }
       },
-      "active": "41174f68a9cb6e5a",
-      "mtime": "2026-05-19T11:38:12+10:00"
+      "active": "e9fc6e04f1deeb51",
+      "mtime": "2026-05-19T11:46:34+10:00"
     }
   },
   "active": "Split"
