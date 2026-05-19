@@ -1,0 +1,7 @@
+/* Baseline extension fonts — load additional families so Style Settings
+   font fields (H1 font, H2 font, …) can resolve them. Enable in
+   Settings → Appearance → CSS snippets, then type the family name into
+   the Style Settings font field. */
+
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap");
