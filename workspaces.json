@@ -320,27 +320,13 @@
             "type": "tabs",
             "children": [
               {
-                "id": "5734ca09e14ab3c6",
+                "id": "19738b196791c85a",
                 "type": "leaf",
                 "state": {
-                  "type": "markdown",
-                  "state": {
-                    "file": "Mesh/(System) Orbh Sessions.md",
-                    "mode": "source",
-                    "source": false,
-                    "backlinks": true,
-                    "backlinkOpts": {
-                      "collapseAll": false,
-                      "extraContext": false,
-                      "sortOrder": "alphabetical",
-                      "showSearch": false,
-                      "searchQuery": "",
-                      "backlinkCollapsed": false,
-                      "unlinkedCollapsed": true
-                    }
-                  },
+                  "type": "empty",
+                  "state": {},
                   "icon": "lucide-file",
-                  "title": "(System) Orbh Sessions"
+                  "title": "New tab"
                 }
               }
             ]
@@ -534,8 +520,8 @@
           "workspaces:Manage workspace layouts": false
         }
       },
-      "active": "e9fc6e04f1deeb51",
-      "mtime": "2026-05-19T11:49:50+10:00"
+      "active": "19738b196791c85a",
+      "mtime": "2026-05-19T12:38:26+10:00"
     }
   },
   "active": "Split"
