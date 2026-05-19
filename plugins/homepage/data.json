@@ -14,7 +14,16 @@
       "autoCreate": false,
       "autoScroll": false,
       "pin": false,
-      "commands": [],
+      "commands": [
+        {
+          "id": "editor:focus-right",
+          "period": "Both"
+        },
+        {
+          "id": "terminal:open-terminal.default",
+          "period": "Both"
+        }
+      ],
       "alwaysApply": false,
       "hideReleaseNotes": true
     }
