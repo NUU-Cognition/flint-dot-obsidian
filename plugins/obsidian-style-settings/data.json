@@ -7,7 +7,7 @@
   "baseline-style@@nav-item-active-style": "nav-item-baseline",
   "baseline-style@@file-header-visibility": "view-header-title-hover",
   "baseline-style@@colorful-frame": false,
-  "baseline-style@@hide-vault-switcher-off": false,
+  "baseline-style@@hide-vault-switcher-off": true,
   "baseline-style@@status-bar-style": "status-bar-baseline",
   "baseline-style@@tab-top-left-style": "tab-top-left-icon",
   "baseline-style@@tab-left-style": "tab-left-compact",
