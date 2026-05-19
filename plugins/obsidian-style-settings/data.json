@@ -7,5 +7,21 @@
   "baseline-style@@nav-item-active-style": "nav-item-baseline",
   "baseline-style@@file-header-visibility": "view-header-title-hover",
   "baseline-style@@colorful-frame": false,
-  "baseline-style@@hide-vault-switcher-off": true
+  "baseline-style@@hide-vault-switcher-off": false,
+  "baseline-style@@status-bar-style": "status-bar-baseline",
+  "baseline-style@@tab-top-left-style": "tab-top-left-icon",
+  "baseline-style@@tab-left-style": "tab-left-compact",
+  "baseline-style@@h1-weight": 400,
+  "baseline-style@@h2-weight": 400,
+  "baseline-style@@h3-weight": 400,
+  "baseline-style@@h4-weight": 400,
+  "baseline-style@@h5-weight": 400,
+  "baseline-style@@h6-weight": 400,
+  "baseline-style@@inline-title-weight": 400,
+  "baseline-style@@large-new-note": false,
+  "baseline-style@@bold-folders": false,
+  "baseline-style@@nav-indentation-guide-color": "rgba(var(--mono-rgb-100), 0.12)",
+  "baseline-style@@hover-ribbon": true,
+  "baseline-style@@hover-sidedock": false,
+  "baseline-style@@nav-action": "nav-action-indicator"
 }
