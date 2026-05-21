@@ -113,5 +113,14 @@
       ],
       "key": "."
     }
+  ],
+  "file-explorer:new-file": [],
+  "nuu-obsidian:launch-orbh-interactive-default": [
+    {
+      "modifiers": [
+        "Mod"
+      ],
+      "key": "N"
+    }
   ]
 }
