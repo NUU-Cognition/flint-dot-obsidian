@@ -23,5 +23,11 @@
   "baseline-style@@nav-indentation-guide-color": "rgba(var(--mono-rgb-100), 0.12)",
   "baseline-style@@hover-ribbon": true,
   "baseline-style@@hover-sidedock": false,
-  "baseline-style@@nav-action": "nav-action-indicator"
+  "baseline-style@@nav-action": "nav-action-indicator",
+  "obsidian-velocity@@theme-paint-dark": "bronze",
+  "obsidian-velocity-config@@improve-pinned-tabs": false,
+  "obsidian-velocity-config@@enable-dim-img": false,
+  "obsidian-velocity-config@@disable-naked-embeds": false,
+  "obsidian-velocity@@override-default-font": false,
+  "obsidian-velocity@@switch-edit-icons": false
 }
