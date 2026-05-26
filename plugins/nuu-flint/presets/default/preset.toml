@@ -1,0 +1,15 @@
+[preset]
+name = "default"
+description = "Standard flint with default shards"
+
+[shards]
+required = [
+  "NUU-Cognition/shard-claude-code",
+  "NUU-Cognition/shard-agents",
+  "NUU-Cognition/shard-increments",
+  "NUU-Cognition/shard-plan",
+  "NUU-Cognition/shard-notepad",
+  "NUU-Cognition/shard-reports",
+  "NUU-Cognition/shard-flint",
+  "NUU-Cognition/shard-projects",
+]

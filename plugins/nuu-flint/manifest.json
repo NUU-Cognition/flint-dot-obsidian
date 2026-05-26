@@ -1,0 +1,10 @@
+{
+	"id": "nuu-flint",
+	"name": "NUU Flint",
+	"version": "0.0.1",
+	"minAppVersion": "1.5.0",
+	"description": "Companion plugin for the NUU Flint ecosystem. Hosts the local Flint server inside Obsidian and exposes vault/workspace operations over localhost.",
+	"author": "NUU Cognition",
+	"authorUrl": "https://nuu.cognition",
+	"isDesktopOnly": true
+}

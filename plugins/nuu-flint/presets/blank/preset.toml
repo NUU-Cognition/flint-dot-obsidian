@@ -1,0 +1,9 @@
+[preset]
+name = "blank"
+description = "Empty flint with no shards"
+
+[shards]
+required = [
+  "NUU-Cognition/shard-flint",
+  "NUU-Cognition/shard-orbh"
+]
