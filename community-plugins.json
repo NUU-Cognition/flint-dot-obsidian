@@ -1,5 +1,4 @@
 [
-  "terminal",
   "calendar",
   "share-note",
   "obsidian-style-settings",
@@ -14,5 +13,6 @@
   "obsidian-excalidraw-plugin",
   "vertical-tabs",
   "homepage",
+  "terminal",
   "nuu-flint"
 ]
