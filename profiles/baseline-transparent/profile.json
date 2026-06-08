@@ -1,0 +1,8 @@
+{
+  "id": "baseline-transparent",
+  "title": "Baseline Transparent",
+  "description": "Use the Baseline theme with Obsidian window translucency and the matching main-pane transparency snippet.",
+  "patches": [
+    "002-baseline-transparent-appearance"
+  ]
+}
