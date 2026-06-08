@@ -1,0 +1,8 @@
+{
+  "id": "default",
+  "title": "Default",
+  "description": "Default Flint Obsidian profile. Only hides the left ribbon.",
+  "patches": [
+    "000-default-ribbon-off"
+  ]
+}

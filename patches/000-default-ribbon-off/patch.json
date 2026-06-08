@@ -1,0 +1,14 @@
+{
+  "id": "000-default-ribbon-off",
+  "title": "Default ribbon-off appearance",
+  "why": "Keeps the default Flint Obsidian profile limited to hiding the left ribbon. Other appearance choices remain explicit opt-in profiles.",
+  "target": "appearance.json",
+  "type": "json-set",
+  "platforms": ["all"],
+  "changes": [
+    {
+      "path": ["showRibbon"],
+      "value": false
+    }
+  ]
+}
