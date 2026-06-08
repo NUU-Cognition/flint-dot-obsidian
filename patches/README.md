@@ -78,6 +78,10 @@ Use:
 ```bash
 flint obsidian patches list
 flint obsidian patches apply
+flint obsidian profiles
+flint obsidian profiles apply baseline-transparent
 ```
 
 When Obsidian is open, the CLI routes the apply through the NUU Flint plugin runtime API so hotkeys and appearance settings are written through Obsidian's in-memory config. When Obsidian is closed, the CLI writes files directly.
+
+Profiles live under `profiles/<profile-id>/profile.json` and list patch ids in the order they should apply. Use profiles for optional reusable changes such as `baseline-transparent`; keep `patches apply` for low-level repair/reapply of every documented patch.
