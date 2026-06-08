@@ -13,7 +13,7 @@
   "noticeTimeout": 5,
   "openChangelogOnUpdate": true,
   "pinNewInstance": true,
-  "preferredRenderer": "webgl",
+  "preferredRenderer": "dom",
   "profiles": {
     "darwinExternalDefault": {
       "args": [
@@ -41,7 +41,7 @@
     "darwinIntegratedDefault": {
       "args": [],
       "executable": "/bin/zsh",
-      "followTheme": true,
+      "followTheme": false,
       "name": "",
       "platforms": {
         "darwin": true
@@ -55,6 +55,14 @@
         "SIGTERM"
       ],
       "terminalOptions": {
+        "allowTransparency": true,
+        "theme": {
+          "background": "#00000000",
+          "cursor": "#dcddde",
+          "cursorAccent": "#00000000",
+          "foreground": "#dcddde",
+          "selectionBackground": "#ffffff40"
+        },
         "documentOverride": null
       },
       "type": "integrated",
@@ -162,6 +170,7 @@
   },
   "defaultProfile": "darwinIntegratedDefault",
   "terminalOptions": {
+    "allowTransparency": true,
     "documentOverride": null
   }
 }

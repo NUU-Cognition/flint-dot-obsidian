@@ -1,0 +1,58 @@
+/* Baseline theme: extend translucency to the main editor pane, the header/title
+ * bars, and the integrated terminal.
+ *
+ * Baseline normally forces these regions opaque even when "Translucent window"
+ * is on, so only the sidebars show the desktop through. This snippet makes
+ * everything match the sidebar.
+ *
+ * To switch looks, change the value of --bg-main below:
+ *   var(--workspace-background-translucent)  -> matches the sidebar (50% tint, default)
+ *   transparent                              -> fully see-through (no tint at all)
+ */
+
+.is-translucent {
+  /* Translucency strength: lower % = more see-through (theme default is 50%).
+   * Drives both the sidebar and the main pane. */
+  --translucent-light-opacity: 30% !important;
+  --translucent-dark-opacity: 30% !important;
+  --bg-main: var(--workspace-background-translucent);
+}
+
+/* ---- Main note pane -------------------------------------------------- */
+.is-translucent .mod-root,
+.is-translucent .mod-root .workspace-tab-container {
+  background-color: var(--bg-main) !important;
+}
+
+.is-translucent .mod-root .view-content,
+.is-translucent .mod-root .markdown-source-view,
+.is-translucent .mod-root .markdown-reading-view,
+.is-translucent .mod-root .cm-editor,
+.is-translucent .mod-root .cm-scroller {
+  background-color: transparent !important;
+}
+
+/* ---- Header / title / tab bars -------------------------------------- */
+.is-translucent .titlebar,
+.is-translucent .view-header,
+.is-translucent .mod-root .workspace-tab-header-container,
+.is-translucent .mod-root .workspace-tab-header-container-inner {
+  background-color: transparent !important;
+}
+
+/* ---- Integrated terminal (xterm) ------------------------------------ */
+/* Feed xterm a transparent background: it reads --background-primary from the
+ * terminal leaf when "Follow theme" is on. Pair this with allowTransparency
+ * enabled in the Terminal plugin settings (data.json) — CSS alone can't make a
+ * WebGL/canvas terminal see-through. */
+.workspace-leaf-content[data-type="terminal:terminal"] {
+  --background-primary: transparent;
+}
+
+.workspace-leaf-content[data-type="terminal:terminal"] .view-content,
+.workspace-leaf-content[data-type="terminal:terminal"] .terminal\:terminal,
+.workspace-leaf-content[data-type="terminal:terminal"] .xterm,
+.workspace-leaf-content[data-type="terminal:terminal"] .xterm-viewport,
+.workspace-leaf-content[data-type="terminal:terminal"] .xterm-screen {
+  background-color: transparent !important;
+}
