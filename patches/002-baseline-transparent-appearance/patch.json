@@ -1,0 +1,23 @@
+{
+  "id": "002-baseline-transparent-appearance",
+  "title": "Baseline transparent appearance",
+  "why": "Applies the optional Baseline + translucent-window appearance profile without making it part of the default vault setup.",
+  "target": "appearance.json",
+  "type": "json-set",
+  "platforms": ["all"],
+  "changes": [
+    {
+      "path": ["cssTheme"],
+      "value": "Baseline"
+    },
+    {
+      "path": ["translucency"],
+      "value": true
+    },
+    {
+      "path": ["enabledCssSnippets"],
+      "mode": "merge",
+      "value": ["baseline-transparent-main"]
+    }
+  ]
+}
