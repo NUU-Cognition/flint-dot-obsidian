@@ -85,4 +85,4 @@ flint obsidian profiles apply baseline-transparent
 
 When Obsidian is open, the CLI routes the apply through the NUU Flint plugin runtime API so hotkeys and appearance settings are written through Obsidian's in-memory config. When Obsidian is closed, the CLI writes files directly.
 
-Profiles live under `profiles/<NNN-slug>/profile.json` and list patch ids in the order they should apply. The `default` profile only hides the left ribbon. Use other profiles for optional reusable changes such as `baseline-transparent`; keep `patches apply` for low-level repair/reapply of every documented patch.
+Profiles live under `profiles/<NNN-slug>/profile.json` and list patch ids in the order they should apply. The `default` profile hides the left ribbon, keeps window translucency off, and enables the terminal color fix. Use other profiles for optional reusable changes such as `baseline-transparent`; keep `patches apply` for low-level repair/reapply of every documented patch.
