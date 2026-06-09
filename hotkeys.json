@@ -1,4 +1,13 @@
 {
+  "terminal:open-terminal.integrated.root": [
+    {
+      "modifiers": [
+        "Alt",
+        "Ctrl"
+      ],
+      "key": "T"
+    }
+  ],
   "editor:swap-line-up": [
     {
       "modifiers": [
@@ -15,15 +24,6 @@
         "Ctrl"
       ],
       "key": "ArrowDown"
-    }
-  ],
-  "terminal:open-terminal.integrated.root": [
-    {
-      "modifiers": [
-        "Alt",
-        "Ctrl"
-      ],
-      "key": "T"
     }
   ],
   "editor:insert-link": [],
@@ -121,6 +121,15 @@
         "Mod"
       ],
       "key": "N"
+    }
+  ],
+  "vertical-tabs:toggle-zen-mode": [
+    {
+      "modifiers": [
+        "Mod",
+        "Shift"
+      ],
+      "key": "\\"
     }
   ]
 }

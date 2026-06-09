@@ -1,7 +1,7 @@
 {
   "id": "000-default-ribbon-off",
-  "title": "Default ribbon-off appearance",
-  "why": "Keeps the default Flint Obsidian profile limited to hiding the left ribbon. Other appearance choices remain explicit opt-in profiles.",
+  "title": "Default appearance",
+  "why": "Keeps the default Flint Obsidian profile conservative: hide the left ribbon, keep window translucency off, and enable the terminal color fix from the Baseline transparency snippet.",
   "target": "appearance.json",
   "type": "json-set",
   "platforms": ["all"],
@@ -9,6 +9,15 @@
     {
       "path": ["showRibbon"],
       "value": false
+    },
+    {
+      "path": ["translucency"],
+      "value": false
+    },
+    {
+      "path": ["enabledCssSnippets"],
+      "mode": "merge",
+      "value": ["baseline-transparent-main"]
     }
   ]
 }
