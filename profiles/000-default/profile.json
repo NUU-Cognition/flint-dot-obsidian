@@ -1,0 +1,8 @@
+{
+  "id": "default",
+  "title": "Default",
+  "description": "Default Flint Obsidian profile. Hides the left ribbon, keeps window translucency off, and applies the terminal color fix.",
+  "patches": [
+    "000-default-ribbon-off"
+  ]
+}
