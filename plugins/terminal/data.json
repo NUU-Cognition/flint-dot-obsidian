@@ -171,6 +171,7 @@
   "defaultProfile": "darwinIntegratedDefault",
   "terminalOptions": {
     "allowTransparency": true,
-    "documentOverride": null
+    "documentOverride": null,
+    "fontFamily": "JetBrainsMono Nerd Font"
   }
 }
