@@ -8,6 +8,15 @@
       "key": "T"
     }
   ],
+  "vertical-tabs:toggle-zen-mode": [
+    {
+      "modifiers": [
+        "Mod",
+        "Shift"
+      ],
+      "key": "\\"
+    }
+  ],
   "editor:swap-line-up": [
     {
       "modifiers": [
@@ -123,13 +132,30 @@
       "key": "N"
     }
   ],
-  "vertical-tabs:toggle-zen-mode": [
+  "obsidian-excalidraw-plugin:excalidraw-autocreate-and-embed-new-tab": [
     {
       "modifiers": [
-        "Mod",
+        "Alt",
+        "Ctrl"
+      ],
+      "key": "E"
+    }
+  ],
+  "workspace:next-tab": [
+    {
+      "modifiers": [
+        "Ctrl"
+      ],
+      "key": "Tab"
+    }
+  ],
+  "workspace:previous-tab": [
+    {
+      "modifiers": [
+        "Ctrl",
         "Shift"
       ],
-      "key": "\\"
+      "key": "Tab"
     }
   ]
 }
