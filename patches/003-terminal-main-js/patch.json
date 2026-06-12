@@ -1,7 +1,7 @@
 {
   "id": "003-terminal-main-js",
   "title": "Terminal plugin main.js code patches",
-  "why": "Two code edits to the Polyipseity terminal plugin's bundled main.js that have no settings exposure. (1) Hotkey passthrough: while a terminal is focused the plugin re-bakes Obsidian's hotkey table to a hardcoded whitelist Set; we prepend the tab-switch, new-terminal, settings, and zen-mode command ids so those hotkeys still reach Obsidian instead of falling through to the shell. (2) Strip the 'Terminal: ' tab-title prefix by simplifying getDisplayText() to return the bare name. Reapply after any terminal plugin update.",
+  "why": "Two code edits to the Polyipseity terminal plugin's bundled main.js that have no settings exposure. (1) Hotkey passthrough: while a terminal is focused the plugin re-bakes Obsidian's hotkey table to a hardcoded whitelist Set; we prepend the tab-switch (goto-tab/next/previous/last), close-tab, new-terminal, settings, and zen-mode command ids so those hotkeys still reach Obsidian instead of falling through to the shell. (2) Strip the 'Terminal: ' tab-title prefix by simplifying getDisplayText() to return the bare name. Reapply after any terminal plugin update.",
   "target": "plugins/terminal/main.js",
   "type": "text-replace",
   "platforms": [
@@ -10,7 +10,7 @@
   "replacements": [
     {
       "find": "new Set([w3(i,()=>c.t(\"commands.toggle-focus-on-last-terminal\")",
-      "replace": "new Set([\"terminal:open-terminal.integrated.root\",\"app:open-settings\",\"vertical-tabs:toggle-zen-mode\",\"workspace:goto-tab-1\",\"workspace:goto-tab-2\",\"workspace:goto-tab-3\",\"workspace:goto-tab-4\",\"workspace:goto-tab-5\",\"workspace:goto-tab-6\",\"workspace:goto-tab-7\",\"workspace:goto-tab-8\",\"workspace:goto-last-tab\",w3(i,()=>c.t(\"commands.toggle-focus-on-last-terminal\")"
+      "replace": "new Set([\"terminal:open-terminal.integrated.root\",\"app:open-settings\",\"vertical-tabs:toggle-zen-mode\",\"workspace:goto-tab-1\",\"workspace:goto-tab-2\",\"workspace:goto-tab-3\",\"workspace:goto-tab-4\",\"workspace:goto-tab-5\",\"workspace:goto-tab-6\",\"workspace:goto-tab-7\",\"workspace:goto-tab-8\",\"workspace:goto-last-tab\",\"workspace:close\",\"workspace:next-tab\",\"workspace:previous-tab\",\"switcher:open\",\"command-palette:open\",w3(i,()=>c.t(\"commands.toggle-focus-on-last-terminal\")"
     },
     {
       "find": "getDisplayText(){return this.context.language.value.t(`components.${$0.type.id}.display-name`,{interpolation:{escapeValue:!1},name:this.name})}",
