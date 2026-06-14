@@ -35,7 +35,7 @@ Required fields:
 - `title`: short human-readable name.
 - `why`: reason for the patch; include the upstream limitation or local policy.
 - `target`: relative path under `.obsidian/`. Absolute paths and `..` are invalid.
-- `type`: either `json-set` or `file-overlay`.
+- `type`: one of `json-set`, `file-overlay`, or `text-replace`.
 - `platforms`: supported Node platforms, such as `darwin` or `win32`; use `all` only for platform-independent patches.
 
 ## Patch Types
@@ -70,6 +70,48 @@ Each change supports:
   "payload": "example.css"
 }
 ```
+
+`text-replace` patches make in-place string edits to a non-JSON file — chiefly a plugin's
+minified `main.js` where there is no setting or config key to drive the change. Each replacement
+finds an exact anchor and substitutes it. This is preferred over `file-overlay` for plugin
+bundles because it edits only the patched region and survives plugin updates: a fresh `main.js`
+still contains the `find` anchors, so the edit re-applies cleanly instead of pinning the whole
+file to a frozen version.
+
+```json
+{
+  "type": "text-replace",
+  "target": "plugins/terminal/main.js",
+  "replacements": [
+    { "find": "getDisplayText(){return this.context...}", "replace": "getDisplayText(){return this.name}" }
+  ]
+}
+```
+
+Each replacement supports:
+
+- `find`: exact substring anchor that exists in the unpatched file.
+- `replace`: text to substitute for every occurrence of `find`.
+
+`text-replace` is idempotent: a replacement whose `replace` text is already present is treated as
+done and skipped, so re-applying is a no-op. If neither the `find` anchor nor the `replace` result
+is present (the upstream file changed shape), apply fails loudly rather than corrupting the file —
+re-derive the anchor and update the patch.
+
+## Terminal patches
+
+The Polyipseity terminal plugin carries two independent patch units:
+
+- `001-terminal-hotkey-binding` (`json-set` → `hotkeys.json`) — binds the new-terminal command to
+  Alt+Ctrl+T.
+- `003-terminal-main-js` (`text-replace` → `plugins/terminal/main.js`) — the plugin's own code
+  edits that have no settings: (1) hotkey passthrough, so tab-switch / new-terminal / settings /
+  zen-mode hotkeys still reach Obsidian while a terminal pane is focused instead of falling through
+  to the shell, (2) stripping the `Terminal: ` tab-title prefix, and (3) focus-on-activate, so
+  switching to a terminal pane (e.g. via a tab-switch hotkey) moves keyboard focus into the xterm
+  input without a click — the plugin's `active-leaf-change` handler is augmented to call the
+  terminal view's `focus()`, guarded by `document.hasFocus()` so the OS window is never pulled
+  forward during background/programmatic activations. Reapply after any terminal plugin update.
 
 ## Applying
 
