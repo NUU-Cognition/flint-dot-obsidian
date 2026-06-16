@@ -1,4 +1,22 @@
 {
+  "terminal:open-terminal.integrated.root": [
+    {
+      "modifiers": [
+        "Alt",
+        "Ctrl"
+      ],
+      "key": "T"
+    }
+  ],
+  "vertical-tabs:toggle-zen-mode": [
+    {
+      "modifiers": [
+        "Mod",
+        "Shift"
+      ],
+      "key": "\\"
+    }
+  ],
   "editor:swap-line-up": [
     {
       "modifiers": [
@@ -15,15 +33,6 @@
         "Ctrl"
       ],
       "key": "ArrowDown"
-    }
-  ],
-  "terminal:open-terminal.integrated.root": [
-    {
-      "modifiers": [
-        "Alt",
-        "Ctrl"
-      ],
-      "key": "T"
     }
   ],
   "editor:insert-link": [],
@@ -121,6 +130,32 @@
         "Mod"
       ],
       "key": "N"
+    }
+  ],
+  "obsidian-excalidraw-plugin:excalidraw-autocreate-and-embed-new-tab": [
+    {
+      "modifiers": [
+        "Alt",
+        "Ctrl"
+      ],
+      "key": "E"
+    }
+  ],
+  "workspace:next-tab": [
+    {
+      "modifiers": [
+        "Ctrl"
+      ],
+      "key": "Tab"
+    }
+  ],
+  "workspace:previous-tab": [
+    {
+      "modifiers": [
+        "Ctrl",
+        "Shift"
+      ],
+      "key": "Tab"
     }
   ]
 }
