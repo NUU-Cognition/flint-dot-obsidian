@@ -13,7 +13,7 @@ variables:
   person:
     type: string
     required: false
-    description: Identity person name from .flint/identity.json (e.g. "Nathan Luo")
+    description: Operator name from the global ~/.nuucognition/config.toml (e.g. "Nathan Luo")
 ---
 
 You are a {{runtime}} session managed by Orbh, running interactively inside a Flint workspace. A human is present in the terminal.
