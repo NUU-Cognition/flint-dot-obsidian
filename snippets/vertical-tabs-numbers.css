@@ -1,0 +1,37 @@
+/*
+ * Vertical Tabs — always-on tab numbers
+ *
+ * Shows each tab's ordinal (e.g. "1. ") before its title in the Vertical Tabs
+ * sidebar, at all times (no modifier key needed).
+ *
+ * How it works: the Vertical Tabs plugin already writes a `data-index`
+ * attribute (the tab's 1-based position within its group) onto every tab's
+ * `.tree-item-self`. The plugin's built-in "view cue" only renders that number
+ * while Ctrl/Cmd is held and only for the active group. This snippet surfaces
+ * the same attribute permanently, laid out inline after the icon, before the
+ * title — without touching the plugin bundle, so it survives plugin updates.
+ *
+ * Numbering is per-group (each group restarts at 1), matching the data the
+ * plugin provides. Disable by toggling this snippet off in
+ * Settings → Appearance → CSS snippets.
+ */
+
+/* The number, rendered before the title text on each real tab. */
+.obsidian-vertical-tabs-container
+  .tree-item.is-tab:not(.is-tab-slot)
+  .tree-item-self[data-index]::before {
+  content: attr(data-index) ". ";
+  flex: 0 0 auto;
+  align-self: center;
+  margin-right: var(--size-2-2);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+/* Put the tab icon first, so the order reads: icon → number → title. */
+.obsidian-vertical-tabs-container
+  .tree-item.is-tab:not(.is-tab-slot)
+  .tree-item-self[data-index]
+  > .tree-item-icon {
+  order: -1;
+}
