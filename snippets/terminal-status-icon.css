@@ -22,6 +22,29 @@
   }
 }
 
+/* Animated integer counters for the pure-CSS mm:ss turn timer (interim, until a
+   JS timer feeds data-nuu-turn). Resets to 0:00 each time a tab enters `-busy`. */
+@property --nuu-m {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: false;
+}
+@property --nuu-s {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: false;
+}
+@keyframes nuu-count-m {
+  to {
+    --nuu-m: 100;
+  }
+}
+@keyframes nuu-count-s {
+  to {
+    --nuu-s: 60;
+  }
+}
+
 /* Hide the pin button in the sidebar — the status indicator owns the right slot. */
 .obsidian-vertical-tabs-container .tree-item.is-tab .action-pin {
   display: none !important;
@@ -48,7 +71,16 @@
   .tree-item-inner {
   padding-right: 1.6em;
 }
-/* Extra room only when a turn timer is actually present. */
+/* Extra room when a turn timer is shown — while working (CSS timer) or when a
+   JS timer feeds data-nuu-turn. */
+.obsidian-vertical-tabs-container
+  .tree-item.is-tab:not(.is-tab-slot)
+  .tree-item-self:has(.tree-item-icon .svg-icon.nuu-claude-busy)
+  .tree-item-inner,
+.obsidian-vertical-tabs-container
+  .tree-item.is-tab:not(.is-tab-slot)
+  .tree-item-self:has(.tree-item-icon .svg-icon.nuu-codex-busy)
+  .tree-item-inner,
 .obsidian-vertical-tabs-container
   .tree-item.is-tab:not(.is-tab-slot)
   .tree-item-self
@@ -104,12 +136,40 @@
   animation: nuu-terminal-icon-spin 0.8s linear infinite;
 }
 
-/* Turn timer — fed by JS via data-nuu-turn; vertically centered, left of the slot. */
+/* Turn timer (interim pure-CSS): while working, a mm:ss counter that resets to
+   0:00 each turn. Vertically centered, just left of the status ring. */
+.obsidian-vertical-tabs-container
+  .tree-item.is-tab:not(.is-tab-slot)
+  .tree-item-self:has(.tree-item-icon .svg-icon.nuu-claude-busy)
+  .tree-item-inner::after,
+.obsidian-vertical-tabs-container
+  .tree-item.is-tab:not(.is-tab-slot)
+  .tree-item-self:has(.tree-item-icon .svg-icon.nuu-codex-busy)
+  .tree-item-inner::after {
+  counter-reset: nuum var(--nuu-m) nuus var(--nuu-s);
+  content: counter(nuum) ":" counter(nuus, decimal-leading-zero);
+  position: absolute;
+  right: calc(var(--size-4-3) + 1.5em);
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  line-height: 1;
+  font-size: var(--font-ui-smaller);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  animation: nuu-count-m 6000s steps(100) forwards, nuu-count-s 60s steps(60) infinite;
+  pointer-events: none;
+}
+
+/* When a JS timer feeds data-nuu-turn, it wins (persists across turns). */
 .obsidian-vertical-tabs-container
   .tree-item.is-tab:not(.is-tab-slot)
   .tree-item-self
   .tree-item-inner[data-nuu-turn]:not([data-nuu-turn=""])::after {
-  content: attr(data-nuu-turn);
+  counter-reset: none !important;
+  content: attr(data-nuu-turn) !important;
+  animation: none !important;
   position: absolute;
   right: calc(var(--size-4-3) + 1.5em);
   top: 0;
