@@ -6,7 +6,7 @@
     "markdown"
   ],
   "sidebarExcludeSelf": true,
-  "trimTabNames": false,
+  "trimTabNames": true,
   "showMoreButtons": false,
   "useTabEditing": true,
   "zenMode": false,

@@ -1,37 +1,46 @@
 /*
  * Vertical Tabs — always-on tab numbers
  *
- * Shows each tab's ordinal (e.g. "1. ") before its title in the Vertical Tabs
- * sidebar, at all times (no modifier key needed).
+ * Shows each tab's ordinal (e.g. "1.") at the far LEFT of the row, before the
+ * icon — in a reserved gutter, outside the icon/title flex flow.
  *
- * How it works: the Vertical Tabs plugin already writes a `data-index`
- * attribute (the tab's 1-based position within its group) onto every tab's
- * `.tree-item-self`. The plugin's built-in "view cue" only renders that number
- * while Ctrl/Cmd is held and only for the active group. This snippet surfaces
- * the same attribute permanently, laid out inline after the icon, before the
- * title — without touching the plugin bundle, so it survives plugin updates.
+ * Why absolute positioning: each tab row (`.tree-item-self[data-index]`) is a
+ * flex container whose first child is the `.tree-item-icon` component slot.
+ * Flex-ordering a `::before` around that slot is fragile, so instead we (1) add
+ * left padding to the row to open a gutter, and (2) absolutely position the
+ * number into that gutter. This is the same technique the plugin's own
+ * Ctrl/Cmd "view cue" badge uses. No plugin bundle is touched, so it survives
+ * plugin updates.
  *
- * Numbering is per-group (each group restarts at 1), matching the data the
- * plugin provides. Disable by toggling this snippet off in
- * Settings → Appearance → CSS snippets.
+ * The number comes from the plugin's `data-index` attribute (1-based position
+ * within the group; numbering restarts per group). Disable by toggling this
+ * snippet off in Settings → Appearance → CSS snippets.
  */
 
-/* The number, rendered before the title text on each real tab. */
+/* Each real tab row is the positioning context; icon/title are left untouched. */
+.obsidian-vertical-tabs-container
+  .tree-item.is-tab:not(.is-tab-slot)
+  .tree-item-self[data-index] {
+  position: relative;
+  overflow: visible;
+}
+
+/* Park the number just OUTSIDE the box, in the indentation gutter to its left.
+   `right: 100%` aligns the number's right edge to the box's left edge, so it
+   sits fully outside the tab and right-aligns regardless of digit count. */
 .obsidian-vertical-tabs-container
   .tree-item.is-tab:not(.is-tab-slot)
   .tree-item-self[data-index]::before {
-  content: attr(data-index) ". ";
-  flex: 0 0 auto;
-  align-self: center;
+  content: attr(data-index) ".";
+  position: absolute;
+  right: 100%;
   margin-right: var(--size-2-2);
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  color: var(--text-faint);
   font-variant-numeric: tabular-nums;
   line-height: 1;
-}
-
-/* Put the tab icon first, so the order reads: icon → number → title. */
-.obsidian-vertical-tabs-container
-  .tree-item.is-tab:not(.is-tab-slot)
-  .tree-item-self[data-index]
-  > .tree-item-icon {
-  order: -1;
+  pointer-events: none;
 }
