@@ -1,0 +1,10 @@
+{
+  "id": "nuu-flint-helper",
+  "name": "NUU Flint Helper",
+  "version": "0.0.1",
+  "minAppVersion": "1.5.0",
+  "description": "Development helper for reloading the NUU Flint plugin without restarting Obsidian.",
+  "author": "NUU Cognition",
+  "authorUrl": "https://nuu.cognition",
+  "isDesktopOnly": true
+}

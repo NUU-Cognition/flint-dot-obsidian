@@ -38,8 +38,6 @@ If your harness later shows a native session or thread ID, that is different fro
 
 Use these Orbh commands while you work:
 
-- `{{commandPath}} session status <queued|in-progress|blocked|deferred|finished|failed|cancelled>`
-
 - `{{commandPath}} session set <key> <value>`
 
 - `{{commandPath}} session get <key>`
