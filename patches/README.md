@@ -1,8 +1,22 @@
-# Obsidian Patch Registry
+# The Patch Log
 
-This folder contains intentional local patches that can be re-applied after a reset, new-machine clone, plugin update, or upstream overwrite.
+This folder is a **log of intentional edits to plugin bundles** — code changes to files like `plugins/*/main.js` that have no settings exposure. Every entry is already **baked into the committed tree**: on a healthy checkout you never need to apply anything. The log exists so the edits can be **replayed** when a plugin update ships a fresh bundle and clobbers them — a dev/maintainer operation, not part of normal vault use.
 
-Each patch lives in its own numbered folder:
+This is one of two mechanisms for intentional local changes. The other is **profiles** (`../profiles/`) — activatable, *reversible*, per-vault choices such as appearance. The split:
+
+| | Patch log (`patches/`) | Profiles (`../profiles/`) |
+|---|---|---|
+| What | Code edits to plugin bundles | Per-vault config choices (appearance, etc.) |
+| Lives in git? | Yes — effects are committed | No — targets are untracked per-vault files |
+| Lifecycle | Permanent; replayed after plugin updates | Activate / deactivate at will |
+| Reversible? | No — they *are* the canonical state | Yes — activation stashes prior values |
+| Who runs it | Dev, after updating a plugin | Anyone, any time |
+
+If you are about to add an appearance or config choice here: stop — that's a profile.
+
+## Layout
+
+Each log entry lives in its own numbered folder:
 
 ```text
 patches/<NNN-slug>/patch.json
@@ -10,73 +24,36 @@ patches/<NNN-slug>/patch.json
 
 ## Descriptor Format
 
-Every `patch.json` includes:
-
 ```json
 {
-  "id": "001-example",
-  "title": "Human-readable patch title",
-  "why": "Why this patch exists and when it should be reapplied.",
-  "target": "relative/path/under/.obsidian.json",
-  "type": "json-set",
+  "id": "003-example",
+  "title": "Human-readable title",
+  "why": "What the edit does and why it exists. Include the upstream limitation.",
+  "target": "relative/path/under/.obsidian",
+  "type": "text-replace",
   "platforms": ["darwin"],
-  "changes": [
-    {
-      "path": ["some", "json", "key"],
-      "value": true
-    }
+  "replacements": [
+    { "find": "original upstream text", "replace": "patched text" }
   ]
 }
 ```
 
 Required fields:
 
-- `id`: stable patch id, normally matching the folder name.
+- `id`: stable entry id, normally matching the folder name.
 - `title`: short human-readable name.
-- `why`: reason for the patch; include the upstream limitation or local policy.
+- `why`: reason for the edit; include the upstream limitation. This is the log's documentation value — write it well.
 - `target`: relative path under `.obsidian/`. Absolute paths and `..` are invalid.
-- `type`: one of `json-set`, `file-overlay`, or `text-replace`.
-- `platforms`: supported Node platforms, such as `darwin` or `win32`; use `all` only for platform-independent patches.
+- `platforms`: Node platforms this entry applies on (`darwin`, `win32`), or `all`.
+- `type`: one of `text-replace`, `json-set`, or `file-overlay` (see below).
 
-## Patch Types
+## The Anchor-on-Original Rule
 
-`json-set` patches set or merge JSON values in tracked Obsidian config files such as `hotkeys.json` or `plugins/*/data.json`.
+**Every replacement anchors on original upstream text and produces its final form directly.** No entry may anchor on another entry's output. This keeps every entry independently derivable from a fresh plugin bundle, which is what makes replay order-independent and lets each entry's status be checked in isolation. If two edits touch the same region, the later entry owns that region end-to-end and the earlier entry drops it.
 
-```json
-{
-  "type": "json-set",
-  "target": "hotkeys.json",
-  "changes": [
-    {
-      "path": ["terminal:open-terminal.integrated.root"],
-      "value": [{ "modifiers": ["Alt", "Ctrl"], "key": "T" }]
-    }
-  ]
-}
-```
+## Entry Types
 
-Each change supports:
-
-- `path`: JSON path as an array of object keys or array indexes.
-- `value`: JSON value to write.
-- `mode`: optional, `set` by default. Use `merge` to deep-merge object values while preserving sibling keys.
-
-`file-overlay` patches replace or ensure a whole file. The payload is stored beside the descriptor:
-
-```json
-{
-  "type": "file-overlay",
-  "target": "snippets/example.css",
-  "payload": "example.css"
-}
-```
-
-`text-replace` patches make in-place string edits to a non-JSON file — chiefly a plugin's
-minified `main.js` where there is no setting or config key to drive the change. Each replacement
-finds an exact anchor and substitutes it. This is preferred over `file-overlay` for plugin
-bundles because it edits only the patched region and survives plugin updates: a fresh `main.js`
-still contains the `find` anchors, so the edit re-applies cleanly instead of pinning the whole
-file to a frozen version.
+`text-replace` is the normal type for plugin bundles — in-place string edits to a minified `main.js` where no setting exists. Each replacement finds an exact anchor and substitutes it:
 
 ```json
 {
@@ -88,43 +65,32 @@ file to a frozen version.
 }
 ```
 
-Each replacement supports:
+`text-replace` is idempotent: a replacement whose `replace` text is already present is treated as done and skipped, so replaying over an already-patched tree is a no-op. If neither the `find` anchor nor the `replace` result is present, the upstream file changed shape — replay fails loudly rather than corrupting the file; re-derive the anchor from the new bundle and update the entry.
 
-- `find`: exact substring anchor that exists in the unpatched file.
-- `replace`: text to substitute for every occurrence of `find`.
+`json-set` (set/merge JSON values) and `file-overlay` (replace a whole file, payload stored beside the descriptor) are also supported, but tracked JSON config belongs directly in git and per-vault config belongs in profiles — so log entries of these types should be rare.
 
-`text-replace` is idempotent: a replacement whose `replace` text is already present is treated as
-done and skipped, so re-applying is a no-op. If neither the `find` anchor nor the `replace` result
-is present (the upstream file changed shape), apply fails loudly rather than corrupting the file —
-re-derive the anchor and update the patch.
+## Current Entries
 
-## Terminal patches
+Both target the Polyipseity terminal plugin's `main.js` and are independent of each other:
 
-The Polyipseity terminal plugin carries two independent patch units:
+- `003-terminal-main-js` — (1) hotkey passthrough: whitelist tab-switch / new-terminal / settings / zen-mode command ids so they reach Obsidian while a terminal is focused; (2) focus-on-activate: switching to a terminal pane moves keyboard focus into the xterm input, guarded by `document.hasFocus()`. (The Alt+Ctrl+T binding itself lives in the tracked `hotkeys.json` — tracked config needs no log entry.)
+- `004-terminal-icon` — status-driven tab icons: `getIcon()` returns runtime brand icons (nuu-claude / nuu-codex, with `-busy` variants keyed off the leading spinner glyph in the pane title); `getDisplayText()` is rewritten end-to-end to strip the `Terminal: ` wrapper and the status glyph/runtime label.
 
-- `001-terminal-hotkey-binding` (`json-set` → `hotkeys.json`) — binds the new-terminal command to
-  Alt+Ctrl+T.
-- `003-terminal-main-js` (`text-replace` → `plugins/terminal/main.js`) — the plugin's own code
-  edits that have no settings: (1) hotkey passthrough, so tab-switch / new-terminal / settings /
-  zen-mode hotkeys still reach Obsidian while a terminal pane is focused instead of falling through
-  to the shell, (2) stripping the `Terminal: ` tab-title prefix, and (3) focus-on-activate, so
-  switching to a terminal pane (e.g. via a tab-switch hotkey) moves keyboard focus into the xterm
-  input without a click — the plugin's `active-leaf-change` handler is augmented to call the
-  terminal view's `focus()`, guarded by `document.hasFocus()` so the OS window is never pulled
-  forward during background/programmatic activations. Reapply after any terminal plugin update.
+After updating the terminal plugin, replay and reload.
 
-## Applying
-
-Use:
+## CLI
 
 ```bash
-flint obsidian patches list
-flint obsidian patches apply
-flint obsidian profiles
-flint obsidian profiles apply default
-flint obsidian profiles apply baseline-transparent
+flint obsidian patches list      # is every entry still baked in?
+flint obsidian patches replay    # dev repair: re-derive entries onto fresh bundles
 ```
 
-When Obsidian is open, the CLI routes the apply through the NUU Flint plugin runtime API so hotkeys and appearance settings are written through Obsidian's in-memory config. When Obsidian is closed, the CLI writes files directly.
+`list` shows whether each entry's effect is present in the working files. `replay` writes the entries back (idempotent, order-independent) and reloads Obsidian if it is open. Profiles have their own verbs:
 
-Profiles live under `profiles/<NNN-slug>/profile.json` and list patch ids in the order they should apply. The `default` profile hides the left ribbon, keeps window translucency off, and enables the terminal color fix. Use other profiles for optional reusable changes such as `baseline-transparent`; keep `patches apply` for low-level repair/reapply of every documented patch.
+```bash
+flint obsidian profiles list
+flint obsidian profiles activate <id>
+flint obsidian profiles deactivate
+```
+
+Profile activation stashes the prior values of exactly what it changes into the untracked `.obsidian/.profile-state.json`; deactivation restores them. See `../profiles/`.
