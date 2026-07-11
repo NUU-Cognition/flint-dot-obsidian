@@ -1,0 +1,17 @@
+{
+  "id": "005-terminal-default-platform-fallback",
+  "title": "Default terminal falls back to platform-integrated profile",
+  "why": "defaultProfile is a single shared string (darwinIntegratedDefault / zsh). On Linux that profile is platform-incompatible, so the ribbon and open-terminal.default open a profile picker instead of launching. This edit: when the configured default is missing or not compatible with A2.CURRENT, fall back to Profile.defaultOfType(\"integrated\", profiles, CURRENT) \u2014 so Linux auto-opens linuxIntegratedDefault and Mac keeps using darwinIntegratedDefault when set. Only if no platform-integrated profile exists does the picker still open. Independent of 003/004; anchors on original upstream text.",
+  "target": "plugins/terminal/main.js",
+  "type": "text-replace",
+  "platforms": [
+    "darwin",
+    "linux"
+  ],
+  "replacements": [
+    {
+      "find": "v=d=>{let{defaultProfile:u,profiles:w}=r.value;if(u&&w[u]){let m=w[u];if(V1.Profile.isCompatible(m,A2.CURRENT))return d||Nt(e,m,{cwd:l==null?void 0:l.getBasePath()}),!0}return d||new Vt(e,l==null?void 0:l.getBasePath()).open(),!0}",
+      "replace": "v=d=>{let{defaultProfile:u,profiles:w}=r.value;if(u&&w[u]){let m=w[u];if(V1.Profile.isCompatible(m,A2.CURRENT))return d||Nt(e,m,{cwd:l==null?void 0:l.getBasePath()}),!0}let m=V1.Profile.defaultOfType(\"integrated\",w,A2.CURRENT);if(m)return d||Nt(e,m,{cwd:l==null?void 0:l.getBasePath()}),!0;return d||new Vt(e,l==null?void 0:l.getBasePath()).open(),!0}"
+    }
+  ]
+}

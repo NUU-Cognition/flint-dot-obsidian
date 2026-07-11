@@ -71,10 +71,11 @@ Required fields:
 
 ## Current Entries
 
-Both target the Polyipseity terminal plugin's `main.js` and are independent of each other:
+All target the Polyipseity terminal plugin's `main.js` and are independent of each other:
 
 - `003-terminal-main-js` — (1) hotkey passthrough: whitelist tab-switch / new-terminal / settings / zen-mode command ids so they reach Obsidian while a terminal is focused; (2) focus-on-activate: switching to a terminal pane moves keyboard focus into the xterm input, guarded by `document.hasFocus()`. (The Alt+Ctrl+T binding itself lives in the tracked `hotkeys.json` — tracked config needs no log entry.)
 - `004-terminal-icon` — status-driven tab icons: `getIcon()` returns runtime brand icons (nuu-claude / nuu-codex / nuu-grok, with `-busy` variants keyed off the leading spinner glyph in the pane title; plain shells keep the stock terminal icon); `getDisplayText()` strips the status glyph/runtime label so runtime tabs show the topic only, and plain (no-runtime) tabs always show the fixed label `Terminal`.
+- `005-terminal-default-platform-fallback` — when `defaultProfile` is missing or not compatible with the current OS, open the first platform-compatible integrated profile instead of the profile picker. Keeps Mac on `darwinIntegratedDefault` (zsh) while Linux auto-opens `linuxIntegratedDefault` (bash --login).
 
 After updating the terminal plugin, replay and reload.
 
