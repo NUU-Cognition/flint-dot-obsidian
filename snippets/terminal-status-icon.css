@@ -2,7 +2,7 @@
  * terminal-status-icon
  *
  * The patched terminal getIcon() keeps the runtime BRAND logo on the left at all
- * times (svg class `nuu-claude` / `nuu-codex`), swapping to the identical-artwork
+ * times (svg class `nuu-claude` / `nuu-codex` / `nuu-grok`), swapping to the identical-artwork
  * `*-busy` variant while the runtime is working. This snippet reads that class
  * via :has() and renders a status indicator on the RIGHT of the tab:
  *   - working   → a spinning ring
@@ -58,7 +58,10 @@
   .tree-item-self:has(.tree-item-icon .svg-icon[class*="nuu-claude"]),
 .obsidian-vertical-tabs-container
   .tree-item.is-tab:not(.is-tab-slot)
-  .tree-item-self:has(.tree-item-icon .svg-icon[class*="nuu-codex"]) {
+  .tree-item-self:has(.tree-item-icon .svg-icon[class*="nuu-codex"]),
+.obsidian-vertical-tabs-container
+  .tree-item.is-tab:not(.is-tab-slot)
+  .tree-item-self:has(.tree-item-icon .svg-icon[class*="nuu-grok"]) {
   position: relative;
 }
 .obsidian-vertical-tabs-container
@@ -68,6 +71,10 @@
 .obsidian-vertical-tabs-container
   .tree-item.is-tab:not(.is-tab-slot)
   .tree-item-self:has(.tree-item-icon .svg-icon[class*="nuu-codex"])
+  .tree-item-inner,
+.obsidian-vertical-tabs-container
+  .tree-item.is-tab:not(.is-tab-slot)
+  .tree-item-self:has(.tree-item-icon .svg-icon[class*="nuu-grok"])
   .tree-item-inner {
   padding-right: 1.6em;
 }
@@ -80,6 +87,10 @@
 .obsidian-vertical-tabs-container
   .tree-item.is-tab:not(.is-tab-slot)
   .tree-item-self:has(.tree-item-icon .svg-icon.nuu-codex-busy)
+  .tree-item-inner,
+.obsidian-vertical-tabs-container
+  .tree-item.is-tab:not(.is-tab-slot)
+  .tree-item-self:has(.tree-item-icon .svg-icon.nuu-grok-busy)
   .tree-item-inner,
 .obsidian-vertical-tabs-container
   .tree-item.is-tab:not(.is-tab-slot)
@@ -98,10 +109,16 @@
   .tree-item-self:has(.tree-item-icon .svg-icon.nuu-codex)::after,
 .obsidian-vertical-tabs-container
   .tree-item.is-tab:not(.is-tab-slot)
+  .tree-item-self:has(.tree-item-icon .svg-icon.nuu-grok)::after,
+.obsidian-vertical-tabs-container
+  .tree-item.is-tab:not(.is-tab-slot)
   .tree-item-self:has(.tree-item-icon .svg-icon.nuu-claude-busy)::after,
 .obsidian-vertical-tabs-container
   .tree-item.is-tab:not(.is-tab-slot)
-  .tree-item-self:has(.tree-item-icon .svg-icon.nuu-codex-busy)::after {
+  .tree-item-self:has(.tree-item-icon .svg-icon.nuu-codex-busy)::after,
+.obsidian-vertical-tabs-container
+  .tree-item.is-tab:not(.is-tab-slot)
+  .tree-item-self:has(.tree-item-icon .svg-icon.nuu-grok-busy)::after {
   content: "";
   box-sizing: border-box;
   position: absolute;
@@ -120,7 +137,10 @@
   .tree-item-self:has(.tree-item-icon .svg-icon.nuu-claude)::after,
 .obsidian-vertical-tabs-container
   .tree-item.is-tab:not(.is-tab-slot)
-  .tree-item-self:has(.tree-item-icon .svg-icon.nuu-codex)::after {
+  .tree-item-self:has(.tree-item-icon .svg-icon.nuu-codex)::after,
+.obsidian-vertical-tabs-container
+  .tree-item.is-tab:not(.is-tab-slot)
+  .tree-item-self:has(.tree-item-icon .svg-icon.nuu-grok)::after {
   background: radial-gradient(circle, #fff 0.205em, transparent 0.215em);
 }
 
@@ -130,7 +150,10 @@
   .tree-item-self:has(.tree-item-icon .svg-icon.nuu-claude-busy)::after,
 .obsidian-vertical-tabs-container
   .tree-item.is-tab:not(.is-tab-slot)
-  .tree-item-self:has(.tree-item-icon .svg-icon.nuu-codex-busy)::after {
+  .tree-item-self:has(.tree-item-icon .svg-icon.nuu-codex-busy)::after,
+.obsidian-vertical-tabs-container
+  .tree-item.is-tab:not(.is-tab-slot)
+  .tree-item-self:has(.tree-item-icon .svg-icon.nuu-grok-busy)::after {
   border: 2px solid rgba(255, 255, 255, 0.25);
   border-top-color: #fff;
   animation: nuu-terminal-icon-spin 0.8s linear infinite;
@@ -145,6 +168,10 @@
 .obsidian-vertical-tabs-container
   .tree-item.is-tab:not(.is-tab-slot)
   .tree-item-self:has(.tree-item-icon .svg-icon.nuu-codex-busy)
+  .tree-item-inner::after,
+.obsidian-vertical-tabs-container
+  .tree-item.is-tab:not(.is-tab-slot)
+  .tree-item-self:has(.tree-item-icon .svg-icon.nuu-grok-busy)
   .tree-item-inner::after {
   counter-reset: nuum var(--nuu-m) nuus var(--nuu-s);
   content: counter(nuum) ":" counter(nuus, decimal-leading-zero);
@@ -189,9 +216,13 @@
   .workspace-tab-header-inner::after,
 .workspace-tab-header:has(.workspace-tab-header-inner-icon .svg-icon.nuu-codex)
   .workspace-tab-header-inner::after,
+.workspace-tab-header:has(.workspace-tab-header-inner-icon .svg-icon.nuu-grok)
+  .workspace-tab-header-inner::after,
 .workspace-tab-header:has(.workspace-tab-header-inner-icon .svg-icon.nuu-claude-busy)
   .workspace-tab-header-inner::after,
 .workspace-tab-header:has(.workspace-tab-header-inner-icon .svg-icon.nuu-codex-busy)
+  .workspace-tab-header-inner::after,
+.workspace-tab-header:has(.workspace-tab-header-inner-icon .svg-icon.nuu-grok-busy)
   .workspace-tab-header-inner::after {
   content: "";
   box-sizing: border-box;
@@ -206,12 +237,16 @@
 .workspace-tab-header:has(.workspace-tab-header-inner-icon .svg-icon.nuu-claude)
   .workspace-tab-header-inner::after,
 .workspace-tab-header:has(.workspace-tab-header-inner-icon .svg-icon.nuu-codex)
+  .workspace-tab-header-inner::after,
+.workspace-tab-header:has(.workspace-tab-header-inner-icon .svg-icon.nuu-grok)
   .workspace-tab-header-inner::after {
   background: radial-gradient(circle, #fff 0.205em, transparent 0.215em);
 }
 .workspace-tab-header:has(.workspace-tab-header-inner-icon .svg-icon.nuu-claude-busy)
   .workspace-tab-header-inner::after,
 .workspace-tab-header:has(.workspace-tab-header-inner-icon .svg-icon.nuu-codex-busy)
+  .workspace-tab-header-inner::after,
+.workspace-tab-header:has(.workspace-tab-header-inner-icon .svg-icon.nuu-grok-busy)
   .workspace-tab-header-inner::after {
   border: 2px solid rgba(255, 255, 255, 0.25);
   border-top-color: #fff;
