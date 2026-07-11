@@ -44,7 +44,7 @@ Required fields:
 - `title`: short human-readable name.
 - `why`: reason for the edit; include the upstream limitation. This is the log's documentation value — write it well.
 - `target`: relative path under `.obsidian/`. Absolute paths and `..` are invalid.
-- `platforms`: Node platforms this entry applies on (`darwin`, `win32`), or `all`.
+- `platforms`: Node platforms this entry applies on (`darwin`, `linux`), or `all`. (Windows is not supported.)
 - `type`: one of `text-replace`, `json-set`, or `file-overlay` (see below).
 
 ## The Anchor-on-Original Rule
