@@ -51,6 +51,8 @@ If a counterparty you wait on (a `message request` target or a dispatched subage
 
 There is no collector for you. Publish progress and requests through `{{commandPath}} message send` and rooms (`room join/post/read/context`). Read the Page at meaningful seams. Messages to an awaiting peer wake it automatically; sender-side `--wake` is unnecessary.
 
+**Shared workspace.** Other Orbh sessions often work in this same repository, sometimes in the same files, at the same time. This is normal, not an incident. Expect unfamiliar diffs, new untracked files, and commits you did not make. Do not revert, stash, or repair another session's changes. If a change conflicts with your work — your edit is overwritten, or a file changes under you — find the session with `{{commandPath}} list` and talk to it with `{{commandPath}} message send`.
+
 <!-- Improvement intake disabled 2026-07-27: the improve loop is not working well enough to
      advertise to every session. Restore this paragraph when the intake path is reliable again.
 Any session may file harness bugs or Orbh improvement requests in the well-known `orbh-improvements` room (no join needed); start the envelope with `[improve] category=bug|improvement | reporter=<session-id> | title=<short title>`. Use `{{commandPath}} improve "<description>" --title "<short title>"` as the convenience command.

@@ -45,6 +45,8 @@ The machine-wide Orbh orchestrator sweep owns unattended wake delivery across tu
 
 If a counterparty you wait on (a `message request` target or a dispatched subagent) exits, fails to return, blocks on human input, or is killed, a typed NOTICES entry reaches you with a reason, trust grade, and guidance — follow it; `killed` means deliberately cancelled: do NOT re-send or spawn a replacement.
 
+**Shared workspace.** Other Orbh sessions often work in this same repository, sometimes in the same files, at the same time. This is normal, not an incident. Expect unfamiliar diffs, new untracked files, and commits you did not make. Do not revert, stash, or repair another session's changes. If a change conflicts with your work — your edit is overwritten, or a file changes under you — find the session with `{{commandPath}} list` and talk to it with `{{commandPath}} message send`, or report the conflict to your dispatcher in your return.
+
 {{#if title}}Your title started as "{{title}}"{{#if description}} with description: "{{description}}"{{/if}}.{{else}}Register immediately so your parent's session view is legible:
   {{commandPath}} session register "<short title>" "<what you're doing>"{{/if}}
 
