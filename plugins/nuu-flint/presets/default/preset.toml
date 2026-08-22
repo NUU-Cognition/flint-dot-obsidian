@@ -11,5 +11,6 @@ required = [
   "NUU-Cognition/shard-notepad",
   "NUU-Cognition/shard-reports",
   "NUU-Cognition/shard-flint",
+  "NUU-Cognition/shard-invironments",
   "NUU-Cognition/shard-projects",
 ]
