@@ -1,0 +1,17 @@
+{
+  "id": "006-terminal-start-offscreen",
+  "title": "Terminal emulator starts while the Obsidian window is off-screen",
+  "why": "startEmulator awaits Ne(el), a CSS-readiness check: it sets display:none, adds the plugin's await-css class (whose stylesheet rule forces display:unset!important), and resolves when an IntersectionObserver reports the element intersecting. IntersectionObserver never fires for a window that is hidden, occluded, or on another workspace, so a terminal opened while Obsidian is not on screen never spawns its shell until the window is shown. Orbh launches from Strike hit this constantly (Obsidian is behind the launching app), and the only workaround was raising the window. This edit keeps the intent — prove the stylesheet applied — but reads it with getComputedStyle, which resolves off-screen; it falls back to the observer only when the class rule has not applied yet.",
+  "target": "plugins/terminal/main.js",
+  "type": "text-replace",
+  "platforms": [
+    "darwin",
+    "linux"
+  ],
+  "replacements": [
+    {
+      "find": "async function Ne(e){let{classList:t,style:i,style:{display:a}}=e;return i.display=\"none\",new Promise((c,s)=>{let n=Y71(e,()=>{try{i.display=a,t.remove(Ne.CLASS),c()}catch(r){s(r)}finally{n.disconnect()}});t.add(Ne.CLASS)})}",
+      "replace": "async function Ne(e){let{classList:t,style:i,style:{display:a}}=e;i.display=\"none\",t.add(Ne.CLASS);let o=p0(e).getComputedStyle(e).display;if(o!==\"none\")return i.display=a,void t.remove(Ne.CLASS);return new Promise((c,s)=>{let n=Y71(e,()=>{try{i.display=a,t.remove(Ne.CLASS),c()}catch(r){s(r)}finally{n.disconnect()}})})}"
+    }
+  ]
+}

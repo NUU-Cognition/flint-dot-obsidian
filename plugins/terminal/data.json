@@ -104,8 +104,10 @@
       "type": "external"
     },
     "linuxIntegratedDefault": {
-      "args": [],
-      "executable": "/bin/sh",
+      "args": [
+        "--login"
+      ],
+      "executable": "/bin/bash",
       "followTheme": true,
       "name": "",
       "platforms": {
@@ -171,6 +173,7 @@
   "defaultProfile": "darwinIntegratedDefault",
   "terminalOptions": {
     "allowTransparency": true,
+    "fontFamily": "JetBrainsMono Nerd Font",
     "documentOverride": null
   }
 }
