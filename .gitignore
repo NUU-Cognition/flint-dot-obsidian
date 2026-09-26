@@ -1,5 +1,8 @@
-appearance.json
-workspace.json
-graph.json
-plugins/share-note/data.json
-.profile-state.json
+# The payload source holds plain files only. check.mjs refuses junk.
+.DS_Store
+Thumbs.db
+*.bak*
+*.orig
+*.rej
+*.swp
+node_modules/

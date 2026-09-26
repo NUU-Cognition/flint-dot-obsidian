@@ -1,0 +1,14 @@
+{
+  "name": "flint-dot-obsidian",
+  "private": true,
+  "description": "The payload source of the Flint Obsidian payload.",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/check.mjs",
+    "test": "node --test scripts/test/"
+  }
+}
