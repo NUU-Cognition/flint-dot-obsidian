@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "id": "0006-remove-retired-nuu-flint-keys",
+  "description": "Remove the retired keys preferredPort and hideLeftRibbon from the NUU Flint plugin settings. appearance.json#showRibbon is the one owner of the ribbon.",
+  "file": "plugins/nuu-flint/data.json",
+  "platforms": [
+    "darwin",
+    "linux"
+  ],
+  "operations": [
+    {
+      "op": "remove-key",
+      "key": "/preferredPort"
+    },
+    {
+      "op": "remove-key",
+      "key": "/hideLeftRibbon"
+    }
+  ]
+}

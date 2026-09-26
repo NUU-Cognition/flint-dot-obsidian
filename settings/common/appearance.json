@@ -1,0 +1,7 @@
+{
+  "showRibbon": false,
+  "enabledCssSnippets": [
+    "vertical-tabs-numbers",
+    "checkbox-dim-not-strike"
+  ]
+}

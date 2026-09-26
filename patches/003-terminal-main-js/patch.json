@@ -1,13 +1,10 @@
 {
+  "schema": 1,
   "id": "003-terminal-main-js",
-  "title": "Terminal plugin hotkey passthrough and focus-on-activate",
-  "why": "Two code edits to the Polyipseity terminal plugin's bundled main.js that have no settings exposure. (1) Hotkey passthrough: while a terminal is focused the plugin re-bakes Obsidian's hotkey table to a hardcoded whitelist Set; we prepend the tab-switch, new-terminal, settings, and zen-mode command ids so those hotkeys still reach Obsidian instead of falling through to the shell. (The Alt+Ctrl+T binding itself lives in the tracked hotkeys.json — no patch needed for it.) (2) Focus on activate: the plugin's active-leaf-change handler only records the last non-terminal leaf and never focuses a terminal when its leaf becomes active, so switching to a terminal pane via a tab-switch hotkey leaves keyboard focus outside the xterm input (user must click in). We augment the handler so that when the activated leaf's view is the terminal class it calls the view's own focus(), guarded by document.hasFocus() so focus only moves while the Obsidian window is already foregrounded (the interactive tab-switch case) and the OS window is never pulled forward during background/programmatic activations. The tab-title edits (prefix strip, status glyphs) live in 004-terminal-icon. Replay after any terminal plugin update. The focus-on-activate guard reads the Electron BrowserWindow's isFocused() (falling back to document.hasFocus()): on Wayland document.hasFocus() stays true while the OS window is not focused, and an xterm.focus() in that state makes Chromium request window activation, which Hyprland (misc:focus_on_activate) honours by raising Obsidian over the operator's current app.",
-  "target": "plugins/terminal/main.js",
-  "type": "text-replace",
-  "platforms": [
-    "darwin",
-    "linux"
-  ],
+  "title": "Terminal hotkey passthrough and focus on activate",
+  "why": "Two edits to the terminal bundle. The plugin has no setting for either edit. (1) Hotkey passthrough. When a terminal has focus, the plugin replaces the Obsidian hotkey table with a fixed allow list. The edit adds these command ids to the list, so that their hotkeys still reach Obsidian: open a new terminal, open the settings, the Vertical Tabs zen mode, go to tab 1 to 8, go to the last tab, close, next tab, previous tab, the quick switcher, and the command palette. hotkeys.json holds the Alt+Ctrl+T binding itself. (2) Focus on activate. Upstream, the active-leaf-change handler only records the last leaf that is not a terminal. It never moves focus into a terminal whose leaf becomes active, so a tab-switch hotkey leaves the keyboard focus outside the terminal input. The edit calls the focus() method of the terminal view when its leaf becomes active. A guard allows the focus move only while the Obsidian window has the focus. The guard reads isFocused() of the Electron BrowserWindow, and it uses document.hasFocus() only when Electron is not available. On Wayland, document.hasFocus() stays true when the window does not have the focus, and a focus call then makes Hyprland raise Obsidian above the current app.",
+  "plugin": "terminal",
+  "file": "main.js",
   "replacements": [
     {
       "find": "new Set([w3(i,()=>c.t(\"commands.toggle-focus-on-last-terminal\")",

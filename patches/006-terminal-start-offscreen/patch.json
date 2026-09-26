@@ -1,13 +1,10 @@
 {
+  "schema": 1,
   "id": "006-terminal-start-offscreen",
-  "title": "Terminal emulator starts while the Obsidian window is off-screen",
-  "why": "startEmulator awaits Ne(el), a CSS-readiness check: it sets display:none, adds the plugin's await-css class (whose stylesheet rule forces display:unset!important), and resolves when an IntersectionObserver reports the element intersecting. IntersectionObserver never fires for a window that is hidden, occluded, or on another workspace, so a terminal opened while Obsidian is not on screen never spawns its shell until the window is shown. Orbh launches from Strike hit this constantly (Obsidian is behind the launching app), and the only workaround was raising the window. This edit keeps the intent — prove the stylesheet applied — but reads it with getComputedStyle, which resolves off-screen; it falls back to the observer only when the class rule has not applied yet.",
-  "target": "plugins/terminal/main.js",
-  "type": "text-replace",
-  "platforms": [
-    "darwin",
-    "linux"
-  ],
+  "title": "Terminal starts while the Obsidian window is off screen",
+  "why": "Upstream, startEmulator waits for Ne(el), a check that the plugin stylesheet applies. Ne sets display:none, adds the await-css class (its rule sets display:unset !important), and waits until an IntersectionObserver reports that the element is visible. The observer never fires for a window that is hidden, covered, or on another workspace. So a terminal that opens while Obsidian is not on screen does not start its shell until the window shows. Orbh launches from Strike often hit this, because Obsidian is behind the launching app. The edit keeps the purpose of the check but reads the result with getComputedStyle, which also works off screen. It uses the observer only when the class rule does not apply yet.",
+  "plugin": "terminal",
+  "file": "main.js",
   "replacements": [
     {
       "find": "async function Ne(e){let{classList:t,style:i,style:{display:a}}=e;return i.display=\"none\",new Promise((c,s)=>{let n=Y71(e,()=>{try{i.display=a,t.remove(Ne.CLASS),c()}catch(r){s(r)}finally{n.disconnect()}});t.add(Ne.CLASS)})}",

@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "id": "0002-remove-tab-selector-hotkey",
+  "description": "Remove the hotkey of the tab-selector plugin. The payload does not contain this plugin.",
+  "file": "hotkeys.json",
+  "platforms": [
+    "darwin",
+    "linux"
+  ],
+  "operations": [
+    {
+      "op": "remove-key",
+      "key": "/tab-selector:open-tab-selector"
+    }
+  ]
+}

@@ -1,16 +1,24 @@
 {
+  "schema": 1,
   "id": "baseline-transparent",
   "title": "Baseline Transparent",
-  "description": "Use the Baseline theme with Obsidian window translucency and the matching main-pane transparency snippet.",
-  "apply": [
-    {
-      "target": "appearance.json",
-      "type": "json-set",
-      "changes": [
-        { "path": ["cssTheme"], "value": "Baseline" },
-        { "path": ["translucency"], "value": true },
-        { "path": ["enabledCssSnippets"], "mode": "merge", "value": ["baseline-transparent-main"] }
-      ]
+  "description": "Use the Baseline theme with window translucency and the matching main-pane snippet.",
+  "platforms": [
+    "darwin"
+  ],
+  "set": {
+    "appearance": {
+      "cssTheme": {
+        "set": "Baseline"
+      },
+      "translucency": {
+        "set": true
+      },
+      "enabledCssSnippets": {
+        "add": [
+          "baseline-transparent-main"
+        ]
+      }
     }
-  ]
+  }
 }

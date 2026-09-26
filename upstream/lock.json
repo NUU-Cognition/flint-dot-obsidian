@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "plugins": {
+    "at-people": {
+      "version": "1.5.1",
+      "source": "https://github.com/backmind/obsidian-at-people/releases/download/1.5.1/main.js",
+      "files": {
+        "main.js": "8c5afcde460074e13dd665673905ac8f420ceb056fa71f7964fa8aa28b50c67f"
+      }
+    },
+    "calendar": {
+      "version": "1.5.10",
+      "source": "https://github.com/liamcain/obsidian-calendar-plugin/releases/download/1.5.10/main.js",
+      "files": {
+        "main.js": "7fb339e9cf9fdbe5a801fa2b8ab85b366b5b3777fbd193cbc8728bc27711d125"
+      }
+    },
+    "copy-path": {
+      "version": "0.3.0",
+      "source": "https://github.com/shumadrid/obsidian-copy-path/releases/download/0.3.0/main.js",
+      "files": {
+        "main.js": "642213a6002443dfd268b70ec7e9acdb4b9a05076adeeb1459055168109ef139"
+      }
+    },
+    "dataview": {
+      "version": "0.5.68",
+      "source": "https://github.com/blacksmithgu/obsidian-dataview/releases/download/0.5.68/main.js",
+      "files": {
+        "main.js": "794e9eaede73920bb8d54b0eda4f5de2182d698cc638774500f24f14bcd4da0b"
+      }
+    },
+    "homepage": {
+      "version": "4.4.2",
+      "source": "https://github.com/mirnovov/obsidian-homepage/releases/download/4.4.2/main.js",
+      "files": {
+        "main.js": "50f6e1c7fd1f950caa8f8a7502f7d6104a46fd959f81f3651d63b17077a2f0da"
+      }
+    },
+    "mermaid-popup": {
+      "version": "0.2.69",
+      "source": "https://github.com/gitcpy/obsidian-diagram-popup/releases/download/0.2.69/main.js",
+      "files": {
+        "main.js": "40f00cda1453978209f2ca31959f088b49b4b654bd4ac2c76c3985262b44666a"
+      }
+    },
+    "obsidian-excalidraw-plugin": {
+      "version": "2.22.0",
+      "source": "https://github.com/zsviczian/obsidian-excalidraw-plugin/releases/download/2.22.0/main.js",
+      "files": {
+        "main.js": "8f7d5dc538228020805a255db9615ba2fdb82a9c0e6081f1b37ee7c2750ab37e"
+      }
+    },
+    "obsidian-git": {
+      "version": "2.37.1",
+      "source": "https://github.com/vinzent03/obsidian-git/releases/download/2.37.1/main.js",
+      "files": {
+        "main.js": "93945328777eaa89f5f7bb0281c28ac95484dac654b6026343c6b2fff1bfa6b7"
+      }
+    },
+    "obsidian-style-settings": {
+      "version": "1.0.9",
+      "source": "https://github.com/obsidian-community/obsidian-style-settings/releases/download/1.0.9/main.js",
+      "files": {
+        "main.js": "1828abaacdab4c5578b705a625c585b30512f8efad4c7cfc5a18e70cc3557468"
+      }
+    },
+    "open-as-md": {
+      "version": "0.0.8",
+      "source": "https://github.com/kursad-k/obsidian-openasmd/releases/download/0.0.8/main.js",
+      "files": {
+        "main.js": "7ef26b5b45db07ab114941fc1475ace383d4a095f0a720ece33fa0bd00021cba"
+      }
+    },
+    "share-note": {
+      "version": "1.2.2",
+      "source": "https://github.com/alangrainger/share-note/releases/download/1.2.2/main.js",
+      "files": {
+        "main.js": "2ae736c7fa0e048ed83f4ea7b8a450ff5fdef0014bd775f469d3808b3bd35002"
+      }
+    },
+    "templater-obsidian": {
+      "version": "2.18.1",
+      "source": "https://github.com/silentvoid13/Templater/releases/download/2.18.1/main.js",
+      "files": {
+        "main.js": "390be01a6e5b78ffb21b79dce296564c126972c32a4ef94deff81fe2c43ec5c6"
+      }
+    },
+    "terminal": {
+      "version": "3.23.0",
+      "source": "https://github.com/polyipseity/obsidian-terminal/releases/download/3.23.0/main.js",
+      "files": {
+        "main.js": "031b6832d706517fd40744b62ad4a6ab211d8cb7bc927839558d1f8cfffc600a"
+      }
+    },
+    "tldraw": {
+      "version": "1.25.3",
+      "source": "https://github.com/tldraw/obsidian-plugin/releases/download/1.25.3/main.js",
+      "files": {
+        "main.js": "bda49216c5f228ca5e806de6688ced405a5d277778f54b98667aa84aebeeda5b"
+      }
+    },
+    "vertical-tabs": {
+      "version": "0.16.10",
+      "source": "https://github.com/oxdc/obsidian-vertical-tabs/releases/download/0.16.10/main.js",
+      "files": {
+        "main.js": "bcc7f8089f89c390074aed81e1c89f5760fc2caa992f281f81881cf400baf1cb"
+      }
+    }
+  }
+}

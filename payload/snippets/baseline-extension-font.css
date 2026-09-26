@@ -1,7 +1,21 @@
-/* Baseline extension fonts — load additional families so Style Settings
-   font fields (H1 font, H2 font, …) can resolve them. Enable in
-   Settings → Appearance → CSS snippets, then type the family name into
-   the Style Settings font field. */
+/* Baseline extension fonts. This snippet declares the Geist and Geist Mono
+   families from the fonts that are installed on this machine, so that the
+   Style Settings font fields (H1 font, H2 font, ...) can use these names.
+   The snippet loads no font from the network. When a font is not installed,
+   Obsidian uses the next family in the font stack.
+   Enable it in Settings -> Appearance -> CSS snippets. Then type the family
+   name into the Style Settings font field. */
 
-@import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap");
+@font-face {
+  font-family: "Geist";
+  src: local("Geist"), local("Geist Variable"), local("Geist-Regular");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  src: local("Geist Mono"), local("Geist Mono Variable"), local("GeistMono-Regular");
+  font-weight: 100 900;
+  font-display: swap;
+}

@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "id": "0004-remove-nuu-flint-helper",
+  "description": "Remove the retired nuu-flint-helper plugin from the list of enabled community plugins. The NUU Flint plugin now has its reload command.",
+  "file": "community-plugins.json",
+  "platforms": [
+    "darwin",
+    "linux"
+  ],
+  "operations": [
+    {
+      "op": "list-remove",
+      "key": "",
+      "members": [
+        "nuu-flint-helper"
+      ]
+    }
+  ]
+}

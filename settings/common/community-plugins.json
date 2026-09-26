@@ -1,11 +1,9 @@
 [
   "calendar",
-  "share-note",
   "obsidian-style-settings",
   "tldraw",
   "open-as-md",
   "mermaid-popup",
-  "obsidian-git",
   "templater-obsidian",
   "copy-path",
   "at-people",
@@ -14,6 +12,5 @@
   "homepage",
   "terminal",
   "vertical-tabs",
-  "nuu-flint-helper",
   "nuu-flint"
 ]

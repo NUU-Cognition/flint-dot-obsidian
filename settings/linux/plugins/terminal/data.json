@@ -125,7 +125,7 @@
       "type": "integrated"
     }
   },
-  "defaultProfile": "darwinIntegratedDefault",
+  "defaultProfile": "linuxIntegratedDefault",
   "terminalOptions": {
     "allowTransparency": true,
     "fontFamily": "JetBrainsMono Nerd Font",

@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "id": "0001-rename-nuu-obsidian-hotkey",
+  "description": "Rename the obsolete nuu-obsidian command id in hotkeys.json.",
+  "file": "hotkeys.json",
+  "platforms": [
+    "darwin",
+    "linux"
+  ],
+  "operations": [
+    {
+      "op": "rename-key",
+      "from": "/nuu-obsidian:launch-orbh-interactive-default",
+      "to": "/nuu-flint:launch-orbh-interactive-default"
+    }
+  ]
+}

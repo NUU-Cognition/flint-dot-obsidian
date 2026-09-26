@@ -1,13 +1,10 @@
 {
+  "schema": 1,
   "id": "005-terminal-default-platform-fallback",
-  "title": "Default terminal falls back to platform-integrated profile",
-  "why": "defaultProfile is a single shared string (darwinIntegratedDefault / zsh). On Linux that profile is platform-incompatible, so the ribbon and open-terminal.default open a profile picker instead of launching. This edit: when the configured default is missing or not compatible with A2.CURRENT, fall back to Profile.defaultOfType(\"integrated\", profiles, CURRENT) \u2014 so Linux auto-opens linuxIntegratedDefault and Mac keeps using darwinIntegratedDefault when set. Only if no platform-integrated profile exists does the picker still open. Independent of 003/004; anchors on original upstream text.",
-  "target": "plugins/terminal/main.js",
-  "type": "text-replace",
-  "platforms": [
-    "darwin",
-    "linux"
-  ],
+  "title": "Default terminal falls back to an integrated profile of the platform",
+  "why": "Upstream, when defaultProfile is missing or does not fit the current platform, the default terminal command opens the profile picker. The edit opens the first integrated profile of the current platform (Profile.defaultOfType(\"integrated\", profiles, CURRENT)) instead. The picker opens only when no such profile exists. From 0.7.0, the initial settings of each platform select a profile of that platform, and the settings migration 0003-linux-terminal-default fixes migrated Linux Flints. This entry stays for one release to protect migrated Linux Flints whose settings still name the macOS profile.",
+  "plugin": "terminal",
+  "file": "main.js",
   "replacements": [
     {
       "find": "v=d=>{let{defaultProfile:u,profiles:w}=r.value;if(u&&w[u]){let m=w[u];if(V1.Profile.isCompatible(m,A2.CURRENT))return d||Nt(e,m,{cwd:l==null?void 0:l.getBasePath()}),!0}return d||new Vt(e,l==null?void 0:l.getBasePath()).open(),!0}",

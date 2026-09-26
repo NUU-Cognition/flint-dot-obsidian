@@ -45,24 +45,6 @@
     }
   ],
   "file-explorer:new-file-in-new-pane": [],
-  "insert-current-date": [
-    {
-      "modifiers": [
-        "Mod",
-        "Shift"
-      ],
-      "key": "M"
-    }
-  ],
-  "insert-current-time": [
-    {
-      "modifiers": [
-        "Mod",
-        "Shift"
-      ],
-      "key": "N"
-    }
-  ],
   "obsidian-git:push": [
     {
       "modifiers": [
@@ -97,14 +79,6 @@
       "key": "]"
     }
   ],
-  "tab-selector:open-tab-selector": [
-    {
-      "modifiers": [
-        "Ctrl"
-      ],
-      "key": "1"
-    }
-  ],
   "vertical-tabs:open-vertical-tabs": [
     {
       "modifiers": [
@@ -124,7 +98,7 @@
     }
   ],
   "file-explorer:new-file": [],
-  "nuu-obsidian:launch-orbh-interactive-default": [
+  "nuu-flint:launch-orbh-interactive-default": [
     {
       "modifiers": [
         "Mod"

@@ -36,6 +36,5 @@
   "autoHideHorizontalTabs": true,
   "disableOnThisDevice": false,
   "enableUpdateCheck": true,
-  "newTabButtonPlacement": "group-toolbar",
-  "installationID": "3kUteRGTAE39LcRaWk8bZ"
+  "newTabButtonPlacement": "group-toolbar"
 }

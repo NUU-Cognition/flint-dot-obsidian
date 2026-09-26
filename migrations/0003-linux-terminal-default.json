@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "id": "0003-linux-terminal-default",
+  "description": "On Linux, change the default terminal profile from the macOS profile to the Linux profile. The change runs only when the value is the old shipped value.",
+  "file": "plugins/terminal/data.json",
+  "platforms": [
+    "linux"
+  ],
+  "operations": [
+    {
+      "op": "set-if-equals",
+      "key": "/defaultProfile",
+      "from": "darwinIntegratedDefault",
+      "to": "linuxIntegratedDefault"
+    }
+  ]
+}

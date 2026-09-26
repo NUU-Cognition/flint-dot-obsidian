@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "appearance": {
+    "showRibbon": {
+      "set": false
+    }
+  },
+  "app": {}
+}

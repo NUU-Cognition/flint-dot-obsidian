@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "id": "0005-remove-terminal-status-icon-snippet",
+  "description": "Remove the retired terminal-status-icon snippet from the enabled CSS snippets. The NUU Flint plugin styles now contain this CSS.",
+  "file": "appearance.json",
+  "platforms": [
+    "darwin",
+    "linux"
+  ],
+  "operations": [
+    {
+      "op": "list-remove",
+      "key": "/enabledCssSnippets",
+      "members": [
+        "terminal-status-icon"
+      ]
+    }
+  ]
+}
