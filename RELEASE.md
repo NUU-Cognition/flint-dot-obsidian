@@ -29,7 +29,7 @@ The branch `obs-0.7.0` holds the 0.7.0 layout. These items are open. Do them in 
 4. **Remove the `share-note` key from the history (Report 083 §15).**
    1. Save a local bundle of the old history: `git bundle create ../flint-dot-obsidian-before-0.7.0.bundle --all`.
    2. On a mirror clone, run `git filter-repo --path plugins/share-note/data.json --invert-paths`.
-   3. Verify that no blob holds the key: `git log --all -p | grep -c '"apiKey": "[^"]'` prints `0`.
+   3. Verify that no commit and no blob holds the key: `git log --all --oneline -- plugins/share-note/data.json` prints nothing, and `git log --all -p | grep -cF '<the old key>'` prints `0`. Read the old key from the bundle of step 1 (`git show bdcaa09:plugins/share-note/data.json`). Do not search with a pattern of the key form: this file quotes such a pattern, so the search finds this line.
    4. Force-push every branch.
    The rewrite changes every commit id. So do it before the tag.
 5. **Cut the release.** Run `node scripts/release.mjs 0.7.0`. Then run the tag and push commands that it prints.
