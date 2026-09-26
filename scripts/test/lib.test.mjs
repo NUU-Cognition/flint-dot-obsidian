@@ -3,7 +3,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { test } from 'node:test';
 import { build } from '../build.mjs';
-import { applyPatches, buildManifest, classify, obsidianInstallForm, sha256 } from '../lib.mjs';
+import { appliedEntryProblem, buildManifest, classify, cliRangeProblem, obsidianInstallForm, replayPatches, satisfiesCliRange, sha256 } from '../lib.mjs';
 import { cleanup, makeTree } from './fixture.mjs';
 
 test('classify gives each path one class', () => {
@@ -75,22 +75,70 @@ test('build records the executable mode', () => {
   }
 });
 
-test('applyPatches anchors on the original text and ignores the order of the entries', () => {
+test('replayPatches anchors on the original text and ignores the order of the entries', () => {
   const upstream = 'A1 B2 C3';
   const p1 = { id: '001', plugin: 'x', file: 'main.js', replacements: [{ find: 'A1', replace: 'B2-new' }] };
   const p2 = { id: '002', plugin: 'x', file: 'main.js', replacements: [{ find: 'B2', replace: 'b' }] };
-  assert.equal(applyPatches(upstream, [p1, p2]), 'B2-new b C3');
-  assert.equal(applyPatches(upstream, [p2, p1]), 'B2-new b C3');
+  assert.equal(replayPatches(upstream, [p1, p2]), 'B2-new b C3');
+  assert.equal(replayPatches(upstream, [p2, p1]), 'B2-new b C3');
 });
 
-test('applyPatches refuses a missing, a repeated, or an overlapping anchor', () => {
+test('replayPatches refuses a missing, a repeated, or an overlapping anchor', () => {
   const entry = (find) => ({ id: '001', plugin: 'x', file: 'main.js', replacements: [{ find, replace: 'z' }] });
-  assert.throws(() => applyPatches('abc', [entry('zzz')]), /not in the upstream file/);
-  assert.throws(() => applyPatches('abab', [entry('ab')]), /more than once/);
-  assert.throws(() => applyPatches('abcdef', [entry('abcd'), { ...entry('cdef'), id: '002' }]), /overlaps/);
+  assert.throws(() => replayPatches('abc', [entry('zzz')]), /not in the upstream file/);
+  assert.throws(() => replayPatches('abab', [entry('ab')]), /more than once/);
+  assert.throws(() => replayPatches('abcdef', [entry('abcd'), { ...entry('cdef'), id: '002' }]), /overlaps/);
 });
 
 test('obsidianInstallForm removes inline source maps and adds the trailer', () => {
   assert.equal(obsidianInstallForm('code;\n'), 'code;\n\n/* nosourcemap */');
   assert.equal(obsidianInstallForm('code;\n//# sourceMappingURL=data:application/json;base64,AAAA\n'), 'code;\n\n\n/* nosourcemap */');
+});
+
+test('cliRangeProblem accepts comparator sets only (decision C12)', () => {
+  for (const ok of ['>=0.7.0 <0.8.0', '>=0.7.0 <0.8.0 || =0.9.1', '=0.7.0', '>0.6.9']) assert.equal(cliRangeProblem(ok), null, ok);
+  for (const bad of ['^0.7.0', '~0.7.0', '0.7.x', '0.7.0 - 0.8.0', '>=0.7', '', '>=0.7.0 ||', 42]) assert.notEqual(cliRangeProblem(bad), null, String(bad));
+});
+
+test('satisfiesCliRange ignores the prerelease part (decision S29)', () => {
+  assert.equal(satisfiesCliRange('0.7.0-dev.5', '>=0.7.0 <0.8.0'), true);
+  assert.equal(satisfiesCliRange('0.7.3', '>=0.7.0 <0.8.0'), true);
+  assert.equal(satisfiesCliRange('0.0.1', '>=0.7.0 <0.8.0'), false);
+  assert.equal(satisfiesCliRange('0.8.0', '>=0.7.0 <0.8.0'), false);
+  assert.equal(satisfiesCliRange('0.7.0', '^0.7.0'), false);
+});
+
+test('appliedEntryProblem follows the key and type table of OBSIDIAN_APPLIED_KEYS', () => {
+  const ok = [
+    ['appearance', 'showRibbon', { set: false }],
+    ['appearance', 'enabledCssSnippets', { add: ['a'], remove: ['b'] }],
+    ['appearance', 'baseFontSize', { set: 16 }],
+    ['appearance', 'accentColor', { set: '#aabbcc' }],
+    ['appearance', 'theme', { set: 'moonstone' }],
+    ['app', 'userIgnoreFilters', { add: ['Exports/'] }],
+    ['app', 'tabSize', { set: 4 }],
+  ];
+  for (const [file, key, op] of ok) assert.equal(appliedEntryProblem(file, key, op), null, `${file}.${key}`);
+  const bad = [
+    ['app', 'noSuchKey', { set: true }, /not an allowed key/],
+    ['hotkeys', 'x', { set: true }, /not an applied file/],
+    ['appearance', 'showRibbon', { set: 'no' }, /must be a boolean/],
+    ['appearance', 'baseFontSize', { set: 40 }, /integer from 10 to 30/],
+    ['appearance', 'accentColor', { set: 'red' }, /matches/],
+    ['appearance', 'theme', { set: 'dark' }, /one of/],
+    ['appearance', 'showRibbon', { add: ['x'] }, /need a list key/],
+    ['appearance', 'enabledCssSnippets', { set: ['a'], add: ['b'] }, /takes no other field/],
+    ['appearance', 'enabledCssSnippets', { add: [1] }, /list of strings/],
+    ['appearance', 'enabledCssSnippets', {}, /operation must be/],
+  ];
+  for (const [file, key, op, pattern] of bad) assert.match(appliedEntryProblem(file, key, op) ?? '', pattern, `${file}.${key}`);
+});
+
+test('build refuses two paths that differ only in letter case', () => {
+  const root = makeTree((f) => { f['payload/snippets/Tabs.css'] = '.x{}\n'; }, { manifest: false });
+  try {
+    assert.throws(() => buildManifest(root), /differs only in letter case/);
+  } finally {
+    cleanup(root);
+  }
 });

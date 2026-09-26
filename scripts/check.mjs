@@ -8,9 +8,10 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import {
-  APPLIED_KEYS, applyPatches, buildManifest, compare, inventory, isCommit, isDigestHex, isMain,
-  isPointer, isSemver, LIST_KEYS, MIGRATION_OPS, NUU_PLUGIN, NUU_PLUGIN_FILES, obsidianInstallForm, PLATFORMS,
-  PROFILE_KEYS, readPatches, replay, resolveSettings, RETIRED_PATHS, ROOT, sha256, toJson,
+  APPLIED_KEYS, appliedEntryProblem, buildManifest, cliRangeProblem, compare, inventory, isCommit, isDigestHex, isMain,
+  isPointer, isVersion, MIGRATION_ID, MIGRATION_OPS, NUU_PLUGIN, NUU_PLUGIN_FILES, obsidianInstallForm, PATCH_ID, PLATFORMS,
+  PROFILE_ID, PROFILE_KEYS, readPatches, replay, replayPatches, resolveSettings, RETIRED_PATHS, ROOT, satisfiesCliRange,
+  sha256, toJson, unsafePathReason,
 } from './lib.mjs';
 
 /** Command namespaces of the Obsidian app itself (not a core plugin). */
@@ -32,6 +33,10 @@ const SECRET_PATTERNS = [
 const MACHINE_PATH = /(?:\/Users\/|\/home\/)[A-Za-z0-9._-]+\/|\b[A-Za-z]:\\\\?Users\\\\?/;
 const NOTE_PATH = /\.(?:md|canvas|base|excalidraw)(?:#.*)?$/i;
 /** Folders and files whose text the hygiene check scans. upstream/ holds unpatched third-party files. */
+/** The files of the release formats. They follow the general rules of the formats. */
+const FORMAT_FILE = (e) => ['release.json', 'applied.json', 'upstream/lock.json'].includes(e.path) || ['profile', 'migration', 'patch'].includes(e.class);
+/** The next command for a plugin bundle that is not the 0.7.x build. */
+const IMPORT_NEXT = 'node scripts/import-plugin.mjs <flint repo>/apps/nuu-flint-plugin <flint commit>';
 const SCANNED = (path) => /^(?:payload|settings|profiles|migrations|patches|docs)\//.test(path) || ['applied.json', 'release.json', 'README.md', 'RELEASE.md'].includes(path);
 
 export async function runChecks(root = ROOT, { release = false, fetch: online = false } = {}) {
@@ -75,6 +80,14 @@ export async function runChecks(root = ROOT, { release = false, fetch: online = 
       if (plugin.manifest?.id !== id) c.fail(`payload/plugins/${id}/manifest.json: the id is "${plugin.manifest?.id}", not "${id}"`, 'rename the folder to the plugin id');
       if (!plugin.files.includes('main.js')) c.fail(`payload/plugins/${id}/main.js is missing`, 'copy the plugin bundle into the folder');
     }
+    for (const platform of PLATFORMS) {
+      const seen = new Map();
+      for (const dest of [...entries.filter((x) => x.class === 'release').map((x) => x.dest), ...resolveSettings(entries, platform).keys()]) {
+        const fold = dest.toLowerCase();
+        if (seen.has(fold) && seen.get(fold) !== dest) c.fail(`.obsidian/${dest} and .obsidian/${seen.get(fold)} differ only in letter case (${platform})`, 'rename one of the two files');
+        else seen.set(fold, dest);
+      }
+    }
     const nuu = plugins.get(NUU_PLUGIN);
     if (!nuu) c.fail(`payload/plugins/${NUU_PLUGIN}/ is missing`, 'node scripts/import-plugin.mjs <build dir> <flint commit>');
     else for (const f of nuu.files) if (!NUU_PLUGIN_FILES.includes(f)) c.fail(`payload/plugins/${NUU_PLUGIN}/${f}: the NUU Flint plugin ships only ${NUU_PLUGIN_FILES.join(', ')}`, `git rm -r "payload/plugins/${NUU_PLUGIN}/${f}"`);
@@ -109,16 +122,19 @@ export async function runChecks(root = ROOT, { release = false, fetch: online = 
 
   await run('replay', 'upstream/ plus patches/ equals the released bundle', async (c) => {
     const lock = json('upstream/lock.json');
-    if (lock.schema !== 1 || typeof lock.plugins !== 'object') c.fail('upstream/lock.json: expected { "schema": 1, "plugins": { … } }', 'fix upstream/lock.json');
+    if (lock.schema !== 1) c.fail(`upstream/lock.json: ${schemaProblem(lock.schema)}`, 'fix upstream/lock.json');
+    if (!isObject(lock.plugins)) c.fail('upstream/lock.json: "plugins" must be an object of plugin records', 'fix upstream/lock.json');
+    if (Object.hasOwn(lock.plugins ?? {}, NUU_PLUGIN)) c.fail(`upstream/lock.json: "${NUU_PLUGIN}" is not a third-party plugin`, `remove "${NUU_PLUGIN}" from the lock`);
     for (const [id, plugin] of plugins) {
       if (id === NUU_PLUGIN) continue;
       const entry = lock.plugins?.[id];
       if (!entry) { c.fail(`payload/plugins/${id}: no entry in upstream/lock.json`, `add "${id}" with its version, release asset URL, and unpatched sha256`); continue; }
       if (entry.version !== plugin.manifest?.version) c.fail(`upstream/lock.json: "${id}" is ${entry.version}, but the payload bundle is ${plugin.manifest?.version}`, 'update the lock entry and upstream/ together with the bundle');
       if (!/^https:\/\//.test(entry.source ?? '')) c.fail(`upstream/lock.json: "${id}" has no https source URL`, 'add the URL of the release asset');
+      if (!isObject(entry.files) || !Object.keys(entry.files).length) c.fail(`upstream/lock.json: "${id}" has no "files"`, 'add the sha256 of the unpatched main.js');
       for (const [file, hex] of Object.entries(entry.files ?? {})) if (!isDigestHex(hex)) c.fail(`upstream/lock.json: "${id}" ${file} has no sha256`, 'add the sha256 of the unpatched file');
     }
-    for (const id of Object.keys(lock.plugins ?? {})) if (!plugins.has(id)) c.fail(`upstream/lock.json: "${id}" is not in payload/plugins/`, `remove "${id}" from the lock`);
+    for (const id of Object.keys(lock.plugins ?? {})) if (id !== NUU_PLUGIN && !plugins.has(id)) c.fail(`upstream/lock.json: "${id}" is not in payload/plugins/`, `remove "${id}" from the lock`);
     for (const e of entries.filter((x) => x.class === 'upstream' && x.plugin)) {
       if (!lock.plugins?.[e.plugin]?.files?.[e.file]) c.fail(`${e.path}: no matching entry in upstream/lock.json`, 'add the file to the lock, or delete it');
     }
@@ -150,7 +166,7 @@ export async function runChecks(root = ROOT, { release = false, fetch: online = 
         const body = Buffer.from(await response.arrayBuffer());
         if (sha256(body) !== entry.files['main.js']) { c.fail(`${id}: the downloaded main.js does not match upstream/lock.json`, 'check the version and the source URL'); continue; }
         const own = groups.get(`${id}/main.js`) ?? [];
-        const expected = Buffer.from(obsidianInstallForm(applyPatches(body.toString('utf8'), own)), 'utf8');
+        const expected = Buffer.from(obsidianInstallForm(replayPatches(body.toString('utf8'), own)), 'utf8');
         if (!expected.equals(readFileSync(join(root, `payload/plugins/${id}/main.js`)))) c.fail(`payload/plugins/${id}/main.js does not equal its upstream release in the Obsidian install form`, 'copy the bundle again from the upstream release');
       }
       c.note(`${Object.keys(lock.plugins ?? {}).length} upstream releases downloaded and verified`);
@@ -163,6 +179,12 @@ export async function runChecks(root = ROOT, { release = false, fetch: online = 
     for (const e of entries.filter((x) => x.path.endsWith('.json'))) {
       try { json(e.path); } catch (error) { c.fail(`${e.path}: invalid JSON (${error.message})`, 'fix the JSON syntax'); }
     }
+    for (const e of entries.filter(FORMAT_FILE)) {
+      const body = text(e.path);
+      if (!body.endsWith('\n')) c.fail(`${e.path}: the file must end with a newline`, 'add a newline at the end of the file');
+      if (/^\t/m.test(body)) c.fail(`${e.path}: indent with 2 spaces, not tabs`, 'format the file with a 2-space indent');
+    }
+    const applied = safe(() => json('applied.json'), {});
     const core = safe(() => json('settings/common/core-plugins.json'), {});
     const live = (id) => commandProblem(id, core, plugins);
     for (const platform of PLATFORMS) {
@@ -194,9 +216,9 @@ export async function runChecks(root = ROOT, { release = false, fetch: online = 
       }
     }
     for (const e of entries.filter((x) => x.class === 'profile')) {
-      for (const problem of profileProblems(json(e.path), e.id, snippets, themes)) c.fail(`${e.path}: ${problem}`, 'fix the appearance profile (see README.md)');
+      for (const problem of profileProblems(json(e.path), e.id, snippets, themes, applied)) c.fail(`${e.path}: ${problem}`, 'fix the appearance profile (see README.md)');
     }
-    for (const problem of appliedProblems(json('applied.json'), snippets, themes)) c.fail(`applied.json: ${problem}`, 'fix the release layer (see README.md)');
+    for (const problem of appliedProblems(applied, snippets, themes)) c.fail(`applied.json: ${problem}`, 'fix the release layer (see README.md)');
     const migrations = entries.filter((x) => x.class === 'migration');
     for (const e of migrations) for (const problem of migrationProblems(json(e.path), e.id)) c.fail(`${e.path}: ${problem}`, 'fix the settings migration (see README.md)');
     c.note(`${PLATFORMS.join(' and ')} resolved · ${migrations.length} settings migrations · ${entries.filter((x) => x.class === 'profile').length} appearance profile(s)`);
@@ -223,19 +245,29 @@ export async function runChecks(root = ROOT, { release = false, fetch: online = 
 
   await run('release', 'release.json agrees with the NUU Flint plugin', (c) => {
     const r = json('release.json');
-    if (r.schema !== 1) c.fail('release.json: "schema" must be 1', 'fix release.json');
-    if (!isSemver(r.version)) c.fail(`release.json: version "${r.version}" is not a semantic version`, 'node scripts/release.mjs <version>');
-    if (typeof r.cli !== 'string' || !r.cli.trim()) c.fail('release.json: "cli" must name the compatible CLI range', 'set "cli", for example ">=0.7.0 <0.8.0"');
-    if (!Number.isInteger(r.protocol) || r.protocol < 1) c.fail('release.json: "protocol" must be the control protocol number', 'set "protocol" to OBSIDIAN_CONTROL_PROTOCOL');
-    if (!Array.isArray(r.obsidian?.tested) || !r.obsidian.tested.length) c.fail('release.json: "obsidian.tested" must list the tested Obsidian versions', 'add the versions of the live checks');
+    const blocks = { blocksRelease: true };
+    if (r.schema !== 1) c.fail(`release.json: ${schemaProblem(r.schema)}`, 'fix release.json');
+    if (!isVersion(r.version)) c.fail(`release.json: version "${r.version}" is not a version`, 'node scripts/release.mjs <version>');
+    const cliBad = cliRangeProblem(r.cli);
+    if (cliBad) c.fail(`release.json: cli ${JSON.stringify(r.cli)} is not a comparator range (${cliBad})`, 'use comparator sets joined by "||", for example ">=0.7.0 <0.8.0"');
+    if (!Number.isInteger(r.protocol) || r.protocol < 1) c.fail('release.json: "protocol" must be the control protocol number', 'set "protocol" to OBSIDIAN_CONTROL_PROTOCOL, or import the plugin again');
+    if (!Array.isArray(r.obsidian?.tested) || !r.obsidian.tested.length || !r.obsidian.tested.every(isVersion)) c.fail('release.json: "obsidian.tested" must list the tested Obsidian versions', 'add the Obsidian versions of the live checks');
     const plugin = plugins.get(NUU_PLUGIN);
     if (r.plugin?.id !== NUU_PLUGIN) c.fail(`release.json: plugin.id must be "${NUU_PLUGIN}"`, 'fix release.json');
-    if (plugin && r.plugin?.version !== plugin.manifest?.version) c.fail(`release.json: plugin.version is "${r.plugin?.version}", but the bundle is ${plugin.manifest?.version}`, 'node scripts/import-plugin.mjs <build dir> <flint commit>');
+    if (!isVersion(r.plugin?.version)) c.fail(`release.json: plugin.version "${r.plugin?.version}" is not a version`, IMPORT_NEXT);
+    if (plugin && r.plugin?.version !== plugin.manifest?.version) c.fail(`release.json: plugin.version is "${r.plugin?.version}", but the bundle is ${plugin.manifest?.version}`, IMPORT_NEXT);
     const versions = safe(() => json(`payload/plugins/${NUU_PLUGIN}/versions.json`), {});
     if (plugin && !(plugin.manifest?.version in versions)) c.fail(`payload/plugins/${NUU_PLUGIN}/versions.json has no entry for ${plugin.manifest?.version}`, 'import a plugin build whose versions.json lists its version');
-    if (r.plugin?.sourceCommit === 'pending') c.warn('release.json: plugin.sourceCommit is "pending"', 'node scripts/import-plugin.mjs <build dir> <flint commit>', { blocksRelease: true });
-    else if (!isCommit(r.plugin?.sourceCommit)) c.fail(`release.json: plugin.sourceCommit "${r.plugin?.sourceCommit}" is not a full commit id`, 'node scripts/import-plugin.mjs <build dir> <flint commit>');
-    c.note(`release ${r.version} · protocol ${r.protocol} · ${NUU_PLUGIN} ${r.plugin?.version} (${r.plugin?.sourceCommit})`);
+    // A 0.6.x plugin build must never reach a release (Report 083 D6, finding PAY-1).
+    if (!cliBad && isVersion(r.plugin?.version) && !satisfiesCliRange(r.plugin.version, r.cli)) c.warn(`release.json: the NUU Flint plugin ${r.plugin.version} is outside the CLI range ${r.cli}; the bundle comes from another CLI line`, IMPORT_NEXT, blocks);
+    if (plugin && r.protocol >= 2) {
+      const bundle = plugin.bundle();
+      if (!bundle.includes('describe-manager')) c.warn(`payload/plugins/${NUU_PLUGIN}/main.js has no describe-manager operation, so it does not serve control protocol ${r.protocol} (a 0.6.x build)`, IMPORT_NEXT, blocks);
+      if (bundle.includes('trust-vault')) c.warn(`payload/plugins/${NUU_PLUGIN}/main.js still has the retired trust-vault operation (a 0.6.x build)`, IMPORT_NEXT, blocks);
+    }
+    if (r.plugin?.sourceCommit === 'pending') c.warn('release.json: plugin.sourceCommit is "pending"', IMPORT_NEXT, blocks);
+    else if (!isCommit(r.plugin?.sourceCommit)) c.fail(`release.json: plugin.sourceCommit "${r.plugin?.sourceCommit}" is not a full commit id`, IMPORT_NEXT);
+    c.note(`release ${r.version} · cli ${r.cli} · protocol ${r.protocol} · ${NUU_PLUGIN} ${r.plugin?.version} (${r.plugin?.sourceCommit})`);
   });
 
   return results;
@@ -277,9 +309,11 @@ export function commandProblem(id, core, plugins) {
 }
 
 function patchFormatProblem(p, lock) {
-  if (p.schema !== 1) return '"schema" must be 1';
+  if (p.schema !== 1) return schemaProblem(p.schema);
+  if (typeof p.id !== 'string' || !PATCH_ID.test(p.id)) return `the id ${JSON.stringify(p.id)} does not match ${PATCH_ID.source}`;
   if (p.id !== p._folder) return `the id "${p.id}" does not match the folder "${p._folder}"`;
-  if (!p.title || !p.why) return '"title" and "why" are required';
+  if (typeof p.title !== 'string' || !p.title.trim() || typeof p.why !== 'string' || !p.why.trim()) return '"title" and "why" must be non-empty strings';
+  if (p.plugin === NUU_PLUGIN) return `the patch log edits third-party bundles only, not "${NUU_PLUGIN}"`;
   if (!lock.plugins?.[p.plugin]) return `the plugin "${p.plugin}" is not in upstream/lock.json`;
   if (!lock.plugins[p.plugin].files?.[p.file]) return `upstream/lock.json has no file "${p.file}" for "${p.plugin}"`;
   if (!Array.isArray(p.replacements) || !p.replacements.length) return '"replacements" must be a non-empty list';
@@ -292,17 +326,12 @@ function patchFormatProblem(p, lock) {
   return null;
 }
 
-/** Problems of one appliable operation: `{ set }` or `{ add, remove }` for a list key. */
-function opProblem(key, op) {
-  if (!op || typeof op !== 'object' || Array.isArray(op)) return `${key}: an operation is { "set": … } or { "add": [ … ], "remove": [ … ] }`;
-  const keys = Object.keys(op);
-  if (keys.length === 1 && keys[0] === 'set') return null;
-  if (keys.length && keys.every((k) => k === 'add' || k === 'remove')) {
-    if (!LIST_KEYS.has(key)) return `${key}: "add" and "remove" apply only to a list key`;
-    if (keys.some((k) => !Array.isArray(op[k]) || op[k].some((m) => typeof m !== 'string'))) return `${key}: "add" and "remove" take lists of strings`;
-    return null;
-  }
-  return `${key}: unknown operation fields ${keys.join(', ')}`;
+function isObject(value) {
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+}
+
+function schemaProblem(schema) {
+  return typeof schema === 'number' && schema > 1 ? `"schema" is ${schema}: a newer payload format wrote the file` : '"schema" must be 1';
 }
 
 function referenceProblems(key, op, snippets, themes) {
@@ -312,61 +341,75 @@ function referenceProblems(key, op, snippets, themes) {
   return out;
 }
 
-export function profileProblems(p, folder, snippets, themes) {
+const platformsProblem = (platforms) => (!Array.isArray(platforms) || !platforms.length || platforms.some((x) => !PLATFORMS.includes(x)) ? `"platforms" must list one or more of ${PLATFORMS.join(', ')}` : null);
+
+/** The rules of `parseProfileDefinition` in the core, and decision S12. `applied` is the release layer. */
+export function profileProblems(p, folder, snippets, themes, applied = {}) {
+  if (!isObject(p)) return ['the profile is not a JSON object'];
   const out = [];
-  if (p.schema !== 1) out.push('"schema" must be 1');
-  if (p.id !== folder) out.push(`the id "${p.id}" does not match the folder "${folder}"`);
-  if (!p.title || !p.description) out.push('"title" and "description" are required');
-  if (!Array.isArray(p.platforms) || !p.platforms.length || p.platforms.some((x) => !PLATFORMS.includes(x))) out.push(`"platforms" must list one or more of ${PLATFORMS.join(', ')}`);
-  const files = Object.keys(p.set ?? {});
-  if (!files.length) out.push('"set" is empty');
-  for (const file of files) {
-    if (file !== 'appearance') { out.push(`an appearance profile sets only "appearance" keys, not "${file}"`); continue; }
-    for (const [key, op] of Object.entries(p.set[file])) {
-      if (!PROFILE_KEYS.includes(key)) { out.push(`"${key}" is not an appearance profile key (${PROFILE_KEYS.join(', ')})`); continue; }
-      const bad = opProblem(key, op);
-      if (bad) out.push(bad);
-      else out.push(...referenceProblems(key, op, snippets, themes));
-    }
+  if (p.schema !== 1) out.push(schemaProblem(p.schema));
+  if (typeof p.id !== 'string' || !PROFILE_ID.test(p.id)) out.push(`the id ${JSON.stringify(p.id)} does not match ${PROFILE_ID.source}`);
+  else if (p.id !== folder) out.push(`the id "${p.id}" does not match the folder "${folder}"`);
+  if (typeof p.title !== 'string' || !p.title.trim()) out.push('"title" must be a non-empty string');
+  if (typeof p.description !== 'string' || !p.description.trim()) out.push('"description" must be a non-empty string');
+  const platforms = platformsProblem(p.platforms);
+  if (platforms) out.push(platforms);
+  if (!isObject(p.set)) return [...out, '"set" must be an object with the file "appearance"'];
+  for (const file of Object.keys(p.set)) if (file !== 'appearance') out.push(`an appearance profile sets only "appearance" keys, not "${file}"`);
+  const appearance = p.set.appearance;
+  if (!isObject(appearance) || !Object.keys(appearance).length) return [...out, '"set.appearance" must name at least one key'];
+  for (const [key, op] of Object.entries(appearance)) {
+    if (!PROFILE_KEYS.includes(key)) { out.push(`"${key}" is not an appearance profile key (${PROFILE_KEYS.join(', ')})`); continue; }
+    const bad = appliedEntryProblem('appearance', key, op);
+    if (bad) { out.push(bad); continue; }
+    if ('remove' in op) out.push(`appearance.${key}: a profile adds list members and never removes them (decision S12)`);
+    if (isObject(applied?.appearance) && Object.hasOwn(applied.appearance, key)) out.push(`appearance.${key}: applied.json holds this key, so each activation of the profile refuses (decision S12)`);
+    out.push(...referenceProblems(key, op, snippets, themes));
   }
   return out;
 }
 
+/** The release layer: `appearance` and `app` are required; each entry follows `OBSIDIAN_APPLIED_KEYS`. */
 export function appliedProblems(a, snippets, themes) {
+  if (!isObject(a)) return ['applied.json is not a JSON object'];
   const out = [];
-  if (a.schema !== 1) out.push('"schema" must be 1');
+  if (a.schema !== 1) out.push(schemaProblem(a.schema));
+  for (const file of Object.keys(APPLIED_KEYS)) if (!isObject(a[file])) out.push(`"${file}" must be an object of keys (it can be empty)`);
   for (const file of Object.keys(a)) {
     if (file === 'schema') continue;
     if (!(file in APPLIED_KEYS)) { out.push(`"${file}" is not an applied file (${Object.keys(APPLIED_KEYS).join(', ')})`); continue; }
-    if (!a[file] || typeof a[file] !== 'object' || Array.isArray(a[file])) { out.push(`"${file}" must be an object of keys`); continue; }
+    if (!isObject(a[file])) continue;
     for (const [key, op] of Object.entries(a[file])) {
-      const allowed = APPLIED_KEYS[file];
-      if (allowed && !allowed.includes(key)) { out.push(`"${file}.${key}" is not an allowed applied key`); continue; }
-      const bad = opProblem(key, op);
-      if (bad) out.push(`${file}.${bad}`);
+      const bad = appliedEntryProblem(file, key, op);
+      if (bad) out.push(bad);
       else if (file === 'appearance') out.push(...referenceProblems(key, op, snippets, themes));
     }
   }
   return out;
 }
 
+/** The rules of `parseSettingsMigration` and `isMigrationOperation` in the core. */
 export function migrationProblems(m, id) {
+  if (!isObject(m)) return ['the migration is not a JSON object'];
   const out = [];
-  if (m.schema !== 1) out.push('"schema" must be 1');
-  if (m.id !== id) out.push(`the id "${m.id}" does not match the file name "${id}"`);
-  if (!/^\d{4}-[a-z0-9-]+$/.test(id)) out.push('the id must be <4 digits>-<slug>, so that the ids sort in run order');
-  if (!m.description) out.push('"description" is required');
-  if (typeof m.file !== 'string' || !/^(?:[^/]+\.json|plugins\/[^/]+\/data\.json)$/.test(m.file)) out.push('"file" must be a settings file path');
-  if (!Array.isArray(m.platforms) || !m.platforms.length || m.platforms.some((x) => !PLATFORMS.includes(x))) out.push(`"platforms" must list one or more of ${PLATFORMS.join(', ')}`);
-  if (!Array.isArray(m.operations) || !m.operations.length) out.push('"operations" must be a non-empty list');
-  for (const [i, op] of (m.operations ?? []).entries()) {
+  if (m.schema !== 1) out.push(schemaProblem(m.schema));
+  if (typeof m.id !== 'string' || !MIGRATION_ID.test(m.id)) out.push(`the id ${JSON.stringify(m.id)} does not match ${MIGRATION_ID.source}, so the ids do not sort in run order`);
+  else if (m.id !== id) out.push(`the id "${m.id}" does not match the file name "${id}"`);
+  if (typeof m.description !== 'string' || !m.description.trim()) out.push('"description" must be a non-empty string');
+  if (typeof m.file !== 'string' || unsafePathReason(m.file) || !/^(?:[^/]+\.json|plugins\/[^/]+\/data\.json)$/.test(m.file)) out.push('"file" must be a settings file path (<name>.json or plugins/<id>/data.json)');
+  const platforms = platformsProblem(m.platforms);
+  if (platforms) out.push(platforms);
+  if (!Array.isArray(m.operations) || !m.operations.length) return [...out, '"operations" must be a non-empty list'];
+  for (const [i, op] of m.operations.entries()) {
+    const at = `operation ${i + 1}`;
+    if (!isObject(op)) { out.push(`${at}: an operation is an object`); continue; }
     const fields = MIGRATION_OPS[op.op];
-    if (!fields) { out.push(`operation ${i + 1}: unknown op "${op.op}" (${Object.keys(MIGRATION_OPS).join(', ')})`); continue; }
-    for (const f of fields) if (!(f in op)) out.push(`operation ${i + 1}: "${op.op}" needs "${f}"`);
-    for (const f of op.op === 'rename-key' ? ['from', 'to'] : ['key']) if (f in op && !isPointer(op[f])) out.push(`operation ${i + 1}: "${f}" must be a JSON Pointer`);
-    if ('members' in op && (!Array.isArray(op.members) || !op.members.length)) out.push(`operation ${i + 1}: "members" must be a non-empty list`);
+    if (!fields) { out.push(`${at}: unknown op ${JSON.stringify(op.op)} (${Object.keys(MIGRATION_OPS).join(', ')})`); continue; }
+    for (const f of fields) if (!(f in op)) out.push(`${at}: "${op.op}" needs "${f}"`);
+    for (const f of op.op === 'rename-key' ? ['from', 'to'] : ['key']) if (f in op && !isPointer(op[f])) out.push(`${at}: "${f}" must be a JSON Pointer ("" or "/…")`);
+    if ('members' in op && (!Array.isArray(op.members) || !op.members.length || op.members.some((x) => typeof x !== 'string'))) out.push(`${at}: "members" must be a non-empty list of strings`);
     const extra = Object.keys(op).filter((k) => k !== 'op' && !fields.includes(k) && !(op.op === 'remove-key' && k === 'ifEquals'));
-    if (extra.length) out.push(`operation ${i + 1}: unknown fields ${extra.join(', ')}`);
+    if (extra.length) out.push(`${at}: unknown fields ${extra.join(', ')}`);
   }
   return out;
 }

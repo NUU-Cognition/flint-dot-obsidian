@@ -18,7 +18,7 @@ export function files() {
   return {
     'release.json': { schema: 1, version: '0.7.0', cli: '>=0.7.0 <0.8.0', protocol: 2, plugin: { id: 'nuu-flint', version: '0.7.0', sourceCommit: COMMIT }, obsidian: { tested: ['1.13.7'] } },
     'applied.json': { schema: 1, appearance: { showRibbon: { set: false } }, app: {} },
-    'payload/plugins/nuu-flint/main.js': 'addCommand({id:"launch-orbh-interactive-default"});\n',
+    'payload/plugins/nuu-flint/main.js': 'const ops=["describe-manager"];addCommand({id:"launch-orbh-interactive-default"});\n',
     'payload/plugins/nuu-flint/manifest.json': { id: 'nuu-flint', version: '0.7.0' },
     'payload/plugins/nuu-flint/styles.css': '.x{}\n',
     'payload/plugins/nuu-flint/versions.json': { '0.7.0': '1.5.0' },

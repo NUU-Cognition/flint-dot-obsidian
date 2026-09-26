@@ -6,14 +6,16 @@ A payload release is the tag `v<version>` on `main` (decision D3). The tag names
 
 | # | Step | Check |
 |---|---|---|
-| 1 | For a plugin change: build the plugin in the flint repository. Then run `node scripts/import-plugin.mjs <build dir> <flint commit>` here. | `release.json` records the plugin source commit. |
+| 1 | For a plugin change: build the plugin in the flint repository. Then run `node scripts/import-plugin.mjs <build dir> <flint commit>` here, or `node apps/nuu-flint-plugin/scripts/deploy.mjs --payload <this folder>` in the flint repository. | `release.json` records the plugin version, the source commit, and the control protocol of that commit. |
 | 2 | Edit `payload/`, `settings/`, `profiles/`, `migrations/`, `applied.json`, or `patches/`. Then run `node scripts/build.mjs`. | `node scripts/check.mjs` |
-| 3 | Test on macOS and on Linux: run `flint obsidian dev install <this folder>` in a closed test Flint. | `flint obsidian status` shows `dev`. |
+| 3 | Test on macOS and on Linux: run `flint obsidian dev install <this folder>` in a closed test Flint. The version of the Flint CLI must be in `release.json#cli`. | `flint obsidian status` shows `dev`. |
 | 4 | Run `node scripts/release.mjs <version>`. It sets the version, builds the manifest, runs the checks in release mode, and commits `release.json` and `manifest.json`. It does not tag and does not push. | `check.mjs --release` passes. |
-| 5 | Run the tag and push commands that `release.mjs` prints: `git tag -a v<version> -m "Obsidian payload <version>" <commit>`, then `git push origin main v<version>`. | Payload CI runs `node scripts/check.mjs --release` on the tag. |
-| 6 | In the flint repository, run `pnpm obsidian:recommend v<version>`. It writes `recommendation.json`. | The flint release check `obsidian-payload` |
+| 5 | Run the tag and push commands that `release.mjs` prints: `git tag -a v<version> -m "Obsidian payload <version>" <commit>`, then `git push origin main v<version>`. | Payload CI runs `node scripts/check.mjs --release --fetch` on the tag. |
+| 6 | In the flint repository, make sure that the version of `apps/flint-cli` is in `release.json#cli`. Bump it first when it is not: `pnpm obsidian:recommend` refuses a CLI version outside the range. Then run `pnpm obsidian:recommend v<version>`. It writes `recommendation.json`. | The flint release check `070-obsidian-payload` |
 | 7 | Ship the CLI. | — |
 | 8 | Canary: run `flint obsidian update` in one Flint. Then run `flint obsidian update --tinderbox`. | A result and a backup id for each member |
+
+A change of `release.json#cli` needs a new payload release, because the range is part of the tagged commit. So bump the CLI, not the range.
 
 A release never changes a settings file that a person has. To change existing vaults, add a settings migration in `migrations/`.
 
@@ -21,17 +23,18 @@ A release never changes a settings file that a person has. To change existing va
 
 The branch `obs-0.7.0` holds the 0.7.0 layout. These items are open. Do them in this order:
 
-1. **Import the 0.7.0 plugin build (WP6).** Build `apps/nuu-flint-plugin` at the integration commit. Run `node scripts/import-plugin.mjs <build dir> <flint commit>`. The build must contain the CSS under "Moved to plugin styles" below, and the command `nuu-flint:launch-orbh-interactive-default` (`hotkeys.json` binds it). Today `release.json` has `plugin.version` `0.0.1` (the old bundle) and `plugin.sourceCommit` `pending`, and `check.mjs` warns.
-2. **Merge `obs-0.7.0` into `main`.**
-3. **Remove the `share-note` key from the history (Report 083 §15).**
+1. **Import the 0.7.0 plugin build (WP6).** Build `apps/nuu-flint-plugin` at a clean integration commit. Then run `node apps/nuu-flint-plugin/scripts/deploy.mjs --payload <this folder>` in the flint repository (it runs `scripts/import-plugin.mjs`). The build must contain the CSS under "Moved to plugin styles" below, and the command `nuu-flint:launch-orbh-interactive-default` (`hotkeys.json` binds it). Commit `payload/plugins/nuu-flint`, `release.json`, and `manifest.json`. Until this step, `release.json` has `plugin.version` `0.0.1` (the 0.6.x bundle) and `plugin.sourceCommit` `pending`: `check.mjs` warns four times, and `check.mjs --release` fails.
+2. **Bump the Flint CLI to `0.7.0`** in the flint repository (the manager does it at the release cut). `release.json#cli` is `>=0.7.0 <0.8.0`. The dev install, the live checks, and `pnpm obsidian:recommend` refuse a CLI version outside this range.
+3. **Merge `obs-0.7.0` into `main`.**
+4. **Remove the `share-note` key from the history (Report 083 §15).**
    1. Save a local bundle of the old history: `git bundle create ../flint-dot-obsidian-before-0.7.0.bundle --all`.
    2. On a mirror clone, run `git filter-repo --path plugins/share-note/data.json --invert-paths`.
    3. Verify that no blob holds the key: `git log --all -p | grep -c '"apiKey": "[^"]'` prints `0`.
    4. Force-push every branch.
    The rewrite changes every commit id. So do it before the tag.
-4. **Cut the release.** Run `node scripts/release.mjs 0.7.0`. Then run the tag and push commands that it prints.
-5. **Recommend the release** in the flint repository: `pnpm obsidian:recommend v0.7.0`.
-6. **Rotate the Share Note key** at Share Note. GitHub can serve old commits for some time after the rewrite.
+5. **Cut the release.** Run `node scripts/release.mjs 0.7.0`. Then run the tag and push commands that it prints.
+6. **Recommend the release** in the flint repository: `pnpm obsidian:recommend v0.7.0`. Then commit `packages/flint/src/obsidian/recommendation.json`.
+7. **Rotate the Share Note key** at Share Note. GitHub can serve old commits for some time after the rewrite.
 
 ## What 0.7.0 changed in the payload source
 

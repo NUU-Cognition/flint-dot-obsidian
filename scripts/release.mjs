@@ -10,13 +10,13 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { build } from './build.mjs';
 import { render, runChecks } from './check.mjs';
-import { compareVersions, isMain, isSemver, PayloadError, readJson, ROOT, toJson } from './lib.mjs';
+import { compareVersions, isMain, isVersion, PayloadError, readJson, ROOT, toJson } from './lib.mjs';
 
 const RELEASE_FILES = ['release.json', 'manifest.json'];
 
 export async function release(version, root = ROOT) {
   const git = (...args) => execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
-  if (!isSemver(version)) throw new PayloadError(`"${version}" is not a semantic version.`, 'node scripts/release.mjs <major.minor.patch>');
+  if (!isVersion(version)) throw new PayloadError(`"${version}" is not a version.`, 'node scripts/release.mjs <major.minor.patch>');
   const current = readJson(root, 'release.json').version;
   if (compareVersions(version, current) < 0) throw new PayloadError(`${version} is lower than the current version ${current}.`, `node scripts/release.mjs <a version of ${current} or higher>`);
   if (git('tag', '--list', `v${version}`)) throw new PayloadError(`The tag v${version} already exists.`, 'choose the next version');
@@ -34,7 +34,7 @@ export async function release(version, root = ROOT) {
     if (report.failed) throw new PayloadError(`The release checks failed. No file changed.\n${report.text}`, 'fix each failure, then run the release again');
     const changed = git('status', '--porcelain', '--', ...RELEASE_FILES);
     if (changed) git('commit', '--quiet', '-m', `Release Obsidian payload v${version}`, '--', ...RELEASE_FILES);
-    return { version, digest, commit: git('rev-parse', 'HEAD'), branch: git('rev-parse', '--abbrev-ref', 'HEAD'), committed: Boolean(changed), report: report.text };
+    return { version, digest, cli: data.cli, commit: git('rev-parse', 'HEAD'), branch: git('rev-parse', '--abbrev-ref', 'HEAD'), committed: Boolean(changed), report: report.text };
   } catch (error) {
     restore();
     throw error;
@@ -55,7 +55,8 @@ if (isMain(import.meta.url)) {
     console.log('Next:');
     console.log(`  git tag -a v${r.version} -m "Obsidian payload ${r.version}" ${r.commit}`);
     console.log(`  git push origin main v${r.version}`);
-    console.log(`  Then, in the flint repo: pnpm obsidian:recommend v${r.version}`);
+    console.log(`  Then, in the flint repo: make sure that the version of apps/flint-cli is in the range ${r.cli} (bump it first when it is not),`);
+    console.log(`  and run: pnpm obsidian:recommend v${r.version}`);
   } catch (error) {
     console.error(`✖ ${error.message}`);
     if (error.next) console.error(`  Next: ${error.next}`);

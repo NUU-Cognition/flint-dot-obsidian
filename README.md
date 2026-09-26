@@ -53,7 +53,7 @@ scripts/                   build.mjs, check.mjs, import-plugin.mjs, release.mjs,
 - `snippets/<name>.css`
 - `themes/<name>/manifest.json` and `theme.css`
 
-The NUU Flint plugin (`plugins/nuu-flint/`) holds exactly `main.js`, `manifest.json`, `styles.css`, and `versions.json`. Its source is `apps/nuu-flint-plugin` in the flint repository. Only `scripts/import-plugin.mjs` writes this folder, and it records the source commit in `release.json`.
+The NUU Flint plugin (`plugins/nuu-flint/`) holds exactly `main.js`, `manifest.json`, `styles.css`, and `versions.json`. Its source is `apps/nuu-flint-plugin` in the flint repository. Only `scripts/import-plugin.mjs` writes this folder. It records the plugin version, the source commit, and the control protocol in `release.json`.
 
 ## Settings files and initial settings
 
@@ -82,24 +82,26 @@ A settings migration is a named, one-time change to one settings file. Flint run
 }
 ```
 
-Keys are JSON Pointers. The key of a root list is `""`. The id is `<4 digits>-<slug>`, so the ids sort in run order. An operation runs only when its precondition holds. Flint skips and reports an operation whose precondition fails.
+Keys are JSON Pointers. The key of a root list is `""`. The id starts with 4 digits, so the ids sort in run order. An operation runs only when its precondition holds. Flint skips and reports an operation whose precondition fails.
 
 | `op` | Fields | Precondition |
 |---|---|---|
-| `add-if-absent` | `key`, `value` | `key` is absent |
-| `rename-key` | `from`, `to` | `from` is present and `to` is absent |
-| `remove-key` | `key`, optional `ifEquals` | `key` is present (and equals `ifEquals` when given) |
-| `set-if-equals` | `key`, `from`, `to` | `key` equals `from` |
-| `list-add` | `key`, `members` | `key` is a list or absent |
+| `add-if-absent` | `key`, `value` | `key` is absent, and its parent is an object |
+| `rename-key` | `from`, `to` | `from` is present, `to` is absent, and the parent of `to` is an object |
+| `remove-key` | `key`, optional `ifEquals` | `key` is present (and deeply equals `ifEquals` when given) |
+| `set-if-equals` | `key`, `from`, `to` | `key` is present and deeply equals `from` |
+| `list-add` | `key`, `members` | `key` is a list, or `key` is absent and its parent is an object |
 | `list-remove` | `key`, `members` | `key` is a list |
+
+`members` is a non-empty list of strings. The id pattern is `^[0-9]{4}-[a-z0-9]+(-[a-z0-9]+)*$`. The id equals the file name without `.json`.
 
 ## Applied settings
 
 Applied settings are declared keys of `appearance.json` and `app.json`. The NUU Flint plugin applies them each time it loads, through Obsidian's configuration API. They are the one declared exception to "Flint never changes a settings file".
 
-Three layers declare applied settings. A later layer wins for the same key:
+Three layers declare applied settings. A later layer replaces the whole operation of an earlier layer for the same key:
 1. **Release layer**: `applied.json` in this repository.
-2. **Machine layer**: `[obsidian.applied]` in the Flint CLI config.
+2. **Machine layer**: `[obsidian.applied]` in `<NUU home>/flint/config.toml`. A dev build of the CLI uses the same file.
 3. **Flint layer**: `[obsidian.applied]` in `flint.toml`.
 
 The release layer stays minimal. The operator decides each key in it. In 0.7.0 it has one key:
@@ -108,7 +110,9 @@ The release layer stays minimal. The operator decides each key in it. In 0.7.0 i
 { "schema": 1, "appearance": { "showRibbon": { "set": false } }, "app": {} }
 ```
 
-An operation is `{ "set": <value> }`, or `{ "add": [ … ], "remove": [ … ] }` for a list key (`enabledCssSnippets`). The allowed `appearance` keys are `cssTheme`, `theme`, `translucency`, `enabledCssSnippets`, `showRibbon`, `accentColor`, `baseFontSize`, `interfaceFontFamily`, `textFontFamily`, and `monospaceFontFamily`. The spec lists the allowed `app` keys.
+`applied.json` MUST have the objects `appearance` and `app`. Each object can be empty. An operation is `{ "set": <value> }`, or `{ "add": [ … ], "remove": [ … ] }` for a list key. An operation never holds both forms. The list keys are `appearance.enabledCssSnippets` and `app.userIgnoreFilters`.
+
+The allowed keys and the value type of each key are the closed table `OBSIDIAN_APPLIED_KEYS` in `packages/flint-contracts/src/obsidian.ts` of the flint repository. `scripts/lib.mjs` holds a copy (`APPLIED_KEYS`), so that `check.mjs` refuses what the CLI, the core, and the plugin refuse. When the table changes in the flint repository, change the copy too.
 
 ## Appearance profiles
 
@@ -125,7 +129,9 @@ An appearance profile is a reversible set of appearance keys. A person activates
 }
 ```
 
-A profile sets only these keys: `cssTheme`, `translucency`, `enabledCssSnippets`, `showRibbon`, `accentColor`, and `baseFontSize`. `baseline-transparent` stays macOS only until the Linux translucency check (L11) passes.
+A profile sets only these keys: `cssTheme`, `translucency`, `enabledCssSnippets`, `showRibbon`, `accentColor`, and `baseFontSize`. Each value has the type of `OBSIDIAN_APPLIED_KEYS`. An operation is `{ "set": <value> }`, or `{ "add": [ … ] }` for `enabledCssSnippets`. A profile never uses `remove`, because the receipt cannot give back a member that the profile removed (decision S12). A profile cannot set a key that `applied.json` holds: each activation would refuse. The id pattern is `^[a-z0-9]+(-[a-z0-9]+)*$`, and the id equals the folder name. `set.appearance` names at least one key.
+
+`baseline-transparent` stays macOS only until the Linux translucency check (L11) passes.
 
 ## Third-party plugins and the patch log
 
@@ -135,7 +141,7 @@ A profile sets only these keys: `cssTheme`, `translucency`, `enabledCssSnippets`
 { "schema": 1, "plugins": { "terminal": { "version": "3.23.0", "source": "https://github.com/polyipseity/obsidian-terminal/releases/download/3.23.0/main.js", "files": { "main.js": "<sha256>" } } } }
 ```
 
-**The Obsidian install form.** Obsidian's plugin installer changes each `main.js` that it downloads: it removes inline source maps (`//# sourceMappingURL=data:…`) and appends the trailer `\n/* nosourcemap */`. The bundles in `payload/` are in this form, as Obsidian installs them. The checks apply the same change.
+**The Obsidian install form.** Obsidian's plugin installer changes each `main.js` that it downloads: it removes inline source maps (`//# sourceMappingURL=data:…`) and appends the trailer `\n/* nosourcemap */`. The bundles in `payload/` are in this form, as Obsidian installs them. The replay makes the same change.
 
 **The patch log** records the edits to third-party bundles. Each entry is `patches/<id>/patch.json`:
 
@@ -152,6 +158,7 @@ A profile sets only these keys: `cssTheme`, `translucency`, `enabledCssSnippets`
 ```
 
 Rules:
+- The id pattern is `^[0-9]{3}-[a-z0-9]+(-[a-z0-9]+)*$`, and the id equals the folder name. The patch log edits third-party bundles only.
 - Every `find` anchors on the original upstream text and occurs there exactly once. No entry anchors on the output of another entry. Two entries never edit the same region.
 - The replay is: the unpatched file in `upstream/<plugin>/<file>`, plus every patch entry, in the Obsidian install form. The result must equal `payload/plugins/<plugin>/<file>` byte for byte. `check.mjs` proves it.
 - Users never replay patches. A bundle that something overwrote is a changed release file, and `flint obsidian repair --replace` restores it.
@@ -173,7 +180,7 @@ The scripts need Node 24 or later and no dependencies.
 |---|---|
 | `node scripts/build.mjs` | Write `manifest.json`: the path, sha256, mode, and size of each release file; the initial settings of each platform; the profiles; the migrations; and `applied.json`. The entries are sorted, so the bytes are stable. The manifest digest is the sha256 of these bytes. |
 | `node scripts/check.mjs [--release] [--fetch]` | Run every check below. `--release` makes a pending plugin source commit a failure. `--fetch` downloads each upstream release and verifies it against the lock and the payload. |
-| `node scripts/import-plugin.mjs <build dir> <flint commit>` | Copy a NUU Flint plugin build into `payload/plugins/nuu-flint/`, record its version and source commit in `release.json`, and build the manifest. |
+| `node scripts/import-plugin.mjs <build dir> <flint commit> [--protocol <n>]` | Copy a NUU Flint plugin build into `payload/plugins/nuu-flint/`. Record its version, its source commit, and its control protocol in `release.json`. Build the manifest. Without `--protocol`, the script reads `OBSIDIAN_CONTROL_PROTOCOL` of the commit in the flint repository of the build folder. In the flint repository, `node apps/nuu-flint-plugin/scripts/deploy.mjs --payload <this folder>` runs this script. |
 | `node scripts/release.mjs <version>` | Set the version, build, run the checks in release mode, and commit `release.json` and `manifest.json`. It prints the tag and push commands. It never tags and never pushes. |
 | `node --test scripts/test/` | The unit tests of the scripts. |
 
@@ -181,13 +188,13 @@ The checks of `check.mjs`:
 
 | Check | Fails when |
 |---|---|
-| `inventory` | A path has no class or two owners. A path is a link or leaves the tree. A retired path is back. The NUU Flint plugin folder holds other files. |
+| `inventory` | A path has no class or two owners. A path is a link or leaves the tree. Two paths differ only in letter case (in the source, or in `.obsidian/` on one platform). A retired path is back. The NUU Flint plugin folder holds other files. |
 | `hygiene` | The source holds `.DS_Store`, `*.bak*`, a secret, an installation id, an account id, a machine path, a personal value, or a note path in the initial settings. |
 | `replay` | `upstream/` plus `patches/` does not equal the released bundle. A third-party plugin has no lock entry, or its version differs. |
-| `settings` | A JSON file does not parse. On a platform, an enabled plugin, a hotkey command, a snippet, a theme, or the Homepage workspace does not exist. A profile, `applied.json`, or a migration has an invalid form. |
+| `settings` | A JSON file does not parse. A file of the release formats has no trailing newline or uses tabs. On a platform, an enabled plugin, a hotkey command, a snippet, a theme, or the Homepage workspace does not exist. A profile, `applied.json`, or a migration breaks the rules of the core (ids, keys, value types, operation forms, decision S12). |
 | `linux-default` | The terminal settings of a platform do not select an integrated profile of that platform. |
 | `manifest` | `manifest.json` does not match the tree. Next: `node scripts/build.mjs`. |
-| `release` | `release.json` does not agree with the NUU Flint plugin bundle, or the plugin source commit is `pending` (a warning; a failure with `--release`). |
+| `release` | `release.json` does not agree with the NUU Flint plugin bundle, or `cli` is not a comparator range (`>=0.7.0 <0.8.0`; no `^` or `~`). With `--release`, these are failures too (without it, warnings): the plugin source commit is `pending`, the plugin version is outside the `cli` range, or the bundle is a 0.6.x build (no `describe-manager`, or the retired `trust-vault`). |
 
 ## Release
 

@@ -103,8 +103,8 @@ test('settings validates profiles, applied settings, and migrations', async () =
   assert.match(f.settings, /"platforms" must list one or more of darwin, linux/);
   assert.match(f.settings, /the theme "Nope" does not exist/);
   assert.match(f.settings, /"hotkeys" is not an applied file/);
-  assert.match(f.settings, /showRibbon: "add" and "remove" apply only to a list key/);
-  assert.match(f.settings, /"appearance\.fontSizeX" is not an allowed applied key/);
+  assert.match(f.settings, /appearance\.showRibbon: "add" and "remove" need a list key/);
+  assert.match(f.settings, /"appearance\.fontSizeX" is not an allowed key/);
   assert.match(f.settings, /unknown op "replace-file"/);
   assert.match(f.settings, /"key" must be a JSON Pointer/);
 });
@@ -126,4 +126,102 @@ test('release refuses a plugin version mismatch; --release refuses a pending sou
   const pending = (m) => { m['release.json'].plugin.sourceCommit = 'pending'; };
   assert.equal((await failures(pending)).release, '');
   assert.match((await failures(pending, { release: true })).release, /sourceCommit is "pending"/);
+});
+
+/** The warnings and failures of the release check, in normal mode and in release mode. */
+async function releaseCheck(change) {
+  const root = makeTree(change);
+  try {
+    const normal = (await runChecks(root)).find((r) => r.name === 'release');
+    const strict = (await runChecks(root, { release: true })).find((r) => r.name === 'release');
+    return { fail: normal.fail.map((x) => x.text).join('\n'), warn: normal.warn.map((x) => x.text).join('\n'), strict: strict.fail.map((x) => x.text).join('\n') };
+  } finally {
+    cleanup(root);
+  }
+}
+
+test('G9-1: --release refuses the 0.6.x plugin (version 0.0.1, no describe-manager, trust-vault) and a pending source commit', async () => {
+  const legacy = await releaseCheck((m) => {
+    m['release.json'].plugin = { id: 'nuu-flint', version: '0.0.1', sourceCommit: 'pending' };
+    m['payload/plugins/nuu-flint/manifest.json'] = { id: 'nuu-flint', version: '0.0.1' };
+    m['payload/plugins/nuu-flint/versions.json'] = { '0.0.1': '1.5.0' };
+    m['payload/plugins/nuu-flint/main.js'] = 'const ops=["trust-vault","open-vault"];\n';
+  });
+  assert.equal(legacy.fail, '', 'normal mode only warns before the release cut');
+  for (const text of [legacy.warn, legacy.strict]) {
+    assert.match(text, /plugin 0\.0\.1 is outside the CLI range >=0\.7\.0 <0\.8\.0/);
+    assert.match(text, /has no describe-manager operation/);
+    assert.match(text, /retired trust-vault operation/);
+    assert.match(text, /sourceCommit is "pending"/);
+  }
+  const current = await releaseCheck();
+  assert.equal(current.strict, '');
+  assert.equal(current.warn, '');
+});
+
+test('G9-2: release refuses a cli range that the CLI does not understand (C12)', async () => {
+  for (const cli of ['^0.7.0', '~0.7.0', '>=0.7 <0.8']) {
+    const r = await releaseCheck((m) => { m['release.json'].cli = cli; });
+    assert.match(r.fail, /is not a comparator range/, cli);
+  }
+});
+
+test('G9-2: profiles follow the core (remove, value types, ids, empty set, keys of applied.json)', async () => {
+  const f = await failures((m) => {
+    m['profiles/baseline-transparent/profile.json'].set.appearance = {
+      enabledCssSnippets: { remove: ['tabs'] },
+      translucency: { set: 'yes' },
+      showRibbon: { set: true },
+    };
+    m['profiles/Bad_Id/profile.json'] = { schema: 1, id: 'Bad_Id', title: 'Bad', description: 'Bad.', platforms: ['linux'], set: { appearance: {} } };
+    m['profiles/newer/profile.json'] = { schema: 2, id: 'newer', title: 'Newer', description: 'Newer.', platforms: ['linux'], set: { appearance: { cssTheme: { set: 'Baseline' } } } };
+  });
+  assert.match(f.settings, /enabledCssSnippets: a profile adds list members and never removes them/);
+  assert.match(f.settings, /appearance\.translucency: the value must be a boolean/);
+  assert.match(f.settings, /appearance\.showRibbon: applied\.json holds this key/);
+  assert.match(f.settings, /the id "Bad_Id" does not match/);
+  assert.match(f.settings, /"set\.appearance" must name at least one key/);
+  assert.match(f.settings, /"schema" is 2: a newer payload format wrote the file/);
+});
+
+test('G9-2: applied.json follows the key and type table, and needs appearance and app', async () => {
+  const good = await failures((m) => { m['applied.json'].app = { userIgnoreFilters: { add: ['Exports/'] }, tabSize: { set: 4 } }; });
+  assert.equal(good.settings, '');
+  const f = await failures((m) => {
+    m['applied.json'] = { schema: 1, appearance: { showRibbon: { set: 'no' }, baseFontSize: { set: 99 } }, extra: {} };
+  });
+  assert.match(f.settings, /"app" must be an object of keys/);
+  assert.match(f.settings, /appearance\.showRibbon: the value must be a boolean/);
+  assert.match(f.settings, /appearance\.baseFontSize: the value must be an integer from 10 to 30/);
+  assert.match(f.settings, /"extra" is not an applied file/);
+  const unknown = await failures((m) => { m['applied.json'].app = { noSuchKey: { set: true } }; });
+  assert.match(unknown.settings, /"app\.noSuchKey" is not an allowed key/);
+});
+
+test('G9-2: migrations and patch entries follow the id patterns and the operation forms of the core', async () => {
+  const f = await failures((m) => {
+    m['migrations/0001-rename-hotkey.json'] = null;
+    m['migrations/0001--Bad.json'] = { schema: 1, id: '0001--Bad', description: 'Bad.', file: 'hotkeys.json', platforms: ['linux'], operations: [{ op: 'remove-key', key: '/x' }] };
+    m['migrations/0002-no-text.json'] = { schema: 1, id: '0002-no-text', file: '../app.json', platforms: ['linux'], operations: [{ op: 'list-add', key: '', members: [1] }, { op: 'set-if-equals', key: '/x', from: 'a' }] };
+    m['patches/1-short/patch.json'] = { schema: 1, id: '1-short', title: 'x', why: 'x', plugin: 'terminal', file: 'main.js', replacements: [{ find: 'UPSTREAM', replace: 'X' }] };
+  }, {}, () => {}, { manifest: false });
+  assert.match(f.settings, /the id "0001--Bad" does not match/);
+  assert.match(f.settings, /"description" must be a non-empty string/);
+  assert.match(f.settings, /"file" must be a settings file path/);
+  assert.match(f.settings, /"members" must be a non-empty list of strings/);
+  assert.match(f.settings, /"set-if-equals" needs "to"/);
+  assert.match(f.replay, /the id "1-short" does not match/);
+});
+
+test('G9-2: inventory refuses two destinations that differ only in letter case', async () => {
+  const dest = await failures((m) => { m['settings/common/plugins/Terminal/data.json'] = {}; });
+  assert.match(dest.inventory, /\.obsidian\/plugins\/terminal\/data\.json and \.obsidian\/plugins\/Terminal\/data\.json differ only in letter case \(linux\)/);
+  const source = await failures((m) => { m['payload/snippets/Tabs.css'] = '.x{}\n'; }, {}, () => {}, { manifest: false });
+  assert.match(source.inventory, /payload\/snippets\/tabs\.css: differs only in letter case from payload\/snippets\/Tabs\.css/);
+});
+
+test('G9-2: format files need a trailing newline and a 2-space indent', async () => {
+  const f = await failures((m) => { m['applied.json'] = '{\n\t"schema": 1,\n\t"appearance": {},\n\t"app": {}\n}'; });
+  assert.match(f.settings, /applied\.json: the file must end with a newline/);
+  assert.match(f.settings, /applied\.json: indent with 2 spaces, not tabs/);
 });

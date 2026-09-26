@@ -18,14 +18,113 @@ export const NUU_PLUGIN_FILES = ['main.js', 'manifest.json', 'styles.css', 'vers
 /** Obsidian's community-plugin installer appends this trailer to each main.js that it downloads. */
 export const INSTALL_TRAILER = '\n/* nosourcemap */';
 
-/** Keys that an appearance profile can set (Report 083 §8). */
+/** Keys that an appearance profile can set (`OBSIDIAN_PROFILE_KEYS`, Report 083 §8). */
 export const PROFILE_KEYS = ['cssTheme', 'translucency', 'enabledCssSnippets', 'showRibbon', 'accentColor', 'baseFontSize'];
-/** Keys of applied settings. `app` has no list yet: the spec (WP2) lists its keys. */
+
+/**
+ * The allowed keys of applied settings and the value type of each key. This is a copy of
+ * `OBSIDIAN_APPLIED_KEYS` in `packages/flint-contracts/src/obsidian.ts` of the flint
+ * repository (spec: Applied Settings). Keep the two tables equal: a release that passes
+ * this check must pass the CLI, the core, and the plugin.
+ * - `string`: any string; with `pattern`, the string must match it.
+ * - `integer`: an integer from `min` to `max`.
+ * - `enum`: one of `values`.
+ * - `list`: a list of strings. Only a list key takes `add` and `remove`.
+ */
 export const APPLIED_KEYS = {
-  appearance: ['cssTheme', 'theme', 'translucency', 'enabledCssSnippets', 'showRibbon', 'accentColor', 'baseFontSize', 'interfaceFontFamily', 'textFontFamily', 'monospaceFontFamily'],
-  app: null,
+  appearance: {
+    cssTheme: { type: 'string' },
+    theme: { type: 'enum', values: ['obsidian', 'moonstone', 'system'] },
+    translucency: { type: 'boolean' },
+    enabledCssSnippets: { type: 'list' },
+    showRibbon: { type: 'boolean' },
+    accentColor: { type: 'string', pattern: '^(|#[0-9a-fA-F]{6})$' },
+    baseFontSize: { type: 'integer', min: 10, max: 30 },
+    interfaceFontFamily: { type: 'string' },
+    textFontFamily: { type: 'string' },
+    monospaceFontFamily: { type: 'string' },
+  },
+  app: {
+    alwaysUpdateLinks: { type: 'boolean' },
+    attachmentFolderPath: { type: 'string' },
+    autoPairBrackets: { type: 'boolean' },
+    autoPairMarkdown: { type: 'boolean' },
+    defaultViewMode: { type: 'enum', values: ['source', 'preview'] },
+    foldHeading: { type: 'boolean' },
+    foldIndent: { type: 'boolean' },
+    livePreview: { type: 'boolean' },
+    newFileFolderPath: { type: 'string' },
+    newFileLocation: { type: 'enum', values: ['root', 'current', 'folder'] },
+    newLinkFormat: { type: 'enum', values: ['shortest', 'relative', 'absolute'] },
+    promptDelete: { type: 'boolean' },
+    propertiesInDocument: { type: 'enum', values: ['visible', 'hidden', 'source'] },
+    readableLineLength: { type: 'boolean' },
+    showIndentGuide: { type: 'boolean' },
+    showInlineTitle: { type: 'boolean' },
+    showLineNumber: { type: 'boolean' },
+    smartIndentList: { type: 'boolean' },
+    spellcheck: { type: 'boolean' },
+    strictLineBreaks: { type: 'boolean' },
+    tabSize: { type: 'integer', min: 1, max: 8 },
+    trashOption: { type: 'enum', values: ['system', 'local', 'none'] },
+    useMarkdownLinks: { type: 'boolean' },
+    useTab: { type: 'boolean' },
+    userIgnoreFilters: { type: 'list' },
+    vimMode: { type: 'boolean' },
+  },
 };
-export const LIST_KEYS = new Set(['enabledCssSnippets']);
+
+/** The value type of a key in words, for a refusal message. */
+export function describeKeyType(spec) {
+  switch (spec.type) {
+    case 'boolean': return 'a boolean';
+    case 'integer': return `an integer from ${spec.min} to ${spec.max}`;
+    case 'enum': return `one of ${spec.values.map((v) => JSON.stringify(v)).join(', ')}`;
+    case 'list': return 'a list of strings';
+    default: return spec.pattern ? `a string that matches ${spec.pattern}` : 'a string';
+  }
+}
+
+/** True when `value` has the type of the key. */
+export function isKeyValue(spec, value) {
+  switch (spec.type) {
+    case 'boolean': return typeof value === 'boolean';
+    case 'integer': return Number.isInteger(value) && (spec.min === undefined || value >= spec.min) && (spec.max === undefined || value <= spec.max);
+    case 'enum': return typeof value === 'string' && spec.values.includes(value);
+    case 'list': return Array.isArray(value) && value.every((m) => typeof m === 'string');
+    default: return typeof value === 'string' && (!spec.pattern || new RegExp(spec.pattern).test(value));
+  }
+}
+
+/**
+ * The problem of one applied entry (`file`, `key`, `op`), or null. This is the rule of
+ * `checkObsidianAppliedEntry` in the contracts: `{ set }` for any key, or `{ add, remove }`
+ * for a list key, never both forms.
+ */
+export function appliedEntryProblem(file, key, op) {
+  const keys = APPLIED_KEYS[file];
+  if (!keys) return `"${file}" is not an applied file (${Object.keys(APPLIED_KEYS).join(', ')})`;
+  const spec = Object.hasOwn(keys, key) ? keys[key] : undefined;
+  if (!spec) return `"${file}.${key}" is not an allowed key. Allowed keys: ${Object.keys(keys).join(', ')}`;
+  if (!op || typeof op !== 'object' || Array.isArray(op)) return `${file}.${key}: the operation must be { "set": … } or { "add": [ … ], "remove": [ … ] }`;
+  const fields = Object.keys(op);
+  if (fields.includes('set')) {
+    if (fields.length !== 1) return `${file}.${key}: an operation with "set" takes no other field`;
+    return isKeyValue(spec, op.set) ? null : `${file}.${key}: the value must be ${describeKeyType(spec)}`;
+  }
+  if (!fields.length || fields.some((f) => f !== 'add' && f !== 'remove')) return `${file}.${key}: the operation must be { "set": … } or { "add": [ … ], "remove": [ … ] }`;
+  if (spec.type !== 'list') return `${file}.${key}: "add" and "remove" need a list key; use { "set": … }`;
+  for (const f of fields) if (!isKeyValue(spec, op[f])) return `${file}.${key}: "${f}" must be a list of strings`;
+  return null;
+}
+
+/** Id patterns of the release formats. */
+export const PROFILE_ID = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+export const MIGRATION_ID = /^[0-9]{4}-[a-z0-9]+(-[a-z0-9]+)*$/;
+export const PATCH_ID = /^[0-9]{3}-[a-z0-9]+(-[a-z0-9]+)*$/;
+/** A SemVer 2.0.0 version with no leading `v` (the pattern of the core). */
+export const VERSION_PATTERN = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/;
+
 export const MIGRATION_OPS = {
   'add-if-absent': ['key', 'value'],
   'rename-key': ['from', 'to'],
@@ -150,7 +249,11 @@ export function inventory(root) {
   const entries = [];
   const problems = [];
   const problem = (path, kind, reason) => problems.push({ path, kind, reason, text: `${path}: ${reason}` });
+  const folded = new Map();
   for (const entry of listTree(root)) {
+    const fold = entry.path.toLowerCase();
+    if (folded.has(fold)) { problem(entry.path, 'path', `differs only in letter case from ${folded.get(fold)}; macOS compares paths with no case`); continue; }
+    folded.set(fold, entry.path);
     const unsafe = unsafePathReason(entry.path);
     if (unsafe) { problem(entry.path, 'path', unsafe); continue; }
     if (entry.kind !== 'file') { problem(entry.path, 'path', `a ${entry.kind === 'link' ? 'symbolic link' : 'special file'}; the source holds plain files only`); continue; }
@@ -198,11 +301,11 @@ export function resolveSettings(entries, platform) {
 }
 
 /**
- * Apply patch entries to an unpatched upstream text. Each `find` anchors on the original
+ * Replay patch entries onto an unpatched upstream text. Each `find` anchors on the original
  * upstream text and must occur there exactly once. Edits must not overlap. So the result
  * does not depend on the order of the entries.
  */
-export function applyPatches(upstream, patches) {
+export function replayPatches(upstream, patches) {
   const edits = [];
   for (const patch of patches) {
     for (const [i, r] of patch.replacements.entries()) {
@@ -243,18 +346,51 @@ export function replay(root, lock, plugin, file, patches) {
   const bytes = readFileSync(join(root, upstreamPath));
   const expected = lock?.plugins?.[plugin]?.files?.[file];
   if (sha256(bytes) !== expected) throw new PayloadError(`${upstreamPath} does not match its sha256 in upstream/lock.json.`, `download ${lock?.plugins?.[plugin]?.source ?? 'the upstream release asset'} again`);
-  return Buffer.from(obsidianInstallForm(applyPatches(bytes.toString('utf8'), patches)), 'utf8');
+  return Buffer.from(obsidianInstallForm(replayPatches(bytes.toString('utf8'), patches)), 'utf8');
 }
 
 export const isPointer = (value) => typeof value === 'string' && (value === '' || value.startsWith('/'));
-export const isSemver = (value) => typeof value === 'string' && /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(value);
+export const isVersion = (value) => typeof value === 'string' && VERSION_PATTERN.test(value);
 export const isDigestHex = (value) => typeof value === 'string' && /^[0-9a-f]{64}$/.test(value);
 export const isCommit = (value) => typeof value === 'string' && /^[0-9a-f]{40}$/.test(value);
 
-/** Compare two semver versions without pre-release tags. */
+/** The numbers of a version, without the prerelease and build parts. */
+const numbers = (version) => version.split('+')[0].split('-')[0].split('.').map(Number);
+
+/** Compare two versions by major, minor, and patch. The prerelease part is not compared. */
 export function compareVersions(a, b) {
-  const pa = a.split(/[.-]/).slice(0, 3).map(Number);
-  const pb = b.split(/[.-]/).slice(0, 3).map(Number);
+  const pa = numbers(a);
+  const pb = numbers(b);
   for (let i = 0; i < 3; i++) if (pa[i] !== pb[i]) return pa[i] < pb[i] ? -1 : 1;
   return 0;
+}
+
+const COMPARATOR = /^(>=|<=|>|<|=)?v?(.+)$/;
+
+/**
+ * The problem of a `release.json#cli` range, or null. The CLI understands comparator sets
+ * with `>=`, `<=`, `>`, `<`, and `=`, joined by `||` (decision C12). It does not understand
+ * `^`, `~`, `x`, or hyphen ranges.
+ */
+export function cliRangeProblem(range) {
+  if (typeof range !== 'string' || !range.trim()) return 'the range is empty';
+  for (const set of range.split('||')) {
+    const comparators = set.trim().split(/\s+/).filter(Boolean);
+    if (!comparators.length) return 'a comparator set between "||" is empty';
+    for (const comparator of comparators) {
+      const match = COMPARATOR.exec(comparator);
+      if (!match || !isVersion(match[2])) return `"${comparator}" is not a comparator (>=, <=, >, <, or = and a version)`;
+    }
+  }
+  return null;
+}
+
+/** True when a version satisfies a `cli` range. The prerelease part is not compared (decision S29). */
+export function satisfiesCliRange(version, range) {
+  if (!isVersion(version) || cliRangeProblem(range)) return false;
+  return range.split('||').some((set) => set.trim().split(/\s+/).filter(Boolean).every((comparator) => {
+    const [, op = '=', bound] = COMPARATOR.exec(comparator);
+    const order = compareVersions(version, bound);
+    return { '>=': order >= 0, '<=': order <= 0, '>': order > 0, '<': order < 0, '=': order === 0 }[op];
+  }));
 }
