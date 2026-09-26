@@ -1,0 +1,531 @@
+{
+  "schema": 1,
+  "release": "0.7.0",
+  "files": [
+    {
+      "path": "plugins/at-people/main.js",
+      "sha256": "5b187c343ac128a743388629e0ac0e5b5dbf32d8807163ff85936ecaad2fffcb",
+      "mode": "644",
+      "size": 25864
+    },
+    {
+      "path": "plugins/at-people/manifest.json",
+      "sha256": "b51ab97d65a9b4257a7361a569397a7405ec1afcdd07282a4ccb285a4ba967ee",
+      "mode": "644",
+      "size": 323
+    },
+    {
+      "path": "plugins/calendar/main.js",
+      "sha256": "0be6c562b150caf93b7f3e5b5099870d160550cffe2c4e45995dbb2e9b3b81fa",
+      "mode": "644",
+      "size": 141516
+    },
+    {
+      "path": "plugins/calendar/manifest.json",
+      "sha256": "f3e9581338648512baa12d5b458490f7fd367918f7bdb6bd86171ce57be7d08b",
+      "mode": "644",
+      "size": 249
+    },
+    {
+      "path": "plugins/copy-path/main.js",
+      "sha256": "676cde9794dfc6a5389ca09f2455162f6dd7d1436a1f53322ed3fa7288314db0",
+      "mode": "644",
+      "size": 142129
+    },
+    {
+      "path": "plugins/copy-path/manifest.json",
+      "sha256": "997c3d94230e2c3de4505cd84212be964953acf0b2db2c7644ca01f75c286f55",
+      "mode": "644",
+      "size": 306
+    },
+    {
+      "path": "plugins/dataview/main.js",
+      "sha256": "bcdb7a7882051a30427a3fa370533c1052019591e7551bcc12611bb9a726bbb3",
+      "mode": "644",
+      "size": 1302069
+    },
+    {
+      "path": "plugins/dataview/manifest.json",
+      "sha256": "9235db47112da81b85591c79ecb9ae2574e5e72207056e976472f90616286185",
+      "mode": "644",
+      "size": 357
+    },
+    {
+      "path": "plugins/dataview/styles.css",
+      "sha256": "3306dd9032e00f989ba7233a37fd255bc4d3f4340cee661762e952f3f6aa1de9",
+      "mode": "644",
+      "size": 2965
+    },
+    {
+      "path": "plugins/homepage/main.js",
+      "sha256": "ac86db78709143fb95ac9fe3dfc59b771eb7a43c28b120420b8a0c96e3bfe964",
+      "mode": "644",
+      "size": 59151
+    },
+    {
+      "path": "plugins/homepage/manifest.json",
+      "sha256": "3f81933c9b1f5b6f29fc90d63b983fc4d5dd39a6c5783fbf702d484724d31cee",
+      "mode": "644",
+      "size": 344
+    },
+    {
+      "path": "plugins/homepage/styles.css",
+      "sha256": "96e102d93f2463bea8d4a5fa4e4537965eebb11fcd61ece96eda1d2301c64f38",
+      "mode": "644",
+      "size": 4273
+    },
+    {
+      "path": "plugins/mermaid-popup/main.js",
+      "sha256": "1127a4e6ed2391023c65a40572ffdbd799a298622ff8663c013c6b4decdc61f6",
+      "mode": "644",
+      "size": 33367
+    },
+    {
+      "path": "plugins/mermaid-popup/manifest.json",
+      "sha256": "378cc831e0b8649f09240c8f539738f4cf37aefbabb2a423c3e01bc1c7edcfb0",
+      "mode": "644",
+      "size": 297
+    },
+    {
+      "path": "plugins/mermaid-popup/styles.css",
+      "sha256": "ce147c7e0dd98aa599cbcd23d85560b3c5fb6826dca3d42151ebbfc5e6c64300",
+      "mode": "644",
+      "size": 5480
+    },
+    {
+      "path": "plugins/nuu-flint/main.js",
+      "sha256": "aa01b93713a7e2e91dc06ff35b653aaab266c240ed8703190310e0e2d405a3b9",
+      "mode": "644",
+      "size": 1720913
+    },
+    {
+      "path": "plugins/nuu-flint/manifest.json",
+      "sha256": "ad30c18b92e290319b8e8ad3d69b0061e7be58238c1277e4bc27c8a795ad052d",
+      "mode": "644",
+      "size": 348
+    },
+    {
+      "path": "plugins/nuu-flint/styles.css",
+      "sha256": "4bb5b131db6b1f5ca6899d835bc80e96bf5da4df67169a2934736d54dfacde8c",
+      "mode": "644",
+      "size": 272
+    },
+    {
+      "path": "plugins/nuu-flint/versions.json",
+      "sha256": "28dcdde17b8bf379e201011607725c52cfbfee111d08fcbccecdf93038cd5cb6",
+      "mode": "644",
+      "size": 22
+    },
+    {
+      "path": "plugins/obsidian-excalidraw-plugin/main.js",
+      "sha256": "efb9f715447d8b5a838c57de36056bf0483137b33ff8057e2a95c2b8c2f47d48",
+      "mode": "644",
+      "size": 8387245
+    },
+    {
+      "path": "plugins/obsidian-excalidraw-plugin/manifest.json",
+      "sha256": "e4788bd00c9890f62c939d51676ed2eaa392748a738f292d47721df6fe100553",
+      "mode": "644",
+      "size": 486
+    },
+    {
+      "path": "plugins/obsidian-excalidraw-plugin/styles.css",
+      "sha256": "5581af67d9a8cc133774420c7974d03a7cbcb5ebce209d6e8e0a53e00bde3f00",
+      "mode": "644",
+      "size": 197940
+    },
+    {
+      "path": "plugins/obsidian-git/main.js",
+      "sha256": "0839860f85550acccda95a435c8305a22e16ddc7a89b9b8db1231870d69e3f43",
+      "mode": "644",
+      "size": 727872
+    },
+    {
+      "path": "plugins/obsidian-git/manifest.json",
+      "sha256": "ae6e1b75dee4bbee72a3edb224e49890da97bcf544089b0d1c0d550fca88acd9",
+      "mode": "644",
+      "size": 325
+    },
+    {
+      "path": "plugins/obsidian-git/obsidian_askpass.sh",
+      "sha256": "1fa35e0b94bc55081f026608f2be2793dc9ac8647ae10fbe9891e0084607443a",
+      "mode": "755",
+      "size": 402
+    },
+    {
+      "path": "plugins/obsidian-git/styles.css",
+      "sha256": "266bd2569f18bed0ac0c736b522ca2084dee1f92df017e7d213b4559a97c7cef",
+      "mode": "644",
+      "size": 18201
+    },
+    {
+      "path": "plugins/obsidian-style-settings/main.js",
+      "sha256": "74915ff1db38058aad73a29a34706f8cc8e7c930c4cdf69ff5c6928bec7e0fe7",
+      "mode": "644",
+      "size": 154579
+    },
+    {
+      "path": "plugins/obsidian-style-settings/manifest.json",
+      "sha256": "9cffdc20cf2aa1354820e0050b694b0f9b576446e3d5d44a36ae8b0187e5bfb8",
+      "mode": "644",
+      "size": 321
+    },
+    {
+      "path": "plugins/obsidian-style-settings/styles.css",
+      "sha256": "ee7937d2be50653a89ccb30ae5f0572b23507d5b7f1328d005271a363075bfd8",
+      "mode": "644",
+      "size": 13906
+    },
+    {
+      "path": "plugins/open-as-md/main.js",
+      "sha256": "074a2986b1a8d119b3b3e98f707b8eba453673048514d24dca7c55cbebc32737",
+      "mode": "644",
+      "size": 7995
+    },
+    {
+      "path": "plugins/open-as-md/manifest.json",
+      "sha256": "82dfa728434b195e85ce3dedc1915f6a7caee86a2ea2fd209ea832a61522024a",
+      "mode": "644",
+      "size": 266
+    },
+    {
+      "path": "plugins/share-note/main.js",
+      "sha256": "16ef13127cce3e4bdaa74fa584373db34c519c305e40525f5f477af155dc9506",
+      "mode": "644",
+      "size": 527838
+    },
+    {
+      "path": "plugins/share-note/manifest.json",
+      "sha256": "2507532b3ab285200d6c180d48664c6711f3e2757f68b8bc3c87682af08d7101",
+      "mode": "644",
+      "size": 447
+    },
+    {
+      "path": "plugins/share-note/styles.css",
+      "sha256": "87cfbb15a9631d01c40c1ac0f5955a4348d6ece7b5761a1fc0f11a100834e47c",
+      "mode": "644",
+      "size": 503
+    },
+    {
+      "path": "plugins/templater-obsidian/main.js",
+      "sha256": "608bebb1680fc9c92b9bb188060d7fc993094dcd9333af0f2dcd7334f40bad37",
+      "mode": "644",
+      "size": 339564
+    },
+    {
+      "path": "plugins/templater-obsidian/manifest.json",
+      "sha256": "bef3e826246535ad45c698f375e3f2d8adf082e97ef4389622e60e7c3da569ab",
+      "mode": "644",
+      "size": 330
+    },
+    {
+      "path": "plugins/templater-obsidian/styles.css",
+      "sha256": "f7d4ee5bd4ec1d032eda1f4e1da481e713c57af964ec1e55d31494f086068d1e",
+      "mode": "644",
+      "size": 4932
+    },
+    {
+      "path": "plugins/terminal/main.js",
+      "sha256": "f52e4baf454de9ba0b64ff4bf6517d8db5a1f20280bbbca9ecb6ad167e98d436",
+      "mode": "644",
+      "size": 2492899
+    },
+    {
+      "path": "plugins/terminal/manifest.json",
+      "sha256": "5e106b4d3e5a62cfc359857c94fd8fdd2f88ac058f20e46b354166ae4e593060",
+      "mode": "644",
+      "size": 413
+    },
+    {
+      "path": "plugins/terminal/styles.css",
+      "sha256": "715a7d8fb4d7157ba968c909b111d03fd6c24853accf1dcfa9ed43fdd83aca0e",
+      "mode": "644",
+      "size": 5727
+    },
+    {
+      "path": "plugins/tldraw/main.js",
+      "sha256": "f57e188bff326e807d38f41d791b6c6e36e3c59954a94f8af0f7e6064315ffac",
+      "mode": "644",
+      "size": 4815647
+    },
+    {
+      "path": "plugins/tldraw/manifest.json",
+      "sha256": "5b1889a772b23e4d29ee843c78d99a4de56310d17f8145c64202a0e8592703a9",
+      "mode": "644",
+      "size": 353
+    },
+    {
+      "path": "plugins/tldraw/styles.css",
+      "sha256": "39a562b93c4a07edb9250fd01010ca11ee8bb28f3bcbf8d4879fa0b0290e6b7f",
+      "mode": "644",
+      "size": 92155
+    },
+    {
+      "path": "plugins/vertical-tabs/main.js",
+      "sha256": "1bc791a61442512440aed87f7d508f7531f73926420e751f3cf6db37d362b2dc",
+      "mode": "644",
+      "size": 328902
+    },
+    {
+      "path": "plugins/vertical-tabs/manifest.json",
+      "sha256": "1c5d3a9d178bc5a3aba26849eb757f85a51bb97d5c50cafc86d57826e5a5b8b6",
+      "mode": "644",
+      "size": 404
+    },
+    {
+      "path": "plugins/vertical-tabs/styles.css",
+      "sha256": "788dfed377c625cfdfa703f8369cdc285a9c83fb0c8f6f4efa66bad2ec196c38",
+      "mode": "644",
+      "size": 26135
+    },
+    {
+      "path": "snippets/baseline-extension-font.css",
+      "sha256": "14f56aa283e89c588217362158a33ee55283777907a89a19552f7895d2560a51",
+      "mode": "644",
+      "size": 814
+    },
+    {
+      "path": "snippets/baseline-transparent-main.css",
+      "sha256": "c495e54b9be34a4a5350980080a154e20780c7908faeb5abe3a5ca5cd8738433",
+      "mode": "644",
+      "size": 2475
+    },
+    {
+      "path": "snippets/blockquote-tables.css",
+      "sha256": "045d3c99efd7696dfb18b7846c44b55382947afea9fea175a2506451f48757ac",
+      "mode": "644",
+      "size": 198
+    },
+    {
+      "path": "snippets/checkbox-dim-not-strike.css",
+      "sha256": "cdfa2009578bcfb141fb84f739eb56eaf01ab9927e7aaa4a96e72f89f12e0c3f",
+      "mode": "644",
+      "size": 496
+    },
+    {
+      "path": "snippets/vertical-tabs-numbers.css",
+      "sha256": "09c3d6b05ae072737da884549e3793e73d101aaa316768a54285ed2ba405a17b",
+      "mode": "644",
+      "size": 1763
+    },
+    {
+      "path": "themes/Baseline/manifest.json",
+      "sha256": "53c57317a61d68dece9c1844bb5ef5e11962d6ab686ef4ddd7d1ba1226d62c5e",
+      "mode": "644",
+      "size": 206
+    },
+    {
+      "path": "themes/Baseline/theme.css",
+      "sha256": "b1fda42d790f9a1fdd6ce7938e5d96ae2b2b5946e75e3f4b34e0515cfb300b4b",
+      "mode": "644",
+      "size": 626601
+    },
+    {
+      "path": "themes/Sanctum/manifest.json",
+      "sha256": "a89eb62ea17aedc4453d537a5b9f856d6bec77246030b2d8fc0d9e11c4dcfb09",
+      "mode": "644",
+      "size": 150
+    },
+    {
+      "path": "themes/Sanctum/theme.css",
+      "sha256": "368643f25c6700d4aaee2b5fbac1a5e1f88ed6dcf55ebe0104d3165bfad20cbc",
+      "mode": "644",
+      "size": 420320
+    },
+    {
+      "path": "themes/Shiba Inu/manifest.json",
+      "sha256": "1dc6fd48859a815a7a25fe2541fd79ab2b188b080b846dcec6829ea572a48ccc",
+      "mode": "644",
+      "size": 1314
+    },
+    {
+      "path": "themes/Shiba Inu/theme.css",
+      "sha256": "42d0bc5cf1278810c10e8cba645adf0d96d418358e0759a83a99d539a684bdcc",
+      "mode": "644",
+      "size": 276752
+    },
+    {
+      "path": "themes/Tokyo Night/manifest.json",
+      "sha256": "e2d90bc709154b6befd655183cb479829a5bdee788a60afc13c1878c9fc814b3",
+      "mode": "644",
+      "size": 108
+    },
+    {
+      "path": "themes/Tokyo Night/theme.css",
+      "sha256": "f71f853ef32ef9c39912c4865dfa76c13fc8643a262dc885e91ce453a010b335",
+      "mode": "644",
+      "size": 73320
+    },
+    {
+      "path": "themes/Transparent/manifest.json",
+      "sha256": "ca336ebf1944191656a8f63783e0c94b43783498b4d82b8aece82974bd378681",
+      "mode": "644",
+      "size": 142
+    },
+    {
+      "path": "themes/Transparent/theme.css",
+      "sha256": "b02fb6fb7f19a3514217bc140b6bce17c18f1fd3d589202bfdb1160ff40d3e36",
+      "mode": "644",
+      "size": 92835
+    },
+    {
+      "path": "themes/Velocity/manifest.json",
+      "sha256": "7e267d5b1a526b56b89c898d53e98c07b774c4503b50c416d8c7636283816d99",
+      "mode": "644",
+      "size": 215
+    },
+    {
+      "path": "themes/Velocity/theme.css",
+      "sha256": "353d9f602d8625f5d49b84d03f0e421043ec0bfc474387a503ed5d0029a355f2",
+      "mode": "644",
+      "size": 701704
+    }
+  ],
+  "settings": {
+    "common": [
+      {
+        "path": "app.json",
+        "sha256": "63b8b5d1eed52eebee3a6030ab1e6c756c5e00c2f96637e3d111878fa146f954"
+      },
+      {
+        "path": "appearance.json",
+        "sha256": "7c7f353f6c0e44ab07c1bdf2465c25dc306d693fd012f05e5277e71c0fb3f1d7"
+      },
+      {
+        "path": "backlink.json",
+        "sha256": "55b3d1b176a5c14c2307aea23fa66ba6d69a7920ccb67d11b0c7abed95b1c93b"
+      },
+      {
+        "path": "community-plugins.json",
+        "sha256": "f5445d3d0cdcf5ff1776be822d6a148d8731f59972a7a72959153337dfe3a69b"
+      },
+      {
+        "path": "core-plugins.json",
+        "sha256": "7f0331c8dc10b6d30417a0f19cc732aeefeb9e03a1143ddb2890bd0e9d03cd16"
+      },
+      {
+        "path": "daily-notes.json",
+        "sha256": "fbda366ba46e7f9a5b9c5d50665b25fb96e3cd17e9b101202c3cf2215f00ca4b"
+      },
+      {
+        "path": "hotkeys.json",
+        "sha256": "d06c34d67309cd89b453b1cd3ac0a12b862e666893fb20d1e3de0a1e0357ed73"
+      },
+      {
+        "path": "plugins/at-people/data.json",
+        "sha256": "301f729fd51df88e124bef47c140f87201e671b0a61e4d4f6e029ca56bc5d21b"
+      },
+      {
+        "path": "plugins/calendar/data.json",
+        "sha256": "c3f90db5bca86abc80e1c17a35ebdf1c7e18ed8368759f7c7c925598bb1f6c9a"
+      },
+      {
+        "path": "plugins/dataview/data.json",
+        "sha256": "63f34cade75a28a40cca9c593638b714a5c9c433da35b168e81db45c2c5d583b"
+      },
+      {
+        "path": "plugins/homepage/data.json",
+        "sha256": "6b15c2456947153abc9fe0e92c9da53219a32670ef37bb6fb14cef311cfdf8fe"
+      },
+      {
+        "path": "plugins/mermaid-popup/data.json",
+        "sha256": "d8eead15efd904a71c6ade9356f86bb3d5798bece5b650f438d6d31097b96950"
+      },
+      {
+        "path": "plugins/nuu-flint/data.json",
+        "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+      },
+      {
+        "path": "plugins/obsidian-excalidraw-plugin/data.json",
+        "sha256": "4c78d4c312f6c60f1fccb69d12fd8387dbb4ee4a170163324c87682ca151bdfe"
+      },
+      {
+        "path": "plugins/obsidian-style-settings/data.json",
+        "sha256": "d3b9cc8bd2dff6456940bd6befc70578f07b812ba6ecc50378f2d0acae85c67f"
+      },
+      {
+        "path": "plugins/open-as-md/data.json",
+        "sha256": "15a9ca6e15ab5e0d58179e99be1607c96f9b4860b9ead4a2f188c4b3c7897b32"
+      },
+      {
+        "path": "plugins/templater-obsidian/data.json",
+        "sha256": "2acd45502455df895ca52fe65cd9530b5179c8a3cf0d2979fef1dc2ff0001a45"
+      },
+      {
+        "path": "plugins/tldraw/data.json",
+        "sha256": "d15ded6b79fb3accd7d9ffaa4fea87ad805263d25c235bcc2a3fa5d91cc7348c"
+      },
+      {
+        "path": "plugins/vertical-tabs/data.json",
+        "sha256": "367427a14592c85b18fc323c1c6add84ed67d0af1f09b0040b56fc9618423da2"
+      },
+      {
+        "path": "switcher.json",
+        "sha256": "2d2fa94b95b947a5b411e0562af2d2cdaf9f5f4960758f5074e21db05bfe63bf"
+      },
+      {
+        "path": "types.json",
+        "sha256": "79e39c2ee848caa168f72a1177631b4af2d2006b069c61d7899ed383e96ddd17"
+      },
+      {
+        "path": "workspaces.json",
+        "sha256": "868acf017984d15741d3eca46832407d7f803eb26325bef9a09699330b3593b9"
+      }
+    ],
+    "darwin": [
+      {
+        "path": "plugins/terminal/data.json",
+        "sha256": "6edb1b8f8df8a671f6811f4012c02d1cd7b8166ef698c1dc6e96068f9da58fbf"
+      }
+    ],
+    "linux": [
+      {
+        "path": "plugins/terminal/data.json",
+        "sha256": "be947bf01139a450234512bc9717d6466ba2dd68535dff926256d689bbc454d1"
+      }
+    ]
+  },
+  "profiles": [
+    {
+      "id": "baseline-transparent",
+      "path": "profiles/baseline-transparent/profile.json",
+      "sha256": "2b5471b71ac2ed4d60380f1b672ebf8363972c3f14c4ab42435e9fdd4d0268e7"
+    }
+  ],
+  "migrations": [
+    {
+      "id": "0001-rename-nuu-obsidian-hotkey",
+      "path": "migrations/0001-rename-nuu-obsidian-hotkey.json",
+      "sha256": "9b7e04318396bee21daff50c0e597a4af9fb1cc830aa8de66bc70df2f485ab13"
+    },
+    {
+      "id": "0002-remove-tab-selector-hotkey",
+      "path": "migrations/0002-remove-tab-selector-hotkey.json",
+      "sha256": "5f15dea8bd5c7306b52d64b2f31f1a69299f0da55a7cabc9d3388c34aa18ff9a"
+    },
+    {
+      "id": "0003-linux-terminal-default",
+      "path": "migrations/0003-linux-terminal-default.json",
+      "sha256": "ec1508fb2c9dab38156915abeb3221f2ead72e4f6a4a7aecafad121345d73292"
+    },
+    {
+      "id": "0004-remove-nuu-flint-helper",
+      "path": "migrations/0004-remove-nuu-flint-helper.json",
+      "sha256": "78f6f8528890f9f7a69752ea9b781e14eafaa3c8b8b7bc7d0f4ea6668925ede8"
+    },
+    {
+      "id": "0005-remove-terminal-status-icon-snippet",
+      "path": "migrations/0005-remove-terminal-status-icon-snippet.json",
+      "sha256": "4f8cb7fcb148460bf85b3e3091a1046c5c4b40bae7f3236ea3e4c5aaccb8f81a"
+    },
+    {
+      "id": "0006-remove-retired-nuu-flint-keys",
+      "path": "migrations/0006-remove-retired-nuu-flint-keys.json",
+      "sha256": "fa11d5036764767f7bed6089b4ba835074c2183f7d12dc29bf8f596b86eb503f"
+    }
+  ],
+  "applied": {
+    "path": "applied.json",
+    "sha256": "92d2ed26f35b31361bd3137a84cc8c70ea9272d85619acacbb62665d84aa2a89"
+  }
+}
