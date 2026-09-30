@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "id": "0007-darwin-terminal-login-shell",
+  "description": "On macOS, start the integrated terminal as a login shell (/bin/zsh -l), as the Linux profile does (/bin/bash --login). A login zsh reads .zprofile, where Homebrew and the version managers put their PATH, so an Obsidian started from the Dock finds node, flint, and the agent CLI. The change runs only when the value is the old shipped value.",
+  "file": "plugins/terminal/data.json",
+  "platforms": [
+    "darwin"
+  ],
+  "operations": [
+    {
+      "op": "set-if-equals",
+      "key": "/profiles/darwinIntegratedDefault/args",
+      "from": [],
+      "to": [
+        "-l"
+      ]
+    }
+  ]
+}

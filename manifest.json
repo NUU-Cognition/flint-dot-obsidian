@@ -475,7 +475,7 @@
     "darwin": [
       {
         "path": "plugins/terminal/data.json",
-        "sha256": "6edb1b8f8df8a671f6811f4012c02d1cd7b8166ef698c1dc6e96068f9da58fbf"
+        "sha256": "1aab2e56a875b8ad9ad7689c8c33e918dad505bc7e5ca66fe55b9766d7614fd4"
       }
     ],
     "linux": [
@@ -522,6 +522,11 @@
       "id": "0006-remove-retired-nuu-flint-keys",
       "path": "migrations/0006-remove-retired-nuu-flint-keys.json",
       "sha256": "fa11d5036764767f7bed6089b4ba835074c2183f7d12dc29bf8f596b86eb503f"
+    },
+    {
+      "id": "0007-darwin-terminal-login-shell",
+      "path": "migrations/0007-darwin-terminal-login-shell.json",
+      "sha256": "eba4ff791ac85ad0b79ca5220238d79778d191d58c9aae4155962002b6ef2a49"
     }
   ],
   "applied": {

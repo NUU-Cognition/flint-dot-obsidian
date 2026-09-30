@@ -38,7 +38,9 @@
       "type": "external"
     },
     "darwinIntegratedDefault": {
-      "args": [],
+      "args": [
+        "-l"
+      ],
       "executable": "/bin/zsh",
       "followTheme": false,
       "name": "",
