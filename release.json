@@ -6,7 +6,7 @@
   "plugin": {
     "id": "nuu-flint",
     "version": "0.7.0",
-    "sourceCommit": "43fdef532395496a6845d39968519dd07024222d"
+    "sourceCommit": "deed4f215cf07dc34046f87d057eaf85791e2c6d"
   },
   "obsidian": {
     "tested": [

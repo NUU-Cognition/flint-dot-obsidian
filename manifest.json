@@ -94,9 +94,9 @@
     },
     {
       "path": "plugins/nuu-flint/main.js",
-      "sha256": "87be00523b95488d9aae76f091bac85815cd8e398d99a6a722c7cd152bc9f255",
+      "sha256": "3c7631dc6425ec5bfa4eee388b5e5c35ab25f6049aab3d431ad91d7d2847e945",
       "mode": "644",
-      "size": 126694
+      "size": 141429
     },
     {
       "path": "plugins/nuu-flint/manifest.json",
