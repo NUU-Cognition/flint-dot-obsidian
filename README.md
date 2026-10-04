@@ -163,7 +163,7 @@ Rules:
 - The replay is: the unpatched file in `upstream/<plugin>/<file>`, plus every patch entry, in the Obsidian install form. The result must equal `payload/plugins/<plugin>/<file>` byte for byte. `check.mjs` proves it.
 - Users never replay patches. A bundle that something overwrote is a changed release file, and `flint obsidian repair --replace` restores it.
 
-In 0.7.0, the patch log has four entries. All edit `plugins/terminal/main.js` 3.23.0. Entry `005-terminal-default-platform-fallback` stays for one release. It protects migrated Linux Flints whose terminal settings still name the macOS profile.
+In 0.7.0, the patch log has five entries. All edit `plugins/terminal/main.js` 3.23.0. Entry `007-terminal-linux-clipboard-chords` gives the terminal its copy and paste chords on Linux (Ctrl+Shift+C, Ctrl+Insert, Ctrl+Shift+V, Shift+Insert). Entry `005-terminal-default-platform-fallback` stays for one release. It protects migrated Linux Flints whose terminal settings still name the macOS profile.
 
 **To update a third-party plugin:**
 1. Download the release assets (`main.js`, `manifest.json`, `styles.css`) of the new version.
