@@ -43,7 +43,36 @@ function loadGc(src, platform, clipboard, calls) {
     return Gc;`)({ CURRENT: platform }, { activeWindow: null }, require);
 }
 
-/** The real xterm.js clipboard module (paste() clears the helper textarea) and composition helper. */
+/** The text of one webpack module of the xterm.js bundle: from its function to the start of the next module. */
+function moduleText(id) {
+  const head = new RegExp(`[,{]${id}:(\\(c,s,n\\)=>\\{|\\(c,s\\)=>\\{|function\\(c,s,n\\)\\{|function\\(c,s\\)\\{)`);
+  const m = head.exec(PATCHED);
+  assert.ok(m, `the bundle holds module ${id}`);
+  const start = m.index + String(id).length + 2;
+  const next = /\},\d+:(\(c,s,n\)=>\{|\(c,s\)=>\{|function\(c,s,n\)\{|function\(c,s\)\{)/g;
+  next.lastIndex = start;
+  return PATCHED.slice(start, next.exec(PATCHED).index + 1);
+}
+
+/** Load a module of the xterm.js bundle with its dependencies (the keyboard and C0 modules need no others). */
+function xtermModule(id, cache = {}) {
+  if (cache[id]) return cache[id];
+  const exports = (cache[id] = {});
+  new Function('G', `return (${moduleText(id)})`)(setTimeout).call(undefined, {}, exports, (dep) => xtermModule(dep, cache));
+  return exports;
+}
+
+/** A method of the CoreBrowserTerminal class of xterm.js as a function: from its definition to the next method. */
+function method(def, next) {
+  const text = cut(PATCHED, def, next).slice(def.indexOf('('), -next.length);
+  return new Function('B', 'x', `return function${text}`)(xtermModule(706), xtermModule(3534));
+}
+
+/**
+ * The real xterm.js code: the clipboard module (paste() clears the helper textarea; handlePasteEvent() takes
+ * the paste event of Chromium), the composition helper, and _keyDown(), _isThirdLevelShift(), and cancel()
+ * of the terminal, with the real keyboard evaluator and C0 constants.
+ */
 function xtermModules() {
   const clip = {};
   new Function(`return (${cut(PATCHED, '(c,s)=>{function n(p){return p.replace(', 's.rightClickHandler=function(p,g,v,d,u){l(p,g,v),u&&d.rightClickSelect(p),g.value=d.selectionText,g.select()}}')})`)()({}, clip);
@@ -53,7 +82,12 @@ function xtermModules() {
   const start = PATCHED.indexOf('3618:function(c,s,n){') + '3618:'.length;
   const text = cut(PATCHED, 'function(c,s,n){var r=this&&this.__decorate', 'h(5,l.IRenderService)],v)}', start - 1);
   new Function('G', `return (${text})`)(setTimeout).call(undefined, {}, comp, deps);
-  return { paste: clip.paste, CompositionHelper: comp.CompositionHelper };
+  return {
+    paste: clip.paste, handlePasteEvent: clip.handlePasteEvent, CompositionHelper: comp.CompositionHelper,
+    keyDown: method('_keyDown($){', '_isThirdLevelShift($,j){'),
+    isThirdLevelShift: method('_isThirdLevelShift($,j){', '_keyUp($){'),
+    cancel: new Function(`return function${cut(PATCHED, 'cancel($,j){', '$.stopPropagation(),!1}').slice('cancel'.length)}`)(),
+  };
 }
 const XTERM = xtermModules();
 
@@ -97,12 +131,14 @@ function deferred() {
  * `reply:<data>`) and calls the onData listeners. paste() is the real paste of xterm.js on a textarea.
  * `electron` is the list of texts that the synchronous clipboard gives, or null when it is not available.
  * `reads` is the list of results of navigator.clipboard.readText(): a string, an Error, or a deferred.
+ * `system` is the text that the paste event of Chromium gives. _core is the real _keyDown of xterm.js with
+ * the real composition helper (`ime`) on the same textarea and core service.
  */
-function terminal({ selection = '', electron = ['clip text'], reads = [], failWrite = false, bracketed = true } = {}) {
+function terminal({ selection = '', electron = ['clip text'], reads = [], failWrite = false, bracketed = true, system = 'clip text' } = {}) {
   const fx = { sent: [], paste: [], written: [], reads: 0, errors: [] };
   const onData = [], onKey = [];
   const coreService = {
-    decPrivateModes: { bracketedPasteMode: bracketed },
+    decPrivateModes: { bracketedPasteMode: bracketed, applicationCursorKeys: false },
     triggerDataEvent(d, u = false) { fx.sent.push(u ? d : `reply:${d}`); for (const cb of onData) cb(d); },
   };
   const original = coreService.triggerDataEvent;
@@ -126,18 +162,31 @@ function terminal({ selection = '', electron = ['clip text'], reads = [], failWr
     },
     console: { error: (e) => fx.errors.push(String(e)) },
   };
+  const view = { textContent: '', classList: { add() {}, remove() {} }, style: {}, getBoundingClientRect: () => ({ width: 1, height: 1 }) };
+  const ime = new XTERM.CompositionHelper(textarea, view, { buffer: { isCursorInViewport: false } }, { rawOptions: {} }, coreService, {});
+  const core = {
+    _keyDownHandled: false, _keyDownSeen: false, _unprocessedDeadKey: false, _customKeyEventHandler: undefined,
+    browser: { isMac: false, isWindows: false },
+    options: { macOptionIsMeta: false, scrollOnUserInput: false, cancelEvents: false },
+    buffer: { ybase: 0, ydisp: 0 },
+    textarea, coreService, _compositionHelper: ime,
+    optionsService: { rawOptions: { screenReaderMode: false } },
+    _onKey: { fire: (e) => { for (const cb of onKey) cb(e); } },
+    scrollToBottom() {}, updateCursorStyle() {}, scrollLines() {}, selectAll() {}, _showCursor() {},
+    _keyDown: XTERM.keyDown, _isThirdLevelShift: XTERM.isThirdLevelShift, cancel: XTERM.cancel,
+  };
   const t = {
     element: { ownerDocument: { defaultView: win } },
     textarea,
-    _core: { coreService },
+    _core: core,
     onData, onKey,
     hasSelection: () => selection.length > 0,
     getSelection: () => selection,
     paste(s) { fx.paste.push(s); XTERM.paste(s, textarea, coreService, { rawOptions: {} }); },
     input(s, u = true) { coreService.triggerDataEvent(s, u); },
-    attachCustomKeyEventHandler(fn) { this.handler = fn; },
+    attachCustomKeyEventHandler(fn) { this.handler = fn; core._customKeyEventHandler = fn; },
   };
-  return { t, fx, coreService, original, clipboard };
+  return { t, fx, coreService, original, clipboard, ime, system };
 }
 
 const KEYS = { 45: ['Insert', 'Insert'], 67: ['c', 'C'], 86: ['v', 'V'], 13: ['Enter', 'Enter'], 37: ['ArrowLeft', 'ArrowLeft'], 65: ['a', 'A'], 8: ['Backspace', 'Backspace'] };
@@ -167,21 +216,18 @@ function setup(src, platform, opts = {}, passthrough = false) {
   return { g, requires, ...term };
 }
 
+/** The paste edit commands of Chromium (exact modifiers): Shift+Insert (Paste) and Ctrl+Shift+V (PasteAndMatchStyle). */
+const pasteCommand = (e) => !e.altKey && !e.metaKey && ((e.keyCode === INSERT && e.shiftKey && !e.ctrlKey) || (e.keyCode === V && e.ctrlKey && e.shiftKey));
+
 /**
- * Press one key as _keyDown of xterm.js does: the custom handler first; when it returns true, a keydown of
- * Enter, Ctrl+C, Ctrl+V, or a letter fires onKey, and then sends its data through the core service.
+ * Press one key: the real _keyDown of xterm.js (the custom handler, then the composition helper, then the
+ * keyboard evaluator, onKey, and the data), and then the default action of Chromium: when the keydown is not
+ * prevented, a paste edit command fires the paste event, and xterm.js handles it.
  */
 function press(s, event) {
-  const result = s.t.handler(event);
-  if (result && event.type === 'keydown') {
-    const data = event.keyCode === ENTER ? '\r'
-      : event.ctrlKey && event.keyCode === C ? '\x03'
-        : event.ctrlKey && event.keyCode === V ? '\x16'
-          : !event.ctrlKey && !event.altKey && !event.metaKey && event.key.length === 1 ? event.key : null;
-    if (data) {
-      for (const cb of s.t.onKey) cb({ key: data, domEvent: event });
-      s.t._core.coreService.triggerDataEvent(data, true);
-    }
+  const result = s.t._core._keyDown(event);
+  if (event.type === 'keydown' && !event.prevented && pasteCommand(event)) {
+    XTERM.handlePasteEvent({ stopPropagation() {}, clipboardData: { getData: () => s.system } }, s.t.textarea, s.coreService, { rawOptions: {} });
   }
   return result;
 }
@@ -271,8 +317,7 @@ test('patch 007 on linux: the core service is not wrapped, and nothing waits aft
 test('patch 007 on linux: an IME composition after two pastes keeps its text (real paste and composition helper)', async () => {
   const first = deferred(), second = deferred();
   const s = setup(PATCHED, 'linux', { electron: ['one', 'two'], reads: [first, second] });
-  const view = { textContent: '', classList: { add() {}, remove() {} }, style: {}, getBoundingClientRect: () => ({ width: 1, height: 1 }) };
-  const ime = new XTERM.CompositionHelper(s.t.textarea, view, { buffer: { isCursorInViewport: false } }, { rawOptions: {} }, s.coreService, {});
+  const { ime } = s;
   press(s, key(V, 'cs'));
   press(s, key(INSERT, 's'));
   second.resolve('two');
@@ -286,6 +331,57 @@ test('patch 007 on linux: an IME composition after two pastes keeps its text (re
   ime.compositionend();
   await settle();
   assert.deepEqual(s.fx.sent, [bracket('one'), bracket('two'), 'あ']);
+});
+
+// Review finding (round 3): a paste chord must not discard an active or pending IME composition.
+async function composeA(s, end) {
+  s.ime.compositionstart();
+  s.t.textarea.value += 'あ';
+  s.ime.compositionupdate({ data: 'あ' });
+  await settle();
+  if (end) s.ime.compositionend(); // the composed text now waits for a timer of xterm.js
+}
+
+for (const [name, code, mods] of [['Shift+Insert', INSERT, 's'], ['Ctrl+Shift+V', V, 'cs']]) {
+  test(`patch 007 on linux: ${name} during an active IME composition sends the composed text first, as upstream does`, async () => {
+    const results = [];
+    for (const src of [PATCHED, UPSTREAM]) {
+      const s = setup(src, 'linux', { electron: ['clip'], system: 'clip' });
+      await composeA(s, false);
+      press(s, key(code, mods));
+      s.ime.compositionend();
+      await settle();
+      results.push(s.fx.sent);
+    }
+    assert.deepEqual(results[0], ['あ', bracket('clip')]);
+    assert.deepEqual(results[0], results[1]);
+  });
+
+  test(`patch 007 on linux: ${name} while the composed text waits to be sent sends it first, as upstream does`, async () => {
+    const results = [];
+    for (const src of [PATCHED, UPSTREAM]) {
+      const s = setup(src, 'linux', { electron: ['clip'], system: 'clip' });
+      await composeA(s, true);
+      press(s, key(code, mods));
+      await settle();
+      results.push(s.fx.sent);
+    }
+    assert.deepEqual(results[0], ['あ', bracket('clip')]);
+    assert.deepEqual(results[0], results[1]);
+  });
+}
+
+test('patch 007 on linux: during an active or pending IME composition, the handler takes no chord', async () => {
+  for (const end of [false, true]) {
+    for (const [code, mods] of [[C, 'cs'], [INSERT, 'c'], [V, 'cs'], [INSERT, 's']]) {
+      const s = setup(PATCHED, 'linux', { selection: 'sel', electron: ['clip'] });
+      await composeA(s, end);
+      const ev = key(code, mods);
+      assert.equal(s.t.handler(ev), true, `keyCode ${code} "${mods}" end=${end}`);
+      assert.equal(ev.prevented, false);
+      assert.deepEqual([s.fx.written, s.fx.paste], [[], []]);
+    }
+  }
 });
 
 // Review finding 2 (round 2): the developer console must see each key action with its own data.
