@@ -1,6 +1,6 @@
 // A small, valid payload source tree for the tests. Each test changes one fact and runs a script.
 
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { build } from '../build.mjs';
@@ -60,3 +60,18 @@ export function makeTree(change = () => {}, { manifest = true } = {}) {
 }
 
 export const cleanup = (root) => rmSync(root, { recursive: true, force: true });
+
+/**
+ * The skip reason of a test that writes two paths that differ only in letter case, or false.
+ * The probe writes `a` in the temp folder and looks for `A`. A case-insensitive file system
+ * (the default of macOS) finds it, and there the second path overwrites the first.
+ */
+export const CASE_SKIP = (() => {
+  const root = mkdtempSync(join(tmpdir(), 'payload-case-'));
+  try {
+    writeFileSync(join(root, 'a'), '');
+    return existsSync(join(root, 'A')) && 'the temp folder is on a case-insensitive file system, and the fixture needs two paths that differ only in letter case';
+  } finally {
+    cleanup(root);
+  }
+})();

@@ -182,7 +182,7 @@ The scripts need Node 24 or later and no dependencies.
 | `node scripts/check.mjs [--release] [--fetch]` | Run every check below. `--release` makes a pending plugin source commit a failure. `--fetch` downloads each upstream release and verifies it against the lock and the payload. |
 | `node scripts/import-plugin.mjs <build dir> <flint commit> [--protocol <n>]` | Copy a NUU Flint plugin build into `payload/plugins/nuu-flint/`. Record its version, its source commit, and its control protocol in `release.json`. Build the manifest. Without `--protocol`, the script reads `OBSIDIAN_CONTROL_PROTOCOL` of the commit in the flint repository of the build folder. In the flint repository, `node apps/nuu-flint-plugin/scripts/deploy.mjs --payload <this folder>` runs this script. |
 | `node scripts/release.mjs <version>` | Set the version, build, run the checks in release mode, and commit `release.json` and `manifest.json`. It prints the tag and push commands. It never tags and never pushes. |
-| `node --test scripts/test/` | The unit tests of the scripts. |
+| `node --test "scripts/test/*.test.mjs"` | The unit tests of the scripts (`npm test` runs the same command). Keep the quotes: Node expands the pattern. Node 22 and later do not take a folder here. On a case-insensitive file system (the default of macOS), the tests that write two paths that differ only in letter case skip and give the reason. |
 
 The checks of `check.mjs`:
 

@@ -3,7 +3,7 @@ import { mkdirSync, symlinkSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { test } from 'node:test';
 import { runChecks } from '../check.mjs';
-import { cleanup, makeTree } from './fixture.mjs';
+import { CASE_SKIP, cleanup, makeTree } from './fixture.mjs';
 
 /** Run the checks on a changed fixture. Returns the failures of each check as text. */
 async function failures(change = () => {}, options = {}, after = () => {}, { manifest = true } = {}) {
@@ -216,6 +216,9 @@ test('G9-2: migrations and patch entries follow the id patterns and the operatio
 test('G9-2: inventory refuses two destinations that differ only in letter case', async () => {
   const dest = await failures((m) => { m['settings/common/plugins/Terminal/data.json'] = {}; });
   assert.match(dest.inventory, /\.obsidian\/plugins\/terminal\/data\.json and \.obsidian\/plugins\/Terminal\/data\.json differ only in letter case \(linux\)/);
+});
+
+test('G9-2: inventory refuses two source paths that differ only in letter case', { skip: CASE_SKIP }, async () => {
   const source = await failures((m) => { m['payload/snippets/Tabs.css'] = '.x{}\n'; }, {}, () => {}, { manifest: false });
   assert.match(source.inventory, /payload\/snippets\/tabs\.css: differs only in letter case from payload\/snippets\/Tabs\.css/);
 });

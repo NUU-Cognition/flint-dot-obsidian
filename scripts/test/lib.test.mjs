@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import { test } from 'node:test';
 import { build } from '../build.mjs';
 import { appliedEntryProblem, buildManifest, classify, cliRangeProblem, obsidianInstallForm, replayPatches, satisfiesCliRange, sha256 } from '../lib.mjs';
-import { cleanup, makeTree } from './fixture.mjs';
+import { CASE_SKIP, cleanup, makeTree } from './fixture.mjs';
 
 test('classify gives each path one class', () => {
   const cases = {
@@ -134,7 +134,7 @@ test('appliedEntryProblem follows the key and type table of OBSIDIAN_APPLIED_KEY
   for (const [file, key, op, pattern] of bad) assert.match(appliedEntryProblem(file, key, op) ?? '', pattern, `${file}.${key}`);
 });
 
-test('build refuses two paths that differ only in letter case', () => {
+test('build refuses two paths that differ only in letter case', { skip: CASE_SKIP }, () => {
   const root = makeTree((f) => { f['payload/snippets/Tabs.css'] = '.x{}\n'; }, { manifest: false });
   try {
     assert.throws(() => buildManifest(root), /differs only in letter case/);
