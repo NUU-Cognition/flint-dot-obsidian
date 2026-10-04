@@ -226,9 +226,9 @@
     },
     {
       "path": "plugins/terminal/main.js",
-      "sha256": "641e96347ec5f9a6907b8ed3690371e5d77eb213ade56fdd0fe6c2e44c119027",
+      "sha256": "cd0a21b1fa0e02e3ab6105bb0c7383b6fa9a2867ab349fc2d21a24793e597f63",
       "mode": "644",
-      "size": 2493353
+      "size": 2493374
     },
     {
       "path": "plugins/terminal/manifest.json",
