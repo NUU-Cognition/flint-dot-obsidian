@@ -16,7 +16,7 @@
       },
       "enabledCssSnippets": {
         "add": [
-          "baseline-transparent-main"
+          "terminal-transparent"
         ]
       }
     }

@@ -125,7 +125,7 @@ An appearance profile is a reversible set of appearance keys. A person activates
   "title": "Baseline Transparent",
   "description": "Use the Baseline theme with window translucency and the matching main-pane snippet.",
   "platforms": ["darwin"],
-  "set": { "appearance": { "cssTheme": { "set": "Baseline" }, "translucency": { "set": true }, "enabledCssSnippets": { "add": ["baseline-transparent-main"] } } }
+  "set": { "appearance": { "cssTheme": { "set": "Baseline" }, "translucency": { "set": true }, "enabledCssSnippets": { "add": ["terminal-transparent"] } } }
 }
 ```
 

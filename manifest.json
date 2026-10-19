@@ -285,12 +285,6 @@
       "size": 814
     },
     {
-      "path": "snippets/baseline-transparent-main.css",
-      "sha256": "c495e54b9be34a4a5350980080a154e20780c7908faeb5abe3a5ca5cd8738433",
-      "mode": "644",
-      "size": 2475
-    },
-    {
       "path": "snippets/blockquote-tables.css",
       "sha256": "045d3c99efd7696dfb18b7846c44b55382947afea9fea175a2506451f48757ac",
       "mode": "644",
@@ -301,6 +295,12 @@
       "sha256": "cdfa2009578bcfb141fb84f739eb56eaf01ab9927e7aaa4a96e72f89f12e0c3f",
       "mode": "644",
       "size": 496
+    },
+    {
+      "path": "snippets/terminal-transparent.css",
+      "sha256": "87704c75916b7036e22c37cc8e84e4a601f3961760e31c3cb717c2c67eb71344",
+      "mode": "644",
+      "size": 2515
     },
     {
       "path": "snippets/vertical-tabs-numbers.css",
@@ -489,7 +489,7 @@
     {
       "id": "baseline-transparent",
       "path": "profiles/baseline-transparent/profile.json",
-      "sha256": "2b5471b71ac2ed4d60380f1b672ebf8363972c3f14c4ab42435e9fdd4d0268e7"
+      "sha256": "84a6a2a58049bdd96823c9745dcf0f9e6ccd2633bfc117b69dfe1b302903212a"
     }
   ],
   "migrations": [
@@ -527,6 +527,11 @@
       "id": "0007-darwin-terminal-login-shell",
       "path": "migrations/0007-darwin-terminal-login-shell.json",
       "sha256": "eba4ff791ac85ad0b79ca5220238d79778d191d58c9aae4155962002b6ef2a49"
+    },
+    {
+      "id": "0008-rename-transparent-snippet",
+      "path": "migrations/0008-rename-transparent-snippet.json",
+      "sha256": "a0ab2e89f60a6d778ab03dcdd333feddf54b1b10245657e80ee7a3813a5a93fa"
     }
   ],
   "applied": {

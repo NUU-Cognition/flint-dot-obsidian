@@ -1,0 +1,132 @@
+{
+  "schema": 1,
+  "id": "0008-rename-transparent-snippet",
+  "description": "Rename the enabled snippet baseline-transparent-main to terminal-transparent: the snippet file has the new name, and it works with every theme. No operation renames a list member, so each operation checks one position of the list (the first 20) and changes it only when it holds the old name. A list without the old name does not change.",
+  "file": "appearance.json",
+  "platforms": [
+    "darwin",
+    "linux"
+  ],
+  "operations": [
+    {
+      "op": "set-if-equals",
+      "key": "/enabledCssSnippets/0",
+      "from": "baseline-transparent-main",
+      "to": "terminal-transparent"
+    },
+    {
+      "op": "set-if-equals",
+      "key": "/enabledCssSnippets/1",
+      "from": "baseline-transparent-main",
+      "to": "terminal-transparent"
+    },
+    {
+      "op": "set-if-equals",
+      "key": "/enabledCssSnippets/2",
+      "from": "baseline-transparent-main",
+      "to": "terminal-transparent"
+    },
+    {
+      "op": "set-if-equals",
+      "key": "/enabledCssSnippets/3",
+      "from": "baseline-transparent-main",
+      "to": "terminal-transparent"
+    },
+    {
+      "op": "set-if-equals",
+      "key": "/enabledCssSnippets/4",
+      "from": "baseline-transparent-main",
+      "to": "terminal-transparent"
+    },
+    {
+      "op": "set-if-equals",
+      "key": "/enabledCssSnippets/5",
+      "from": "baseline-transparent-main",
+      "to": "terminal-transparent"
+    },
+    {
+      "op": "set-if-equals",
+      "key": "/enabledCssSnippets/6",
+      "from": "baseline-transparent-main",
+      "to": "terminal-transparent"
+    },
+    {
+      "op": "set-if-equals",
+      "key": "/enabledCssSnippets/7",
+      "from": "baseline-transparent-main",
+      "to": "terminal-transparent"
+    },
+    {
+      "op": "set-if-equals",
+      "key": "/enabledCssSnippets/8",
+      "from": "baseline-transparent-main",
+      "to": "terminal-transparent"
+    },
+    {
+      "op": "set-if-equals",
+      "key": "/enabledCssSnippets/9",
+      "from": "baseline-transparent-main",
+      "to": "terminal-transparent"
+    },
+    {
+      "op": "set-if-equals",
+      "key": "/enabledCssSnippets/10",
+      "from": "baseline-transparent-main",
+      "to": "terminal-transparent"
+    },
+    {
+      "op": "set-if-equals",
+      "key": "/enabledCssSnippets/11",
+      "from": "baseline-transparent-main",
+      "to": "terminal-transparent"
+    },
+    {
+      "op": "set-if-equals",
+      "key": "/enabledCssSnippets/12",
+      "from": "baseline-transparent-main",
+      "to": "terminal-transparent"
+    },
+    {
+      "op": "set-if-equals",
+      "key": "/enabledCssSnippets/13",
+      "from": "baseline-transparent-main",
+      "to": "terminal-transparent"
+    },
+    {
+      "op": "set-if-equals",
+      "key": "/enabledCssSnippets/14",
+      "from": "baseline-transparent-main",
+      "to": "terminal-transparent"
+    },
+    {
+      "op": "set-if-equals",
+      "key": "/enabledCssSnippets/15",
+      "from": "baseline-transparent-main",
+      "to": "terminal-transparent"
+    },
+    {
+      "op": "set-if-equals",
+      "key": "/enabledCssSnippets/16",
+      "from": "baseline-transparent-main",
+      "to": "terminal-transparent"
+    },
+    {
+      "op": "set-if-equals",
+      "key": "/enabledCssSnippets/17",
+      "from": "baseline-transparent-main",
+      "to": "terminal-transparent"
+    },
+    {
+      "op": "set-if-equals",
+      "key": "/enabledCssSnippets/18",
+      "from": "baseline-transparent-main",
+      "to": "terminal-transparent"
+    },
+    {
+      "op": "set-if-equals",
+      "key": "/enabledCssSnippets/19",
+      "from": "baseline-transparent-main",
+      "to": "terminal-transparent"
+    }
+  ]
+}

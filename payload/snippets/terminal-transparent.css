@@ -1,9 +1,9 @@
-/* Baseline theme: extend translucency to the main editor pane, the header/title
- * bars, and the integrated terminal.
+/* Terminal transparent: extend translucency to the main editor pane, the
+ * header/title bars, and the integrated terminal. It works with every theme.
  *
- * Baseline normally forces these regions opaque even when "Translucent window"
- * is on, so only the sidebars show the desktop through. This snippet makes
- * everything match the sidebar.
+ * A theme such as Baseline forces these regions opaque even when "Translucent
+ * window" is on, so only the sidebars show the desktop through. This snippet
+ * makes everything match the sidebar.
  *
  * To switch looks, change the value of --bg-main below:
  *   var(--workspace-background-translucent)  -> matches the sidebar (50% tint, default)
