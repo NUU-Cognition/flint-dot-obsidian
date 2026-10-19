@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "release": "0.7.0",
+  "release": "0.7.1",
   "files": [
     {
       "path": "plugins/at-people/main.js",
