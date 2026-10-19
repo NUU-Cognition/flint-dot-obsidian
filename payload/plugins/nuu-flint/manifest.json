@@ -1,7 +1,7 @@
 {
 	"id": "nuu-flint",
 	"name": "NUU Flint",
-	"version": "0.7.0",
+	"version": "0.7.1",
 	"minAppVersion": "1.8.7",
 	"description": "Companion plugin for the NUU Flint ecosystem. Registers the Obsidian manager of the vault, serves its protected control port, runs terminal tabs and Orbh sessions, and applies the applied settings of the Flint.",
 	"author": "NUU Cognition",
