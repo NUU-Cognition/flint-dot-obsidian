@@ -5,8 +5,8 @@
   "protocol": 2,
   "plugin": {
     "id": "nuu-flint",
-    "version": "0.7.1",
-    "sourceCommit": "69d2b2c3650366d1ed824089740fa1c18b3d63fc"
+    "version": "0.7.2",
+    "sourceCommit": "ad56b8328577e0b8dd39f231a9cafde56069f30a"
   },
   "obsidian": {
     "tested": [
