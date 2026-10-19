@@ -94,13 +94,13 @@
     },
     {
       "path": "plugins/nuu-flint/main.js",
-      "sha256": "8fcb3754761138f5a949801c9ab9b5349af7e644d371b8ed5629c3b137a5e625",
+      "sha256": "55af49be8e79a7681600b8318d0c99b28709522efc2c4ec5c60d1b4c0d121eee",
       "mode": "644",
-      "size": 188712
+      "size": 191625
     },
     {
       "path": "plugins/nuu-flint/manifest.json",
-      "sha256": "6267526fd90f79718b171ec716d31323cae9fdcbcdb7236eb5c7eaa7eee598ff",
+      "sha256": "6d6cac41d3bf60a9b6874664a7a5024d5949f4aa89d0c3a634fb00f6c35006cc",
       "mode": "644",
       "size": 414
     },
@@ -112,9 +112,9 @@
     },
     {
       "path": "plugins/nuu-flint/versions.json",
-      "sha256": "47e784c1c2ba63d359497971410a9446b512c3087dfb28bb9a11509ee6e745cd",
+      "sha256": "3ca290666a9959fb3f9af74c90611a7d34fc35e3042d4722bafc1e01a3b2649e",
       "mode": "644",
-      "size": 79
+      "size": 60
     },
     {
       "path": "plugins/obsidian-excalidraw-plugin/main.js",
