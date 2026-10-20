@@ -57,6 +57,18 @@
       "size": 2965
     },
     {
+      "path": "plugins/file-explorer-reload/main.js",
+      "sha256": "265017e41819c089c66da84566c669063dcaa937a33222049020ac60d04e2f46",
+      "mode": "644",
+      "size": 242600
+    },
+    {
+      "path": "plugins/file-explorer-reload/manifest.json",
+      "sha256": "65797836af51aed213215d641c1c0887839918264ee08499649de725626df78a",
+      "mode": "644",
+      "size": 321
+    },
+    {
       "path": "plugins/homepage/main.js",
       "sha256": "ac86db78709143fb95ac9fe3dfc59b771eb7a43c28b120420b8a0c96e3bfe964",
       "mode": "644",
@@ -397,7 +409,7 @@
       },
       {
         "path": "community-plugins.json",
-        "sha256": "f5445d3d0cdcf5ff1776be822d6a148d8731f59972a7a72959153337dfe3a69b"
+        "sha256": "db975d3a1d051797e8abf149ee4cb3413b9520c878bc9b5f69d25ebc89c75fac"
       },
       {
         "path": "core-plugins.json",
@@ -532,6 +544,11 @@
       "id": "0008-rename-transparent-snippet",
       "path": "migrations/0008-rename-transparent-snippet.json",
       "sha256": "a0ab2e89f60a6d778ab03dcdd333feddf54b1b10245657e80ee7a3813a5a93fa"
+    },
+    {
+      "id": "0009-enable-file-explorer-reload",
+      "path": "migrations/0009-enable-file-explorer-reload.json",
+      "sha256": "6486de3f0dc3209c888ed77dab4b45e5ea526ea46a5cf4808175c6fe9fc05baf"
     }
   ],
   "applied": {
