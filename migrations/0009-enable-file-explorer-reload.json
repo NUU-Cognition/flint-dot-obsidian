@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "id": "0009-enable-file-explorer-reload",
+  "description": "Enable the File Explorer Reload plugin in the list of enabled community plugins. The payload installs the plugin from release 0.7.1.",
+  "file": "community-plugins.json",
+  "platforms": [
+    "darwin",
+    "linux"
+  ],
+  "operations": [
+    {
+      "op": "list-add",
+      "key": "",
+      "members": [
+        "file-explorer-reload"
+      ]
+    }
+  ]
+}

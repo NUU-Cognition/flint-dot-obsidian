@@ -12,5 +12,6 @@
   "homepage",
   "terminal",
   "vertical-tabs",
-  "nuu-flint"
+  "nuu-flint",
+  "file-explorer-reload"
 ]

@@ -29,6 +29,13 @@
         "main.js": "794e9eaede73920bb8d54b0eda4f5de2182d698cc638774500f24f14bcd4da0b"
       }
     },
+    "file-explorer-reload": {
+      "version": "1.3.18",
+      "source": "https://github.com/mnaoumov/obsidian-file-explorer-reload/releases/download/1.3.18/main.js",
+      "files": {
+        "main.js": "c21fe94c08be5343bd12fa73c23101d898a94ce1c87a7f28e91eeb4c09eb7d28"
+      }
+    },
     "homepage": {
       "version": "4.4.2",
       "source": "https://github.com/mirnovov/obsidian-homepage/releases/download/4.4.2/main.js",

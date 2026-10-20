@@ -1,0 +1,11 @@
+{
+  "id": "file-explorer-reload",
+  "name": "File Explorer Reload",
+  "version": "1.3.18",
+  "minAppVersion": "1.14.4",
+  "description": "Reloads file explorer pane.",
+  "author": "mnaoumov",
+  "authorUrl": "https://github.com/mnaoumov",
+  "isDesktopOnly": true,
+  "fundingUrl": "https://www.buymeacoffee.com/mnaoumov"
+}
