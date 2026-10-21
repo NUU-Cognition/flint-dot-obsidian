@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "release": "0.7.1",
+  "release": "0.7.2",
   "files": [
     {
       "path": "plugins/at-people/main.js",
@@ -401,7 +401,7 @@
       },
       {
         "path": "appearance.json",
-        "sha256": "7c7f353f6c0e44ab07c1bdf2465c25dc306d693fd012f05e5277e71c0fb3f1d7"
+        "sha256": "a20aec742d26c11bc04c33798129c20549d8de67de93874fe9a9d15efb00a6d5"
       },
       {
         "path": "backlink.json",
@@ -549,6 +549,11 @@
       "id": "0009-enable-file-explorer-reload",
       "path": "migrations/0009-enable-file-explorer-reload.json",
       "sha256": "6486de3f0dc3209c888ed77dab4b45e5ea526ea46a5cf4808175c6fe9fc05baf"
+    },
+    {
+      "id": "0010-enable-terminal-transparent-snippet",
+      "path": "migrations/0010-enable-terminal-transparent-snippet.json",
+      "sha256": "e750ca9c5d91cb718eb82775c6ee80ed75c838267a27a4caecc311f530eb4564"
     }
   ],
   "applied": {
