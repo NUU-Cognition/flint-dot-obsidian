@@ -2,6 +2,7 @@
   "showRibbon": false,
   "enabledCssSnippets": [
     "vertical-tabs-numbers",
-    "checkbox-dim-not-strike"
+    "checkbox-dim-not-strike",
+    "terminal-transparent"
   ]
 }

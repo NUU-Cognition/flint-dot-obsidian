@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "id": "0010-enable-terminal-transparent-snippet",
+  "description": "Enable the snippet terminal-transparent in the list of enabled CSS snippets. New Flints get the snippet on from release 0.7.2.",
+  "file": "appearance.json",
+  "platforms": [
+    "darwin",
+    "linux"
+  ],
+  "operations": [
+    {
+      "op": "list-add",
+      "key": "/enabledCssSnippets",
+      "members": [
+        "terminal-transparent"
+      ]
+    }
+  ]
+}
