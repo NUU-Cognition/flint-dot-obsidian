@@ -87,6 +87,24 @@
       "size": 4273
     },
     {
+      "path": "plugins/just-simple-file-viewer/main.js",
+      "sha256": "129f81b410550f5196d879c0a13904779fd29a875844566670e636bdcb430b1b",
+      "mode": "644",
+      "size": 214502
+    },
+    {
+      "path": "plugins/just-simple-file-viewer/manifest.json",
+      "sha256": "c20ca000794e060d98a1db03d866fa4d30b462ac2044f2f86b86028769fa047d",
+      "mode": "644",
+      "size": 389
+    },
+    {
+      "path": "plugins/just-simple-file-viewer/styles.css",
+      "sha256": "fd15247d554668dc7a502f285260a368ae2f6eb523d659c2de33788089422b50",
+      "mode": "644",
+      "size": 3921
+    },
+    {
       "path": "plugins/mermaid-popup/main.js",
       "sha256": "1127a4e6ed2391023c65a40572ffdbd799a298622ff8663c013c6b4decdc61f6",
       "mode": "644",
@@ -409,7 +427,7 @@
       },
       {
         "path": "community-plugins.json",
-        "sha256": "db975d3a1d051797e8abf149ee4cb3413b9520c878bc9b5f69d25ebc89c75fac"
+        "sha256": "c00c0dcdd1d3221c50bfda7c55f0e30502f6d201ef11eaa9f63b2c79e086757b"
       },
       {
         "path": "core-plugins.json",
@@ -438,6 +456,10 @@
       {
         "path": "plugins/homepage/data.json",
         "sha256": "6b15c2456947153abc9fe0e92c9da53219a32670ef37bb6fb14cef311cfdf8fe"
+      },
+      {
+        "path": "plugins/just-simple-file-viewer/data.json",
+        "sha256": "7e65c1e1a455512cf4e9b7cacd208097391dd56f021f36d3992bd8c224075394"
       },
       {
         "path": "plugins/mermaid-popup/data.json",
@@ -554,6 +576,11 @@
       "id": "0010-enable-terminal-transparent-snippet",
       "path": "migrations/0010-enable-terminal-transparent-snippet.json",
       "sha256": "e750ca9c5d91cb718eb82775c6ee80ed75c838267a27a4caecc311f530eb4564"
+    },
+    {
+      "id": "0011-plugin-list-of-0-7-3",
+      "path": "migrations/0011-plugin-list-of-0-7-3.json",
+      "sha256": "0da13c8f5807d3f5a86804c951e03460b7835c7cce8ca6a69312465f68655554"
     }
   ],
   "applied": {

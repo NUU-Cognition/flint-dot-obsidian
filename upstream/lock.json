@@ -43,6 +43,13 @@
         "main.js": "50f6e1c7fd1f950caa8f8a7502f7d6104a46fd959f81f3651d63b17077a2f0da"
       }
     },
+    "just-simple-file-viewer": {
+      "version": "0.3.1",
+      "source": "https://github.com/davidhurtadoai/just-simple-file-viewer/releases/download/0.3.1/main.js",
+      "files": {
+        "main.js": "ae306bc2e46f6f3a7a344f17a59cef85070a1f86b2b37ab84be8362c4d29fc94"
+      }
+    },
     "mermaid-popup": {
       "version": "0.2.69",
       "source": "https://github.com/gitcpy/obsidian-diagram-popup/releases/download/0.2.69/main.js",

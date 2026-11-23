@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "id": "0011-plugin-list-of-0-7-3",
+  "description": "Turn on Just Simple File Viewer, and turn off Open as Markdown, in the list of enabled community plugins. The payload installs Just Simple File Viewer from release 0.7.3, and it opens the files that are not Markdown.",
+  "file": "community-plugins.json",
+  "platforms": [
+    "darwin",
+    "linux"
+  ],
+  "operations": [
+    {
+      "op": "list-add",
+      "key": "",
+      "members": [
+        "just-simple-file-viewer"
+      ]
+    },
+    {
+      "op": "list-remove",
+      "key": "",
+      "members": [
+        "open-as-md"
+      ]
+    }
+  ]
+}

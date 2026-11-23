@@ -1,0 +1,10 @@
+{
+  "id": "just-simple-file-viewer",
+  "name": "Just Simple File Viewer",
+  "version": "0.3.1",
+  "minAppVersion": "1.13.0",
+  "description": "A deliberately minimal text file editor. Open JSON, CSV, Python and more in native tabs, with syntax highlighting and automatic saving.",
+  "author": "David Hurtado",
+  "authorUrl": "https://github.com/DavidHurtadoAI",
+  "isDesktopOnly": false
+}

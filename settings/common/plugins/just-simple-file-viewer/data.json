@@ -1,0 +1,11 @@
+{
+  "extensions": "txt, text, log, json, jsonc, jsonl, ndjson, csv, tsv, py, pyi, python, js, mjs, cjs, jsx, ts, tsx, css, scss, less, htm, xml, xsl, yaml, yml, toml, ini, cfg, conf, config, env, properties, sh, bash, zsh, fish, ps1, psm1, bat, cmd, sql, r, rb, go, rs, c, h, cpp, hpp, cs, java, kt, swift, php, lua, dart, vue, svelte, graphql, gql, tex, bib, rst, adoc, org, diff, patch, env, example",
+  "highlightSyntax": true,
+  "wordWrap": false,
+  "lineNumbers": true,
+  "tabSize": 4,
+  "csvView": "table",
+  "csvDelimiter": "auto",
+  "csvHeader": true,
+  "fontMode": "auto"
+}

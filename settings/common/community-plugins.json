@@ -2,7 +2,6 @@
   "calendar",
   "obsidian-style-settings",
   "tldraw",
-  "open-as-md",
   "mermaid-popup",
   "templater-obsidian",
   "copy-path",
@@ -13,5 +12,6 @@
   "terminal",
   "vertical-tabs",
   "nuu-flint",
-  "file-explorer-reload"
+  "file-explorer-reload",
+  "just-simple-file-viewer"
 ]
