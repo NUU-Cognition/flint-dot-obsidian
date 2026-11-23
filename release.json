@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "version": "0.7.2",
+  "version": "0.7.3",
   "cli": ">=0.7.0 <0.8.0",
   "protocol": 2,
   "plugin": {
