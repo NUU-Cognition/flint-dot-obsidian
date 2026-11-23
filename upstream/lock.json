@@ -57,6 +57,13 @@
         "main.js": "40f00cda1453978209f2ca31959f088b49b4b654bd4ac2c76c3985262b44666a"
       }
     },
+    "nuu-tabs": {
+      "version": "0.1.0",
+      "source": "https://github.com/NUU-Cognition/obsidian-nuu-tabs/releases/download/v0.1.0/main.js",
+      "files": {
+        "main.js": "5bea0160ce3100d2225f997ee4fb4751b21fb4e082949097b98a128c1691a146"
+      }
+    },
     "obsidian-excalidraw-plugin": {
       "version": "2.22.0",
       "source": "https://github.com/zsviczian/obsidian-excalidraw-plugin/releases/download/2.22.0/main.js",

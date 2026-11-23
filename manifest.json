@@ -147,6 +147,24 @@
       "size": 79
     },
     {
+      "path": "plugins/nuu-tabs/main.js",
+      "sha256": "873f2977d7c44b9d062fdc22cd4c1e96192c39f71121f143354352ec31f37521",
+      "mode": "644",
+      "size": 432583
+    },
+    {
+      "path": "plugins/nuu-tabs/manifest.json",
+      "sha256": "8c03ee5fc61845d053d040cd7270439c26a95c5c9cf35401ac40b713462dfb4e",
+      "mode": "644",
+      "size": 307
+    },
+    {
+      "path": "plugins/nuu-tabs/styles.css",
+      "sha256": "f3d0aea6faea2537801b4ddc5c58fe5ba24cbd0773c077538e3cf031af1cc24b",
+      "mode": "644",
+      "size": 49247
+    },
+    {
       "path": "plugins/obsidian-excalidraw-plugin/main.js",
       "sha256": "efb9f715447d8b5a838c57de36056bf0483137b33ff8057e2a95c2b8c2f47d48",
       "mode": "644",
@@ -427,7 +445,7 @@
       },
       {
         "path": "community-plugins.json",
-        "sha256": "c00c0dcdd1d3221c50bfda7c55f0e30502f6d201ef11eaa9f63b2c79e086757b"
+        "sha256": "4084f3398cf0b553b00a8d1391aae8673531679ea6aab219cf62ec35677b2a3d"
       },
       {
         "path": "core-plugins.json",
@@ -580,7 +598,7 @@
     {
       "id": "0011-plugin-list-of-0-7-3",
       "path": "migrations/0011-plugin-list-of-0-7-3.json",
-      "sha256": "0da13c8f5807d3f5a86804c951e03460b7835c7cce8ca6a69312465f68655554"
+      "sha256": "f49d4453f153a07907c378a41e76215d00ba548a5624317b291953a5d4c9da44"
     }
   ],
   "applied": {

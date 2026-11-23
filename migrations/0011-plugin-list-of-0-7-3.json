@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "id": "0011-plugin-list-of-0-7-3",
-  "description": "Turn on Just Simple File Viewer, and turn off Open as Markdown, in the list of enabled community plugins. The payload installs Just Simple File Viewer from release 0.7.3, and it opens the files that are not Markdown.",
+  "description": "Turn on Just Simple File Viewer and NUU Tabs, and turn off Open as Markdown, in the list of enabled community plugins. The payload installs both plugins from release 0.7.3. Just Simple File Viewer opens the files that are not Markdown. NUU Tabs turns off Vertical Tabs when it loads, and turns it on again when its own load fails, so the list keeps vertical-tabs.",
   "file": "community-plugins.json",
   "platforms": [
     "darwin",
@@ -12,7 +12,8 @@
       "op": "list-add",
       "key": "",
       "members": [
-        "just-simple-file-viewer"
+        "just-simple-file-viewer",
+        "nuu-tabs"
       ]
     },
     {
